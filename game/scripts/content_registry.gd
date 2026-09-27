@@ -11,6 +11,9 @@ func _ready() -> void:
 	_load_npc("res://data/npcs/mara.tres")
 	_load_npc("res://data/npcs/rowan.tres")
 	_load_location("res://data/locations/larkmere.tres")
+	_load_location("res://data/locations/fishing.tres")
+	_load_location("res://data/locations/home.tres")
+	_load_location("res://data/locations/sleeping_gate.tres")
 
 func _load_echo(path: String) -> void:
 	var data := load(path) as EverduneEchoData
