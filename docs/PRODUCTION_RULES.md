@@ -10,3 +10,7 @@
 8. Every feature needs a reason to exist in the core player loop.
 9. Every system must have a test or deterministic verification path where practical.
 10. Preserve the ability to expand the world without rewriting the foundation.
+
+
+11. Treat every knowingly temporary implementation as an explicit placeholder; register it in docs/PLACEHOLDER_REGISTRY.md and keep it visible until it passes Second-Eyes.
+12. Never scale world/content to hide unresolved P0 vertical-slice quality gaps.
