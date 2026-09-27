@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name EverduneUI
 
 signal creation_finished
+signal start_requested(continue_game: bool)
 signal sound_requested(kind: String)
 signal settings_changed(values: Dictionary)
 
@@ -26,6 +27,9 @@ var panel_style: StyleBoxFlat
 var button_style: StyleBoxFlat
 var settings_panel: Panel
 var settings_values := {}
+var start_menu: Panel
+var continue_button: Button
+var session_active := false
 
 func _ready() -> void:
 	layer = 100
@@ -111,8 +115,61 @@ func _build_ui() -> void:
 	craft_button.pressed.connect(_craft_lamp)
 	inventory_panel.add_child(craft_button)
 
+	_build_start_menu()
 	_build_character_creator()
 	_build_settings_panel()
+
+func _build_start_menu() -> void:
+	start_menu = Panel.new()
+	start_menu.add_theme_stylebox_override("panel", panel_style)
+	start_menu.position = Vector2(220,92)
+	start_menu.size = Vector2(520,360)
+	add_child(start_menu)
+	var title := _label_to_panel("EVERDUNE", Vector2(30,24), 38)
+	var subtitle := _label_to_panel("THE WORLD REMEMBERS", Vector2(31,70), 13)
+	var line := ColorRect.new()
+	line.color = Color("#b48b51")
+	line.position = Vector2(31,102)
+	line.size = Vector2(458,1)
+	start_menu.add_child(line)
+	var new_game := Button.new()
+	new_game.text = "NEW JOURNEY"
+	new_game.position = Vector2(60,132)
+	new_game.size = Vector2(400,52)
+	new_game.add_theme_stylebox_override("normal", button_style)
+	new_game.pressed.connect(func(): _open_creator())
+	start_menu.add_child(new_game)
+	continue_button = Button.new()
+	continue_button.text = "CONTINUE"
+	continue_button.position = Vector2(60,196)
+	continue_button.size = Vector2(400,52)
+	continue_button.add_theme_stylebox_override("normal", button_style)
+	continue_button.pressed.connect(func(): start_requested.emit(true))
+	start_menu.add_child(continue_button)
+	var settings_button := Button.new()
+	settings_button.text = "SETTINGS"
+	settings_button.position = Vector2(60,260)
+	settings_button.size = Vector2(190,42)
+	settings_button.add_theme_stylebox_override("normal", button_style)
+	settings_button.pressed.connect(toggle_settings)
+	start_menu.add_child(settings_button)
+	var exit_label := _label_to_panel("A single-player RPG built around exploration, memory and home.", Vector2(60,315), 11)
+	exit_label.add_theme_color_override("font_color", Color("#b8aa90"))
+
+func set_save_available(available: bool) -> void:
+	if continue_button:
+		continue_button.disabled = not available
+		continue_button.modulate = Color.WHITE if available else Color("#66645f")
+
+func _open_creator() -> void:
+	start_menu.visible = false
+	creation_panel.visible = true
+	session_active = false
+
+func begin_session() -> void:
+	session_active = true
+	start_menu.visible = false
+	creation_panel.visible = false
 
 func _build_character_creator() -> void:
 	creation_panel = Panel.new()
@@ -250,6 +307,8 @@ func set_settings(values: Dictionary) -> void:
 
 func toggle_settings() -> void:
 	settings_panel.visible = not settings_panel.visible
+	if settings_panel.visible and start_menu:
+		start_menu.visible = false
 	if settings_panel.visible:
 		inventory_panel.visible = false
 		dialog_panel.visible = false
@@ -257,7 +316,7 @@ func toggle_settings() -> void:
 func _process(_delta: float) -> void:
 	if state == null:
 		return
-	creation_panel.visible = String(state.character.get("name","")).is_empty()
+	creation_panel.visible = (not session_active) and start_menu != null and not start_menu.visible
 	stats_label.text = "%s  •  Day %d  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d" % [
 		state.character.get("name","Wayfarer"), state.day, state.hour, state.minute,
 		state.hp, state.max_hp, state.energy, state.max_energy, state.level, state.xp, state.echoes
