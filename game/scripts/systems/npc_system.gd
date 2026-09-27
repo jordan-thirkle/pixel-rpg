@@ -5,6 +5,7 @@ func talk(id: String, registry: Node, state: Node) -> Dictionary:
 	var data: EverduneNPCData = registry.npc(id)
 	if data == null:
 		return {"title": id, "text": ""}
+	state.relationship_mara = int(state.relationship_mara) + (1 if id == "mara" else 0)
 	var text := data.default_dialogue
 	if not data.evening_dialogue.is_empty() and state.hour >= data.evening_hour:
 		text = data.evening_dialogue
@@ -13,4 +14,5 @@ func talk(id: String, registry: Node, state: Node) -> Dictionary:
 		if id == "mara":
 			state.set_flag("mara_echo_return", true)
 			state.add_xp(30)
+		state.set_flag("mara_understands", true)
 	return {"title": data.display_name, "text": text, "met_flag": data.met_flag}
