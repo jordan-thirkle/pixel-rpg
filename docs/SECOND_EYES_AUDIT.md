@@ -258,3 +258,8 @@ Do not call the vertical slice complete until:
 - save/load survives migration/corruption tests
 - the full regression journey passes
 - the browser and native builds share the same gameplay source
+
+
+## Active vertical-slice gate
+
+The next major product gate is `docs/EVEDUNE_VERTICAL_SLICE_QUALITY_GATE.md`. Temporary work is governed by `docs/PLACEHOLDER_REGISTRY.md`; no knowingly temporary implementation may become invisible technical debt.
