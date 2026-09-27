@@ -28,6 +28,16 @@ jobs:
           test -f game/scripts/world.gd
           test -f game/scripts/ui.gd
           test -f game/scripts/save_system.gd
+          test -f game/scripts/world_tiles.gd
+          test -f game/scripts/gather_node.gd
+          test -f game/scripts/weather.gd
+          test -f game/assets/terrain_atlas.svg
+          test -f game/assets/props.svg
+          test -f game/assets/player_body.svg
+          test -f game/assets/player_hair.svg
+          test -f game/assets/player_coat.svg
+          test -f game/assets/rain_overlay.svg
+          test -f game/assets/light.svg
           python - <<'PY'
           import json
           with open("assets/ASSET_MANIFEST.json", encoding="utf-8") as f:
