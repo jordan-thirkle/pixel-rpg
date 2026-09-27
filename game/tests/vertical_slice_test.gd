@@ -38,6 +38,8 @@ func _run() -> void:
 	assert(world.path_layer != null)
 	assert(world.water_layer.get_cell_source_id(Vector2i(19, 1)) == 0)
 	assert(world.path_layer.get_cell_source_id(Vector2i(18, 8)) == 0)
+	assert(world.path_layer.get_cell_source_id(Vector2i(25, 8)) == 0)
+	assert(world.water_layer.get_cell_source_id(Vector2i(19, 8)) == -1)
 	var tile_set: TileSet = world.water_layer.tile_set
 	assert(tile_set.get_physics_layers_count() == 1)
 	var water_source := tile_set.get_source(0) as TileSetAtlasSource
