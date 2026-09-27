@@ -8,6 +8,7 @@ const SAVE_SCENE := preload("res://scripts/save_system.gd")
 const WEATHER_SCENE := preload("res://scripts/weather.gd")
 const GATHER_SCENE := preload("res://scripts/gather_node.gd")
 const AUDIO_SCENE := preload("res://scripts/audio.gd")
+const ENEMY_SCENE := preload("res://scripts/enemy.gd")
 const PROPS := preload("res://assets/props.svg")
 
 var world: Node2D
@@ -25,13 +26,16 @@ var fish_cooldown := 0.0
 var nearby_kind := ""
 var nearby_id := ""
 var vfx_root: Node2D
+var dungeon_unlocked := false
+var dungeon_wins := 0
 var interactables := [
 	{"id":"mara", "kind":"npc", "pos":Vector2(300,250), "radius":34.0},
 	{"id":"rowan", "kind":"npc", "pos":Vector2(620,250), "radius":34.0},
 	{"id":"old_road", "kind":"echo", "pos":Vector2(495,355), "radius":42.0},
 	{"id":"glass_orchard", "kind":"echo", "pos":Vector2(520,150), "radius":42.0},
 	{"id":"fishing", "kind":"fish", "pos":Vector2(730,370), "radius":58.0},
-	{"id":"home", "kind":"home", "pos":Vector2(430,235), "radius":48.0}
+	{"id":"home", "kind":"home", "pos":Vector2(430,235), "radius":48.0},
+	{"id":"dungeon", "kind":"dungeon", "pos":Vector2(820,430), "radius":50.0}
 ]
 
 func _ready() -> void:
@@ -48,6 +52,7 @@ func _ready() -> void:
 	add_child(vfx_root)
 	_spawn_gather_nodes()
 	_add_orchard_echo_visual()
+	_add_world_fx()
 	weather = WEATHER_SCENE.new()
 	add_child(weather)
 	audio = AUDIO_SCENE.new()
@@ -97,6 +102,10 @@ func _add_orchard_echo_visual() -> void:
 func _on_gathered(node: Node) -> void:
 	state.add_item(node.resource_id, node.amount)
 	_play_cue("gather")
+	state.add_skill_xp("gathering", 10)
+	if state.collections.get("wood", 0) >= 5:
+		state._unlock_achievement("collector_wood")
+	_spawn_sparkles(node.global_position)
 	state.add_xp(4)
 	_show_toast("Gathered %s +%d  •  node will regrow." % [node.resource_id.capitalize(), node.amount])
 
@@ -148,6 +157,7 @@ func _update_nearby() -> void:
 			"echo": prompt = "E  Listen to the Echo"
 			"fish": prompt = "E  Fish"
 			"home": prompt = "E  Rest at home"
+			"dungeon": prompt = "E  Enter the Sleeping Gate"
 			"gather": prompt = "E  Gather " + nearby_id
 
 func _interact() -> void:
@@ -156,6 +166,7 @@ func _interact() -> void:
 		"echo": _discover_echo(nearby_id)
 		"fish": _fish()
 		"home": _rest()
+		"dungeon": _enter_dungeon()
 		"gather":
 			for node in get_tree().get_nodes_in_group("gather_nodes"):
 				if node.resource_id == nearby_id and node.global_position.distance_to(player.position) < 34.0:
@@ -164,7 +175,9 @@ func _interact() -> void:
 
 func _talk(id: String) -> void:
 	if id == "mara":
-		if state.flags.get("old_road_echo", false) and not state.flags.get("mara_echo_return", false):
+		if state.hour >= 18:
+			ui.show_dialogue("Mara Vale", "The market is closed now. Come back with the morning bell.")
+		elif state.flags.get("old_road_echo", false) and not state.flags.get("mara_echo_return", false):
 			state.set_flag("mara_echo_return", true)
 			state.add_xp(30)
 			ui.show_dialogue("Mara Vale", "You heard it. I can tell. The valley has been waiting for someone willing to listen.")
@@ -185,6 +198,8 @@ func _discover_echo(id: String) -> void:
 			ui.show_dialogue("The Old Road", "The road remembers you now.")
 			return
 		state.set_flag("old_road_echo", true)
+		state.quest_stage = maxi(state.quest_stage, 2)
+		state.add_skill_xp("memory", 15)
 		state.echoes += 1
 		state.add_xp(25)
 		state.add_item("memory_shard", 1)
@@ -200,6 +215,8 @@ func _discover_echo(id: String) -> void:
 			ui.show_dialogue("The Orchard", "Petals drift where no wind blows. Something here remembers spring.")
 			return
 		state.set_flag("glass_orchard_echo", true)
+		state.quest_stage = maxi(state.quest_stage, 5)
+		state.add_skill_xp("memory", 20)
 		state.echoes += 1
 		state.add_xp(40)
 		state.add_item("memory_shard", 1)
@@ -213,7 +230,11 @@ func _fish() -> void:
 		return
 	fish_cooldown = 1.25
 	state.add_item("river_fish", 1)
+	state.add_skill_xp("fishing", 10)
+	if state.collections.get("silverfin", 0) >= 3:
+		state._unlock_achievement("angler")
 	_play_cue("fish")
+	_spawn_fishing_fx()
 	state.add_xp(6)
 	_show_toast("You caught a silverfin.")
 
@@ -229,8 +250,31 @@ func _rest() -> void:
 	_show_toast("You rest at home. The valley feels a little quieter.")
 
 func _attack() -> void:
-	state.add_xp(1)
-	_show_toast("A careful strike. Combat is optional here, but mastery will matter later.")
+	player.perform_action("attack")
+	var nearest: Node = null
+	var distance := 9999.0
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		var d: float = player.position.distance_to(enemy.position)
+		if d < 58.0 and d < distance:
+			distance = d
+			nearest = enemy
+	if nearest:
+		var killed := nearest.take_damage(8 + int(state.skills.get("combat", 1)) * 2)
+		state.add_skill_xp("combat", 8)
+		_play_cue("hit")
+		_spawn_hit_fx(nearest.position)
+		if killed:
+			dungeon_wins += 1
+			state.gold += 5
+			state.add_xp(12)
+			_play_cue("defeat")
+			if dungeon_wins >= 3:
+				state.quest_stage = maxi(state.quest_stage, 7)
+				state._unlock_achievement("sleeping_gate")
+				ui.show_dialogue("The Sleeping Gate", "The mosslings retreat. Behind them, the old gate gives a single answering chime.")
+				_show_toast("Sleeping Gate cleared  •  Gold +5")
+	else:
+		_show_toast("Your blade cuts the air. Move close to strike.")
 
 func _save_game() -> void:
 	save_system.save_game(state, player)
@@ -293,4 +337,68 @@ func _spawn_echo_burst(pos: Vector2) -> void:
 		var tween := create_tween()
 		tween.tween_property(p, "position", target, 0.65)
 		tween.parallel().tween_property(p, "modulate:a", 0.0, 0.65)
+		tween.tween_callback(p.queue_free)
+
+
+func _enter_dungeon() -> void:
+	if not state.flags.get("glass_orchard_echo", false):
+		ui.show_dialogue("The Sleeping Gate", "The gate is cold. The Orchard memory has not awakened the path yet.")
+		return
+	if not dungeon_unlocked:
+		dungeon_unlocked = true
+		for p in [Vector2(760,410),Vector2(835,390),Vector2(855,455)]:
+			var enemy := ENEMY_SCENE.new()
+			world.add_child(enemy)
+			enemy.setup(p, player)
+			enemy.defeated.connect(_on_enemy_defeated)
+		state.quest_stage = maxi(state.quest_stage, 6)
+		_play_cue("gate")
+		ui.show_dialogue("The Sleeping Gate", "Three mosslings stir beneath the old stones. The gate remembers a fight.")
+		_show_toast("Optional combat trial unlocked.")
+	else:
+		ui.show_dialogue("The Sleeping Gate", "Only quiet stone remains. You have already cleared this chamber.")
+
+func _on_enemy_defeated(_enemy: Node) -> void:
+	_spawn_hit_fx(player.position)
+
+func _add_world_fx() -> void:
+	var fire := Sprite2D.new()
+	fire.texture = load("res://assets/environment_fx.svg")
+	fire.region_enabled = true
+	fire.region_rect = Rect2(32,0,32,32)
+	fire.position = Vector2(335,275)
+	fire.scale = Vector2(1.5,1.5)
+	fire.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	world.add_child(fire)
+	var foliage := Sprite2D.new()
+	foliage.texture = load("res://assets/environment_fx.svg")
+	foliage.region_enabled = true
+	foliage.region_rect = Rect2(96,0,32,32)
+	foliage.position = Vector2(570,100)
+	foliage.scale = Vector2(1.5,1.5)
+	foliage.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	world.add_child(foliage)
+
+func _spawn_fishing_fx() -> void:
+	for i in range(5):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(-2,0),Vector2(0,-3),Vector2(2,0),Vector2(0,3)])
+		p.color = Color("#9abdc5")
+		p.position = Vector2(730,370)
+		vfx_root.add_child(p)
+		var tween := create_tween()
+		tween.tween_property(p, "position", p.position + Vector2((i-2)*5,-8-i*2), 0.4)
+		tween.parallel().tween_property(p, "modulate:a",0.0,0.4)
+		tween.tween_callback(p.queue_free)
+
+func _spawn_hit_fx(pos: Vector2) -> void:
+	for i in range(4):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(-3,0),Vector2(0,-2),Vector2(3,0),Vector2(0,2)])
+		p.color = Color("#ead49a")
+		p.position = pos
+		vfx_root.add_child(p)
+		var tween := create_tween()
+		tween.tween_property(p, "position", pos + Vector2((i-2)*8,-8),0.25)
+		tween.parallel().tween_property(p,"modulate:a",0.0,0.25)
 		tween.tween_callback(p.queue_free)
