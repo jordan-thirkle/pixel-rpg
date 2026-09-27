@@ -224,7 +224,7 @@ func _build_character_creator() -> void:
 	preview_body.z_index = 1
 	preview_coat.z_index = 2
 	preview_hair.z_index = 3
-	var preview_label := _start_label("YOUR WAYFARER", Vector2(356,70), 12)
+	var preview_label := _creation_label("YOUR WAYFARER", Vector2(356,70), 12)
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.size = Vector2(128,24)
 	_update_preview()
@@ -242,6 +242,15 @@ func _update_preview() -> void:
 		preview_hair.modulate = {"dark":Color("#4b3730"),"ember":Color("#7d4938"),"gold":Color("#9a713e")}.get(selected_hair,Color.WHITE)
 	if preview_coat:
 		preview_coat.modulate = {"teal":Color("#355f59"),"wine":Color("#704f65"),"ochre":Color("#80633b")}.get(selected_coat,Color.WHITE)
+
+func _creation_label(text:String,pos:Vector2,size:int)->Label:
+	var l:=Label.new()
+	l.text=text
+	l.position=pos
+	l.add_theme_font_size_override("font_size",size)
+	l.add_theme_color_override("font_color",Color("#f3ead2"))
+	creation_panel.add_child(l)
+	return l
 
 func _label_to_panel(text: String, pos: Vector2, size: int) -> Label:
 	var l := Label.new()
@@ -351,15 +360,15 @@ func set_settings(values: Dictionary) -> void:
 					child.button_pressed = bool(settings_values[key])
 
 func toggle_settings() -> void:
-		if not settings_panel.visible:
-			settings_from_start = (not session_active and start_menu != null and start_menu.visible)
-			settings_panel.visible = true
-			if settings_from_start:
-				start_menu.visible = false
-		else:
-			settings_panel.visible = false
-			if settings_from_start and not session_active:
-				start_menu.visible = true
+	if not settings_panel.visible:
+		settings_from_start = (not session_active and start_menu != null and start_menu.visible)
+		settings_panel.visible = true
+		if settings_from_start:
+			start_menu.visible = false
+	else:
+		settings_panel.visible = false
+		if settings_from_start and not session_active:
+			start_menu.visible = true
 	if settings_panel.visible:
 		inventory_panel.visible = false
 		dialog_panel.visible = false
