@@ -65,6 +65,6 @@ jobs:
 
       - name: Run deterministic regression suite
         run: |
-          "$GODOT_BIN" --headless --path game --script tests/vertical_slice_test.gd
-          "$GODOT_BIN" --headless --path game --script tests/save_migration_test.gd
-          "$GODOT_BIN" --headless --path game --script tests/save_round_trip_test.gd
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/vertical_slice_test.gd
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/save_migration_test.gd
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/save_round_trip_test.gd
