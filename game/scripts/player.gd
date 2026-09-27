@@ -4,6 +4,7 @@ class_name EverdunePlayer
 const BODY := preload("res://assets/player_body.svg")
 const HAIR := preload("res://assets/player_hair.svg")
 const COAT := preload("res://assets/player_coat.svg")
+const TOOLS := preload("res://assets/hero_tools.svg")
 
 var state: Node
 var speed := 145.0
@@ -13,6 +14,10 @@ var body_sprite: Sprite2D
 var hair_sprite: Sprite2D
 var coat_sprite: Sprite2D
 var animated := true
+var action_time := 0.0
+var action_kind := ""
+var tool_sprite: Sprite2D
+var equipment := "axe"
 
 func _ready() -> void:
 	z_index = 20
@@ -23,12 +28,15 @@ func _build_layers() -> void:
 	body_sprite = _atlas_sprite(BODY)
 	hair_sprite = _atlas_sprite(HAIR)
 	coat_sprite = _atlas_sprite(COAT)
+	tool_sprite = _atlas_sprite(TOOLS)
+	tool_sprite.visible = false
 	body_sprite.position = Vector2(0,0)
 	hair_sprite.position = Vector2(0,0)
 	coat_sprite.position = Vector2(0,0)
 	add_child(body_sprite)
 	add_child(coat_sprite)
 	add_child(hair_sprite)
+	add_child(tool_sprite)
 	_apply_customisation()
 
 func _atlas_sprite(texture: Texture2D) -> Sprite2D:
@@ -40,12 +48,29 @@ func _atlas_sprite(texture: Texture2D) -> Sprite2D:
 	return s
 
 func _process(delta: float) -> void:
-	bob += delta * (8.0 if velocity.length() > 1.0 else 2.0)
-	var frame := int(floor(fmod(bob * 0.75, 4.0)))
-	var rect := Rect2(frame * 32, 0, 32, 32)
+	bob += delta * (9.0 if velocity.length() > 1.0 else 2.0)
+	action_time = maxf(0.0, action_time - delta)
+	var moving := velocity.length() > 1.0
+	var frame := int(floor(fmod(bob * (0.9 if moving else 0.35), 4.0)))
+	var row := _direction_row()
+	var rect := Rect2(frame * 32, row * 32, 32, 32)
 	if body_sprite: body_sprite.region_rect = rect
 	if hair_sprite: hair_sprite.region_rect = rect
 	if coat_sprite: coat_sprite.region_rect = rect
+	if tool_sprite:
+		tool_sprite.region_rect = Rect2(frame * 32, row * 32, 32, 32)
+		tool_sprite.visible = action_time > 0.0
+		tool_sprite.modulate = Color("#d9c48a") if equipment == "axe" else Color("#a9c3c6")
+
+func _direction_row() -> int:
+	if absf(facing.x) > absf(facing.y):
+		return 1 if facing.x > 0.0 else 3
+	return 0 if facing.y > 0.0 else 2
+
+func perform_action(kind: String) -> void:
+	action_kind = kind
+	action_time = 0.42
+	bob += 0.8
 
 func _physics_process(delta: float) -> void:
 	var input_vector := Vector2(
