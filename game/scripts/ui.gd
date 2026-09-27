@@ -3,6 +3,7 @@ class_name EverduneUI
 
 signal creation_finished
 signal sound_requested(kind: String)
+signal settings_changed(values: Dictionary)
 
 var state: Node
 var prompt_label: Label
@@ -23,6 +24,8 @@ var selected_hair := "dark"
 var selected_coat := "teal"
 var panel_style: StyleBoxFlat
 var button_style: StyleBoxFlat
+var settings_panel: Panel
+var settings_values := {}
 
 func _ready() -> void:
 	layer = 100
@@ -60,6 +63,13 @@ func _build_ui() -> void:
 	toast_label.add_theme_color_override("font_color", Color("#f0c96a"))
 	stats_label = _label("", Vector2(28,22), 16)
 	quest_label = _label("", Vector2(710,24), 14)
+	var settings_button := Button.new()
+	settings_button.text = "Settings"
+	settings_button.position = Vector2(585,20)
+	settings_button.size = Vector2(105,32)
+	settings_button.add_theme_stylebox_override("normal", button_style)
+	settings_button.pressed.connect(toggle_settings)
+	add_child(settings_button)
 	quest_label.add_theme_color_override("font_color", Color("#f1dfb2"))
 
 	dialog_panel = Panel.new()
@@ -102,6 +112,7 @@ func _build_ui() -> void:
 	inventory_panel.add_child(craft_button)
 
 	_build_character_creator()
+	_build_settings_panel()
 
 func _build_character_creator() -> void:
 	creation_panel = Panel.new()
@@ -168,6 +179,78 @@ func _finish_creation() -> void:
 	creation_panel.visible = false
 	creation_finished.emit()
 
+func _build_settings_panel() -> void:
+	settings_panel = Panel.new()
+	settings_panel.add_theme_stylebox_override("panel", panel_style)
+	settings_panel.position = Vector2(230,72)
+	settings_panel.size = Vector2(500,410)
+	settings_panel.visible = false
+	add_child(settings_panel)
+	var title := _label_to_panel_at(settings_panel, "GRAPHICS & ACCESSIBILITY", Vector2(24,18), 22)
+	_label_to_panel_at(settings_panel, "These settings are saved locally and also work in the browser demo.", Vector2(24,52), 13)
+	_add_check(settings_panel, "Fullscreen", "fullscreen", Vector2(24,88))
+	_add_check(settings_panel, "VSync", "vsync", Vector2(250,88))
+	_add_check(settings_panel, "Weather effects", "weather_fx", Vector2(24,126))
+	_add_check(settings_panel, "Dynamic lighting", "dynamic_lighting", Vector2(250,126))
+	_add_check(settings_panel, "Particles & VFX", "particles", Vector2(24,164))
+	_add_check(settings_panel, "Animated water", "animated_water", Vector2(250,164))
+	_add_check(settings_panel, "Screen shake", "screen_shake", Vector2(24,202))
+	_add_check(settings_panel, "Screen flash", "screen_flash", Vector2(250,202))
+	_add_check(settings_panel, "Integer pixel scaling", "integer_scaling", Vector2(24,240))
+	_add_check(settings_panel, "High contrast UI", "high_contrast", Vector2(250,240))
+	var ui_title := _label_to_panel_at(settings_panel, "UI SCALE", Vector2(24,288), 14)
+	var ui_slider := HSlider.new()
+	ui_slider.min_value = 0.85
+	ui_slider.max_value = 1.25
+	ui_slider.step = 0.05
+	ui_slider.value = 1.0
+	ui_slider.position = Vector2(24,315)
+	ui_slider.size = Vector2(300,24)
+	ui_slider.value_changed.connect(func(v): _set_setting("ui_scale", v))
+	settings_panel.add_child(ui_slider)
+	var close := Button.new()
+	close.text = "Close"
+	close.position = Vector2(370,350)
+	close.size = Vector2(100,36)
+	close.add_theme_stylebox_override("normal", button_style)
+	close.pressed.connect(toggle_settings)
+	settings_panel.add_child(close)
+
+func _label_to_panel_at(panel: Panel, text: String, pos: Vector2, size: int) -> Label:
+	var l := Label.new()
+	l.text = text
+	l.position = pos
+	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_color_override("font_color", Color("#f3ead2"))
+	panel.add_child(l)
+	return l
+
+func _add_check(panel: Panel, label: String, key: String, pos: Vector2) -> void:
+	var check := CheckButton.new()
+	check.text = label
+	check.position = pos
+	check.size = Vector2(210,32)
+	check.button_pressed = bool(settings_values.get(key, true))
+	check.toggled.connect(func(v): _set_setting(key, v))
+	panel.add_child(check)
+
+func _set_setting(key: String, value) -> void:
+	settings_values[key] = value
+	settings_changed.emit(settings_values)
+
+func set_settings(values: Dictionary) -> void:
+	settings_values = values.duplicate(true)
+	if settings_panel:
+		for child in settings_panel.get_children():
+			if child is CheckButton and settings_values.has(child.text.to_snake_case()):
+				child.button_pressed = bool(settings_values[child.text.to_snake_case()])
+
+func toggle_settings() -> void:
+	settings_panel.visible = not settings_panel.visible
+	if settings_panel.visible:
+		inventory_panel.visible = false
+		dialog_panel.visible = false
+
 func _process(_delta: float) -> void:
 	if state == null:
 		return
@@ -188,6 +271,8 @@ func _process(_delta: float) -> void:
 		quest_label.text = "THE WORLD REMEMBERS\nThe valley is remembering\n✓ The Gate has answered"
 	if inventory_panel.visible:
 		_refresh_inventory()
+	if settings_panel and settings_panel.visible and state.character.get("name","") == "":
+		settings_panel.visible = false
 
 func set_prompt(prompt: String, toast: String) -> void:
 	prompt_label.text = prompt
@@ -209,7 +294,7 @@ func close_panels() -> void:
 	inventory_panel.visible = false
 
 func _refresh_inventory() -> void:
-	inventory_text.text = "INVENTORY\n\nWood            %d\nStone           %d\nSilverfin       %d\nMemory Shard    %d\nHearthstone     %d\n\nCRAFTING\nTurn Memory Shards into Hearth Lamps." % [
+	inventory_text.text = "INVENTORY\n\nWood            %d\nStone           %d\nSilverfin       %d\nMemory Shard    %d\nHearthstone     %d\n\nSKILLS\nGathering %d   Fishing %d   Memory %d   Combat %d\n\nCOLLECTIONS\nSilverfin %d   Wood %d   Stone %d   Shards %d\nAchievements %d\n\nCRAFTING\nTurn Memory Shards into Hearth Lamps." % [
 		int(state.inventory.get("wood",0)), int(state.inventory.get("stone",0)),
 		int(state.inventory.get("river_fish",0)), int(state.inventory.get("memory_shard",0)),
 		int(state.inventory.get("hearthstone",0)),
