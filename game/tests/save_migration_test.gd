@@ -17,11 +17,11 @@ func _initialize() -> void:
 		"equipment":{"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
 	}
 	var migrated: Dictionary = save.migrate_state_for_test(legacy, 1)
-	assert migrated.has("collections")
-	assert migrated.has("achievements")
+	assert(migrated.has("collections"))
+	assert(migrated.has("achievements"))
 	var state := STATE.new()
 	state.restore(migrated)
-	assert state.collections.has("wood")
-	assert state.achievements is Dictionary
+	assert(state.collections.has("wood"))
+	assert(state.achievements is Dictionary)
 	print("Everdune save migration checks passed.")
 	quit()
