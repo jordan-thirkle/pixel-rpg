@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="32" viewBox="0 0 96 32" shape-rendering="crispEdges">
+<g fill="#6f8d70"><g transform="translate(0)"><path d="M5 25Q6 9 16 7Q27 9 28 25Z"/><rect x="11" y="15" width="3" height="3" fill="#272b2a"/><rect x="21" y="15" width="3" height="3" fill="#272b2a"/></g>
+<g transform="translate(32)"><path d="M4 25Q6 6 16 8Q27 7 29 25Z"/><rect x="11" y="14" width="3" height="3" fill="#272b2a"/><rect x="21" y="14" width="3" height="3" fill="#272b2a"/></g>
+<g transform="translate(64)"><path d="M6 25Q7 10 16 6Q26 10 27 25Z"/><rect x="11" y="16" width="3" height="3" fill="#272b2a"/><rect x="21" y="16" width="3" height="3" fill="#272b2a"/></g></g></svg>
