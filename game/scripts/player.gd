@@ -11,7 +11,10 @@ func _ready() -> void:
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
-	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var input_vector := Vector2(
+		float(Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT)) - float(Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT)),
+		float(Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)) - float(Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP))
+	)
 	if input_vector.length() > 0.0:
 		input_vector = input_vector.normalized()
 		velocity = input_vector * speed
