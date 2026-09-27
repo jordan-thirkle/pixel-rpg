@@ -24,6 +24,7 @@ var echo_cooldown := 0.0
 var fish_cooldown := 0.0
 var nearby_kind := ""
 var nearby_id := ""
+var vfx_root: Node2D
 var interactables := [
 	{"id":"mara", "kind":"npc", "pos":Vector2(300,250), "radius":34.0},
 	{"id":"rowan", "kind":"npc", "pos":Vector2(620,250), "radius":34.0},
@@ -41,6 +42,10 @@ func _ready() -> void:
 	world = WORLD_SCENE.new()
 	world.name = "LarkmereValley"
 	add_child(world)
+	vfx_root = Node2D.new()
+	vfx_root.name = "VFX"
+	vfx_root.z_index = 40
+	add_child(vfx_root)
 	_spawn_gather_nodes()
 	_add_orchard_echo_visual()
 	weather = WEATHER_SCENE.new()
@@ -184,6 +189,7 @@ func _discover_echo(id: String) -> void:
 		state.add_xp(25)
 		state.add_item("memory_shard", 1)
 		_play_cue("echo")
+		_spawn_echo_burst(Vector2(495,355))
 		ui.show_dialogue("An Echo", "A hundred travellers crossed this road before you. For a moment, you hear their laughter in the rain.")
 		_show_toast("Echo I discovered  •  Memory Shard +1  •  XP +25")
 	elif id == "glass_orchard":
@@ -198,6 +204,7 @@ func _discover_echo(id: String) -> void:
 		state.add_xp(40)
 		state.add_item("memory_shard", 1)
 		_play_cue("echo")
+		_spawn_echo_burst(Vector2(520,150))
 		ui.show_dialogue("An Echo", "You remember a garden that once fed the whole valley. Somewhere beneath the roots, a bell is still ringing.")
 		_show_toast("Echo II discovered  •  Memory Shard +1  •  XP +40")
 
@@ -253,3 +260,34 @@ func _on_creation_finished() -> void:
 func _show_toast(message: String) -> void:
 	toast = message
 	toast_time = 3.0
+
+
+func _spawn_sparkles(pos: Vector2) -> void:
+	if vfx_root == null:
+		return
+	for i in range(6):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(0,-3),Vector2(2,0),Vector2(0,3),Vector2(-2,0)])
+		p.color = Color("#ead49a")
+		p.position = pos + Vector2(randf_range(-10,10), randf_range(-8,8))
+		vfx_root.add_child(p)
+		var tween := create_tween()
+		tween.tween_property(p, "position:y", p.position.y - randf_range(10,24), 0.45)
+		tween.parallel().tween_property(p, "modulate:a", 0.0, 0.45)
+		tween.tween_callback(p.queue_free)
+
+func _spawn_echo_burst(pos: Vector2) -> void:
+	if vfx_root == null:
+		return
+	for i in range(10):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(0,-4),Vector2(2,0),Vector2(0,4),Vector2(-2,0)])
+		p.color = Color("#d9c78c")
+		p.position = pos
+		vfx_root.add_child(p)
+		var angle := TAU * float(i) / 10.0
+		var target := pos + Vector2(cos(angle), sin(angle)) * 28.0
+		var tween := create_tween()
+		tween.tween_property(p, "position", target, 0.65)
+		tween.parallel().tween_property(p, "modulate:a", 0.0, 0.65)
+		tween.tween_callback(p.queue_free)
