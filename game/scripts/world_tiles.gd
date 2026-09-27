@@ -15,6 +15,8 @@ var layer: TileMapLayer
 
 func _ready() -> void:
 	_build_reference_art()
+	_build_tiles()
+	_build_props()
 
 func _build_reference_art() -> void:
 	var scene := Sprite2D.new()
@@ -37,7 +39,7 @@ func _build_tiles() -> void:
 	layer = TileMapLayer.new()
 	layer.name = "Terrain"
 	layer.tile_set = set
-	layer.z_index = -10
+	layer.z_index = -30
 	add_child(layer)
 	for y in range(ROWS):
 		for x in range(COLS):
@@ -64,7 +66,7 @@ func _build_tiles() -> void:
 			wave.region_enabled = true
 			wave.region_rect = Rect2(0, 0, 32, 32)
 			wave.position = Vector2(x * 32 + 16, y * 32 + 16)
-			wave.z_index = -9
+			wave.z_index = -28
 			wave.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			add_child(wave)
 			water_sprites.append(wave)
