@@ -1,13 +1,16 @@
 name: Foundation checks
+
 on:
   push:
     branches: ["main"]
   pull_request:
+
 jobs:
   integrity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Verify foundation
         run: |
           test -f README.md
@@ -15,10 +18,30 @@ jobs:
           test -f docs/PIXEL_ART_BIBLE.md
           test -f docs/TECHNICAL_FOUNDATION.md
           test -f docs/PRODUCTION_RULES.md
+          test -f docs/STACK_LOCK.md
           test -f assets/ASSET_MANIFEST.json
+          test -f game/project.godot
+          test -f game/scenes/main.tscn
+          test -f game/scripts/main.gd
+          test -f game/scripts/game_state.gd
+          test -f game/scripts/player.gd
+          test -f game/scripts/world.gd
+          test -f game/scripts/ui.gd
+          test -f game/scripts/save_system.gd
           python - <<'PY'
           import json
           with open("assets/ASSET_MANIFEST.json", encoding="utf-8") as f:
               data=json.load(f)
           print("Foundation manifest valid:", data["project"])
           PY
+
+      - name: Install pinned Godot 4.7.2
+        run: |
+          wget -q https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -O /tmp/godot.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          echo "/tmp/godot" >> "$GITHUB_PATH"
+
+      - name: Validate Godot project
+        run: |
+          godot --headless --path game --editor --quit
+          godot --headless --path game --quit-after 3
