@@ -122,6 +122,7 @@ func _ready() -> void:
 	ui.creation_finished.connect(_on_creation_finished)
 	ui.start_requested.connect(_on_start_requested)
 	ui.sound_requested.connect(_play_cue)
+	ui.craft_requested.connect(_craft_lamp)
 	ui.settings_changed.connect(_apply_settings)
 	ui.set_settings(settings.values)
 
@@ -235,6 +236,13 @@ func _discover_echo(id: String) -> void:
 	_spawn_echo_burst(data.position)
 	ui.show_dialogue("An Echo", data.discovery_text)
 	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
+
+func _craft_lamp() -> void:
+	if crafting.craft_hearth_lamp(state):
+		_play_cue("craft")
+		ui.show_dialogue("Hearth Lamp", "The lamp hums softly. A fragment of the old Hearthsong now lives in your hands.")
+	else:
+		ui.show_dialogue("Hearth Lamp", "Requires 3 Wood, 2 Stone and 1 Memory Shard.")
 
 func _fish() -> void:
 	if fish_cooldown > 0.0:
