@@ -121,6 +121,7 @@ func _on_gathered(node: Node) -> void:
 func _process(delta: float) -> void:
 	if equipment_fx and player:
 		equipment_fx.position = player.position + Vector2(0, -10)
+		equipment_fx.visible = state.equipment.get("tool", "hands") != "hands"
 
 	echo_cooldown = maxf(0.0, echo_cooldown - delta)
 	fish_cooldown = maxf(0.0, fish_cooldown - delta)
