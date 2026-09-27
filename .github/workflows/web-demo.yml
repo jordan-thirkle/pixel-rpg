@@ -45,11 +45,18 @@ jobs:
           "$GODOT_BIN" --headless --path game --export-release "Web" ../build/web/index.html
           test -f build/web/index.html
 
+      - name: Upload browser build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: everdune-web-demo
+          path: build/web
+          retention-days: 14
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: build/web
 
