@@ -146,6 +146,7 @@ func _finish_creation() -> void:
 func _process(_delta: float) -> void:
 	if state == null:
 		return
+	creation_panel.visible = String(state.character.get("name","")).is_empty()
 	stats_label.text = "%s  •  Day %d  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d" % [
 		state.character.get("name","Wayfarer"), state.day, state.hour, state.minute,
 		state.hp, state.max_hp, state.energy, state.max_energy, state.level, state.xp, state.echoes
