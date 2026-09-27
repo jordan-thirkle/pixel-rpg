@@ -73,6 +73,7 @@ func _ready() -> void:
 	ui.creation_finished.connect(_on_creation_finished)
 	ui.sound_requested.connect(_play_cue)
 	ui.settings_changed.connect(_apply_settings)
+	ui.set_settings(settings.values)
 	_load_if_present()
 	player.set_physics_process(not String(state.character.get("name","")).is_empty())
 	weather.set_weather(state.weather)
@@ -418,6 +419,9 @@ func _spawn_hit_fx(pos: Vector2) -> void:
 		tween.tween_callback(p.queue_free)
 
 func _apply_settings(values: Dictionary) -> void:
+	if settings:
+		for key in values.keys():
+			settings.set_value(String(key), values[key])
 	if weather:
 		weather.apply_settings(values)
 	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if bool(values.get("fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED
