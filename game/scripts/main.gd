@@ -32,6 +32,7 @@ var nearby_id := ""
 var vfx_root: Node2D
 var dungeon_unlocked := false
 var dungeon_wins := 0
+var session_started := false
 var interactables := [
 	{"id":"mara", "kind":"npc", "pos":Vector2(300,250), "radius":34.0},
 	{"id":"rowan", "kind":"npc", "pos":Vector2(620,250), "radius":34.0},
@@ -80,14 +81,14 @@ func _ready() -> void:
 	add_child(ui)
 	ui.state = state
 	ui.creation_finished.connect(_on_creation_finished)
+	ui.start_requested.connect(_on_start_requested)
 	ui.sound_requested.connect(_play_cue)
 	ui.settings_changed.connect(_apply_settings)
 	ui.set_settings(settings.values)
-	_load_if_present()
-	player.set_physics_process(not String(state.character.get("name","")).is_empty())
+	player.set_physics_process(false)
+	ui.set_save_available(save_system.has_save())
 	weather.set_weather(state.weather)
 	_apply_settings(settings.values)
-	_show_toast("Welcome to Larkmere Valley.")
 	queue_redraw()
 
 func _spawn_gather_nodes() -> void:
@@ -321,6 +322,29 @@ func _load_if_present() -> void:
 func _play_cue(kind: String) -> void:
 	if audio:
 		audio.cue(kind)
+
+func _on_start_requested(continue_game: bool) -> void:
+	if session_started:
+		return
+	if continue_game:
+		if not save_system.load_game(state, player):
+			return
+		player.refresh_customisation()
+		weather.set_weather(state.weather)
+	else:
+		var fresh_state := STATE_SCENE.new()
+		state.queue_free()
+		state = fresh_state
+		state.name = "GameState"
+		add_child(state)
+		player.state = state
+		ui.state = state
+		player.position = Vector2(480,290)
+		weather.set_weather(state.weather)
+	session_started = true
+	player.set_physics_process(true)
+	ui.begin_session()
+	_show_toast("Welcome to Larkmere Valley.")
 
 func _on_creation_finished() -> void:
 	player.refresh_customisation()
