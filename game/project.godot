@@ -7,7 +7,9 @@ config_version=5
 [application]
 config/name="Everdune"
 config/description="Everdune — The World Remembers."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/boot.tscn"
+config/boot_splash/image="res://assets/hearthfall_scene.svg"
+config/boot_splash/bg_color=Color(0.027,0.067,0.055,1)
 
 [display]
 window/size/viewport_width=960
