@@ -18,6 +18,7 @@ const GATHERING_SCENE := preload("res://scripts/systems/gathering_system.gd")
 const COMBAT_SCENE := preload("res://scripts/systems/combat_system.gd")
 const CRAFTING_SCENE := preload("res://scripts/systems/crafting_system.gd")
 const LOCATION_SCENE := preload("res://scripts/systems/location_system.gd")
+const NPC_VISUAL_SCENE := preload("res://scripts/npc_visual.gd")
 
 var world: Node2D
 var player: CharacterBody2D
@@ -96,6 +97,7 @@ func _ready() -> void:
 	vfx_root.z_index = 40
 	add_child(vfx_root)
 	_spawn_gather_nodes()
+	_spawn_npc_visuals()
 	_add_world_fx()
 
 	weather = WEATHER_SCENE.new()
@@ -132,6 +134,16 @@ func _ready() -> void:
 	ui.set_save_available(save_system.has_save())
 	weather.set_weather(state.weather)
 	_apply_settings(settings.values)
+
+
+func _spawn_npc_visuals() -> void:
+	for id in registry.npcs.keys():
+		var data: EverduneNPCData = registry.npcs[id]
+		var visual := NPC_VISUAL_SCENE.new()
+		visual.name = String(data.id).capitalize()
+		visual.setup(data)
+		visual.z_index = 18
+		world.add_child(visual)
 
 func _spawn_gather_nodes() -> void:
 	var definitions := [
