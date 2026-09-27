@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EverduneNPCData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/npc_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "rowan"
+display_name = "Rowan Bell"
+position = Vector2(620, 250)
+default_dialogue = "Old road-stones are memory anchors. Find one, stand still, and let the world speak first."
+evening_dialogue = ""
+post_echo_dialogue = ""
+evening_hour = 24
+post_echo_flag = ""
+met_flag = "met_rowan"
