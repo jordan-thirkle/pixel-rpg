@@ -8,6 +8,8 @@ var rain_layer: Sprite2D
 var world_light: PointLight2D
 var ambience: CanvasModulate
 var t := 0.0
+var effects_enabled := true
+var lighting_enabled := true
 
 func _ready() -> void:
 	ambience = CanvasModulate.new()
@@ -31,7 +33,7 @@ func _ready() -> void:
 
 func set_weather(kind: String) -> void:
 	if rain_layer:
-		rain_layer.modulate.a = 0.32 if kind == "Rain" else 0.0
+		rain_layer.modulate.a = 0.32 if kind == "Rain" and effects_enabled else 0.0
 
 func set_time(hour: int) -> void:
 	var night := hour >= 20 or hour < 6
@@ -49,3 +51,12 @@ func _process(delta: float) -> void:
 	if rain_layer:
 		rain_layer.position.y = 270.0 + sin(t * 0.6) * 2.0
 		rain_layer.position.x = 480.0 + sin(t * 0.35) * 3.0
+
+func apply_settings(values: Dictionary) -> void:
+	effects_enabled = bool(values.get("weather_fx", true))
+	lighting_enabled = bool(values.get("dynamic_lighting", true))
+	if rain_layer:
+		rain_layer.visible = effects_enabled
+	if world_light:
+		world_light.visible = lighting_enabled
+	set_weather("Rain" if rain_layer and rain_layer.modulate.a > 0.0 else "Clear")
