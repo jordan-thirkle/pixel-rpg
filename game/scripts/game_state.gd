@@ -21,9 +21,37 @@ var flags := {}
 var crafted := {}
 var weather := "Clear"
 var character := {"name":"","hair":"dark","coat":"teal"}
+var quest_stage := 0
+var skills := {"gathering":1,"fishing":1,"memory":1,"combat":1}
+var skill_xp := {"gathering":0,"fishing":0,"memory":0,"combat":0}
+var equipment := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
+var collections := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0}
+var achievements := {}
 
 func add_item(id: String, amount: int) -> void:
 	inventory[id] = int(inventory.get(id, 0)) + amount
+	if collections.has(id):
+		collections[id] = int(collections[id]) + amount
+	changed.emit()
+
+func add_skill_xp(skill: String, amount: int) -> void:
+	skill_xp[skill] = int(skill_xp.get(skill, 0)) + amount
+	var threshold := 25 + (int(skills.get(skill, 1)) - 1) * 20
+	while int(skill_xp[skill]) >= threshold:
+		skill_xp[skill] = int(skill_xp[skill]) - threshold
+		skills[skill] = int(skills.get(skill, 1)) + 1
+		_unlock_achievement("skill_" + skill + "_" + str(skills[skill]))
+		threshold = 25 + (int(skills.get(skill, 1)) - 1) * 20
+	changed.emit()
+
+func _unlock_achievement(id: String) -> void:
+	achievements[id] = true
+
+func has_achievement(id: String) -> bool:
+	return bool(achievements.get(id, false))
+
+func set_equipment(slot: String, id: String) -> void:
+	equipment[slot] = id
 	changed.emit()
 
 func remove_item(id: String, amount: int) -> bool:
@@ -69,12 +97,14 @@ func craft_hearth_lamp() -> bool:
 	remove_item("memory_shard", 1)
 	inventory["hearthstone"] += 1
 	crafted["hearth_lamp"] = int(crafted.get("hearth_lamp", 0)) + 1
+	_unlock_achievement("first_craft")
+	add_skill_xp("memory", 10)
 	add_xp(20)
 	changed.emit()
 	return true
 
 func snapshot() -> Dictionary:
-	return {"day":day,"hour":hour,"minute":minute,"season":season,"year":year,"hp":hp,"energy":energy,"level":level,"xp":xp,"gold":gold,"echoes":echoes,"inventory":inventory,"flags":flags,"crafted":crafted,"weather":weather,"character":character}
+	return {"day":day,"hour":hour,"minute":minute,"season":season,"year":year,"hp":hp,"energy":energy,"level":level,"xp":xp,"gold":gold,"echoes":echoes,"inventory":inventory,"flags":flags,"crafted":crafted,"weather":weather,"character":character,"quest_stage":quest_stage,"skills":skills,"skill_xp":skill_xp,"equipment":equipment,"collections":collections,"achievements":achievements}
 
 func restore(data: Dictionary) -> void:
 	for key in ["day","hour","minute","season","year","hp","energy","level","xp","gold","echoes"]:
@@ -90,4 +120,16 @@ func restore(data: Dictionary) -> void:
 		weather = String(data.weather)
 	if data.has("character"):
 		character = data.character.duplicate(true)
+	if data.has("quest_stage"):
+		quest_stage = int(data.quest_stage)
+	if data.has("skills"):
+		skills = data.skills.duplicate(true)
+	if data.has("skill_xp"):
+		skill_xp = data.skill_xp.duplicate(true)
+	if data.has("equipment"):
+		equipment = data.equipment.duplicate(true)
+	if data.has("collections"):
+		collections = data.collections.duplicate(true)
+	if data.has("achievements"):
+		achievements = data.achievements.duplicate(true)
 	changed.emit()
