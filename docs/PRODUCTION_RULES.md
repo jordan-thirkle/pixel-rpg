@@ -14,3 +14,8 @@
 
 11. Treat every knowingly temporary implementation as an explicit placeholder; register it in docs/PLACEHOLDER_REGISTRY.md and keep it visible until it passes Second-Eyes.
 12. Never scale world/content to hide unresolved P0 vertical-slice quality gaps.
+
+13. Treat main.gd as orchestration. New gameplay content belongs in canonical data Resources and systems.
+14. Retire obsolete implementations instead of keeping parallel compatibility paths.
+15. Runtime asset manifest drift is a CI failure.
+16. Deterministic vertical-slice and save/migration checks are required before architecture changes are considered complete.
