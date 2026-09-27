@@ -9,12 +9,14 @@ const WEATHER_SCENE := preload("res://scripts/weather.gd")
 const GATHER_SCENE := preload("res://scripts/gather_node.gd")
 const AUDIO_SCENE := preload("res://scripts/audio.gd")
 const ENEMY_SCENE := preload("res://scripts/enemy.gd")
+const SETTINGS_SCENE := preload("res://scripts/settings.gd")
 const PROPS := preload("res://assets/props.svg")
 
 var world: Node2D
 var player: CharacterBody2D
 var ui: CanvasLayer
 var state: Node
+var settings: Node
 var save_system: Node
 var weather: Node
 var audio: Node
@@ -41,6 +43,8 @@ var interactables := [
 func _ready() -> void:
 	state = STATE_SCENE.new()
 	add_child(state)
+	settings = SETTINGS_SCENE.new()
+	add_child(settings)
 	save_system = SAVE_SCENE.new()
 	add_child(save_system)
 	world = WORLD_SCENE.new()
@@ -68,9 +72,11 @@ func _ready() -> void:
 	ui.state = state
 	ui.creation_finished.connect(_on_creation_finished)
 	ui.sound_requested.connect(_play_cue)
+	ui.settings_changed.connect(_apply_settings)
 	_load_if_present()
 	player.set_physics_process(not String(state.character.get("name","")).is_empty())
 	weather.set_weather(state.weather)
+	_apply_settings(settings.values)
 	_show_toast("Welcome to Larkmere Valley.")
 	queue_redraw()
 
@@ -310,6 +316,8 @@ func _show_toast(message: String) -> void:
 
 
 func _spawn_sparkles(pos: Vector2) -> void:
+	if settings and not bool(settings.get_value("particles", true)):
+		return
 	if vfx_root == null:
 		return
 	for i in range(6):
@@ -324,6 +332,8 @@ func _spawn_sparkles(pos: Vector2) -> void:
 		tween.tween_callback(p.queue_free)
 
 func _spawn_echo_burst(pos: Vector2) -> void:
+	if settings and not bool(settings.get_value("particles", true)):
+		return
 	if vfx_root == null:
 		return
 	for i in range(10):
@@ -380,6 +390,8 @@ func _add_world_fx() -> void:
 	world.add_child(foliage)
 
 func _spawn_fishing_fx() -> void:
+	if settings and not bool(settings.get_value("particles", true)):
+		return
 	for i in range(5):
 		var p := Polygon2D.new()
 		p.polygon = PackedVector2Array([Vector2(-2,0),Vector2(0,-3),Vector2(2,0),Vector2(0,3)])
@@ -392,6 +404,8 @@ func _spawn_fishing_fx() -> void:
 		tween.tween_callback(p.queue_free)
 
 func _spawn_hit_fx(pos: Vector2) -> void:
+	if settings and not bool(settings.get_value("particles", true)):
+		return
 	for i in range(4):
 		var p := Polygon2D.new()
 		p.polygon = PackedVector2Array([Vector2(-3,0),Vector2(0,-2),Vector2(3,0),Vector2(0,2)])
@@ -402,3 +416,12 @@ func _spawn_hit_fx(pos: Vector2) -> void:
 		tween.tween_property(p, "position", pos + Vector2((i-2)*8,-8),0.25)
 		tween.parallel().tween_property(p,"modulate:a",0.0,0.25)
 		tween.tween_callback(p.queue_free)
+
+func _apply_settings(values: Dictionary) -> void:
+	if weather:
+		weather.apply_settings(values)
+	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if bool(values.get("fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(mode)
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if bool(values.get("vsync", true)) else DisplayServer.VSYNC_DISABLED)
+	if get_window():
+		get_window().content_scale_factor = float(values.get("ui_scale", 1.0))
