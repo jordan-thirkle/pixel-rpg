@@ -4,6 +4,9 @@ const STATE := preload("res://scripts/game_state.gd")
 const SAVE := preload("res://scripts/save_system.gd")
 
 func _init() -> void:
+	call_deferred("_run")
+
+func _run() -> void:
 	var save := SAVE.new()
 	var state := STATE.new()
 	var player := Node2D.new()
