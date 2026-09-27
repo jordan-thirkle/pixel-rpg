@@ -10,6 +10,7 @@ const GATHER_SCENE := preload("res://scripts/gather_node.gd")
 const AUDIO_SCENE := preload("res://scripts/audio.gd")
 const ENEMY_SCENE := preload("res://scripts/enemy.gd")
 const SETTINGS_SCENE := preload("res://scripts/settings.gd")
+const EQUIPMENT := preload("res://assets/hero_equipment.svg")
 const PROPS := preload("res://assets/props.svg")
 
 var world: Node2D
@@ -17,6 +18,7 @@ var player: CharacterBody2D
 var ui: CanvasLayer
 var state: Node
 var settings: Node
+var equipment_fx: Sprite2D
 var save_system: Node
 var weather: Node
 var audio: Node
@@ -117,6 +119,9 @@ func _on_gathered(node: Node) -> void:
 	_show_toast("Gathered %s +%d  •  node will regrow." % [node.resource_id.capitalize(), node.amount])
 
 func _process(delta: float) -> void:
+	if equipment_fx and player:
+		equipment_fx.position = player.position + Vector2(0, -10)
+
 	echo_cooldown = maxf(0.0, echo_cooldown - delta)
 	fish_cooldown = maxf(0.0, fish_cooldown - delta)
 	toast_time = maxf(0.0, toast_time - delta)
