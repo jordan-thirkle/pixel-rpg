@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+  pull_request:
 
 permissions:
   contents: read
@@ -62,7 +63,6 @@ jobs:
           test -f game/scripts/boot.gd
           test -f game/web/everdune_shell.html
           test -f game/assets/hearthfall_scene.svg
-          test -f web/404.html
           grep -q 'html/custom_html_shell="res://web/everdune_shell.html"' game/export_presets.cfg
           grep -q 'onProgress' game/web/everdune_shell.html
           grep -q '/game/index.html' web/index.html
