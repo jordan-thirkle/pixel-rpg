@@ -18,6 +18,7 @@ var action_time := 0.0
 var action_kind := ""
 var tool_sprite: Sprite2D
 var equipment := "axe"
+const CHARACTER_SCALE := Vector2(1.75, 1.75)
 
 func _ready() -> void:
 	z_index = 20
@@ -45,6 +46,7 @@ func _atlas_sprite(texture: Texture2D) -> Sprite2D:
 	s.region_enabled = true
 	s.region_rect = Rect2(0,0,32,32)
 	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	s.scale = CHARACTER_SCALE
 	return s
 
 func _process(delta: float) -> void:
