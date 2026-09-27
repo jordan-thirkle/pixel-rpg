@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="32" viewBox="0 0 128 32" shape-rendering="crispEdges">
+<g transform="translate(0)"><rect width="32" height="32" fill="#4f7890"/><path d="M3 9H13M19 15H29M6 24H20" stroke="#88afbd" stroke-width="2"/></g>
+<g transform="translate(32)"><rect width="32" height="32" fill="#4f7890"/><path d="M7 9H18M2 16H12M17 23H29" stroke="#88afbd" stroke-width="2"/></g>
+<g transform="translate(64)"><rect width="32" height="32" fill="#4f7890"/><path d="M3 12H20M14 19H29M6 27H15" stroke="#88afbd" stroke-width="2"/></g>
+<g transform="translate(96)"><rect width="32" height="32" fill="#4f7890"/><path d="M12 8H28M3 17H15M17 25H27" stroke="#88afbd" stroke-width="2"/></g>
+</svg>
