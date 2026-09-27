@@ -31,6 +31,7 @@ var start_menu: Panel
 var continue_button: Button
 var session_active := false
 var settings_from_start := false
+var hud_settings_button: Button
 
 func _ready() -> void:
 	layer = 100
@@ -68,13 +69,13 @@ func _build_ui() -> void:
 	toast_label.add_theme_color_override("font_color", Color("#f0c96a"))
 	stats_label = _label("", Vector2(28,22), 16)
 	quest_label = _label("", Vector2(710,24), 14)
-	var settings_button := Button.new()
-	settings_button.text = "Settings"
-	settings_button.position = Vector2(585,20)
-	settings_button.size = Vector2(105,32)
-	settings_button.add_theme_stylebox_override("normal", button_style)
-	settings_button.pressed.connect(toggle_settings)
-	add_child(settings_button)
+	hud_settings_button = Button.new()
+	hud_settings_button.text = "Settings"
+	hud_settings_button.position = Vector2(585,20)
+	hud_settings_button.size = Vector2(105,32)
+	hud_settings_button.add_theme_stylebox_override("normal", button_style)
+	hud_settings_button.pressed.connect(toggle_settings)
+	add_child(hud_settings_button)
 	quest_label.add_theme_color_override("font_color", Color("#f1dfb2"))
 
 	dialog_panel = Panel.new()
@@ -332,6 +333,12 @@ func toggle_settings() -> void:
 func _process(_delta: float) -> void:
 	if state == null:
 		return
+	stats_label.visible = session_active
+	quest_label.visible = session_active
+	prompt_label.visible = session_active
+	toast_label.visible = session_active
+	if hud_settings_button:
+		hud_settings_button.visible = session_active
 	creation_panel.visible = (not session_active) and start_menu != null and not start_menu.visible and not settings_panel.visible
 	stats_label.text = "%s  •  Day %d  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d" % [
 		state.character.get("name","Wayfarer"), state.day, state.hour, state.minute,
