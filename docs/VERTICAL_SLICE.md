@@ -27,6 +27,7 @@ The first real game runtime is now implemented in Godot.
 - [x] Weather overlay and day/night ambience
 - [x] Dynamic local light presentation
 - [x] Two-stage Echo progression
+- [x] Replaceable runtime audio cue layer
 
 ## Intentional limitations
 This is not the final game and does not pretend to be. It establishes the executable contract that later art/content systems build on.
