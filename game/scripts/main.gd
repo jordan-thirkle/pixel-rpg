@@ -271,21 +271,33 @@ func _fish() -> void:
 	if fish_cooldown > 0.0:
 		return
 	fish_cooldown = 1.25
-	state.add_item("river_fish",1)
+	var roll := randf()
+	var catch_id := "river_fish"
+	var catch_label := "river fish"
+	if roll > 0.82:
+		catch_id = "silverfin"
+		catch_label = "silverfin"
+		state.fish_luck += 1
+	else:
+		state.fish_luck = maxi(0, state.fish_luck - 1)
+	state.add_item(catch_id,1)
 	state.add_skill_xp("fishing",10)
-	if state.collections.get("silverfin",0) >= 3:
+	if int(state.collections.get("silverfin",0)) >= 3:
 		state._unlock_achievement("angler")
 	_play_cue("fish")
 	_spawn_fishing_fx()
-	state.add_xp(6)
-	_show_toast("You caught a silverfin.")
+	state.add_xp(8 if catch_id == "silverfin" else 4)
+	_show_toast("You caught a %s." % catch_label)
 
 func _rest() -> void:
 	state.energy = state.max_energy
 	state.hp = state.max_hp
 	state.advance_time(2)
+	state.home_returns += 1
+	state.set_flag("returned_home", true)
 	state.weather = "Rain" if state.hour >= 18 and state.hour < 21 else "Clear"
 	weather.set_weather(state.weather)
+	_play_cue("home")
 	_show_toast("You rest at home. The valley feels a little quieter.")
 
 func _attack() -> void:
