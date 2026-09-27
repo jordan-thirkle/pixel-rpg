@@ -55,7 +55,9 @@ func _process(delta: float) -> void:
 	if attack_windup > 0.0:
 		attack_windup -= delta
 		if telegraph:
-			telegraph.color.a = 0.25 + sin(Time.get_ticks_msec() * 0.025) * 0.15
+			var tele_color := telegraph.color
+			tele_color.a = 0.25 + sin(Time.get_ticks_msec() * 0.025) * 0.15
+			telegraph.color = tele_color
 		if attack_windup <= 0.0:
 			_strike()
 	elif telegraph:
