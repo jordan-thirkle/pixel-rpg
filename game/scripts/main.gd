@@ -280,7 +280,7 @@ func _discover_echo(id: String) -> void:
 	_spawn_echo_burst(data.position)
 	if world and world.has_method("awaken_echo"):
 		world.awaken_echo(data.id)
-	ui.show_dialogue("An Echo", data.discovery_text)
+	ui.show_dialogue(data.title, data.discovery_text)
 	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
 
 func _craft_lamp() -> void:
