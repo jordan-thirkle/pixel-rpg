@@ -447,6 +447,34 @@ func _spawn_fishing_fx() -> void:
 		tween.parallel().tween_property(p,"modulate:a",0.0,0.4)
 		tween.tween_callback(p.queue_free)
 
+func _spawn_fishing_cast_fx() -> void:
+	if settings and not bool(settings.get_value("particles",true)):
+		return
+	var ripple := Polygon2D.new()
+	ripple.polygon = PackedVector2Array([Vector2(-9,0),Vector2(-5,-2),Vector2(0,-3),Vector2(5,-2),Vector2(9,0),Vector2(5,2),Vector2(0,3),Vector2(-5,2)])
+	ripple.color = Color("#8fb8bd")
+	ripple.position = Vector2(730,370)
+	vfx_root.add_child(ripple)
+	var tween := create_tween()
+	tween.tween_property(ripple,"scale",Vector2(2.0,2.0),0.55)
+	tween.parallel().tween_property(ripple,"modulate:a",0.0,0.55)
+	tween.tween_callback(ripple.queue_free)
+
+func _spawn_fishing_bite_fx() -> void:
+	if settings and not bool(settings.get_value("particles",true)):
+		return
+	for i in range(8):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(0,-3),Vector2(2,0),Vector2(0,3),Vector2(-2,0)])
+		p.color = Color("#e8c77c")
+		p.position = Vector2(730,370)
+		vfx_root.add_child(p)
+		var angle := TAU * float(i) / 8.0
+		var tween := create_tween()
+		tween.tween_property(p,"position",p.position + Vector2(cos(angle),sin(angle))*18.0,0.28)
+		tween.parallel().tween_property(p,"modulate:a",0.0,0.28)
+		tween.tween_callback(p.queue_free)
+
 func _spawn_hit_fx(pos: Vector2) -> void:
 	if settings and not bool(settings.get_value("particles",true)):
 		return
