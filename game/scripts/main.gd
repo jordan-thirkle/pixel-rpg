@@ -333,7 +333,7 @@ func _on_start_requested(continue_game: bool) -> void:
 		weather.set_weather(state.weather)
 	else:
 		var fresh_state := STATE_SCENE.new()
-		state.queue_free()
+		state.free()
 		state = fresh_state
 		state.name = "GameState"
 		add_child(state)
