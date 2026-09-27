@@ -52,12 +52,12 @@ Not yet production-complete:
 - final authored audio/music assets
 - expanded combat, dungeon design and boss encounters
 - full quest/content library beyond the vertical slice
-- equipment and character customisation
+- expanded equipment and character customisation (core layered equipment/customisation now exists; production breadth remains)
 - procedural content systems
 - Gauntlet
 - Steamworks
 - multiplayer transport
-- accessibility/settings/options
+- accessibility/settings/options (initial runtime settings now exist; full accessibility pass remains)
 - final save migration/versioning
 - automated gameplay regression suite
 
@@ -85,3 +85,8 @@ The current production slice is now structured as a complete short-form player j
 The architecture intentionally leaves the player free to fish, gather, explore and return home rather than forcing combat. The Sleeping Gate is the first explicit high-intensity branch.
 
 Production-quality expansion now focuses on replacing placeholder-quality art/audio with authored final assets while preserving this executable content spine.
+
+
+## Browser deployment gate
+
+The Godot Web export is now generated during the Vercel build and published under `/game/`. The public `/play/` shell and homepage game frame both target that generated runtime. This keeps the playable browser build derived from the same Godot source rather than maintaining a second HTML game.
