@@ -16,6 +16,7 @@ var flash_time := 0.0
 var hit_stun := 0.0
 var telegraph: Polygon2D
 var health_fill: ColorRect
+var visual_base_scale := Vector2.ONE
 
 const SLIME := preload("res://assets/enemy_slime.svg")
 
@@ -47,7 +48,8 @@ func configure_variant(health: int, move_speed: float, visual_scale: float) -> v
 	hp = health
 	speed = move_speed
 	if visual:
-		visual.scale = Vector2.ONE * visual_scale
+		visual_base_scale = Vector2.ONE * visual_scale
+		visual.scale = visual_base_scale
 	_update_health_bar()
 
 func _build_health_bar() -> void:
@@ -112,8 +114,8 @@ func _process(delta: float) -> void:
 		attack_windup = 0.36
 		if visual:
 			var tween := create_tween()
-			tween.tween_property(visual,"scale",visual.scale * Vector2(1.12,0.88),0.12)
-			tween.tween_property(visual,"scale",visual.scale,0.12)
+			tween.tween_property(visual,"scale",visual_base_scale * Vector2(1.12,0.88),0.12)
+			tween.tween_property(visual,"scale",visual_base_scale,0.12)
 
 func _strike() -> void:
 	if target and position.distance_to(target.position) < 46.0 and target.has_method("take_enemy_hit"):
