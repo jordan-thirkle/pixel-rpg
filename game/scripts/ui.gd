@@ -210,7 +210,12 @@ func _refresh_inventory() -> void:
 	inventory_text.text = "INVENTORY\n\nWood            %d\nStone           %d\nSilverfin       %d\nMemory Shard    %d\nHearthstone     %d\n\nCRAFTING\nTurn Memory Shards into Hearth Lamps." % [
 		int(state.inventory.get("wood",0)), int(state.inventory.get("stone",0)),
 		int(state.inventory.get("river_fish",0)), int(state.inventory.get("memory_shard",0)),
-		int(state.inventory.get("hearthstone",0))
+		int(state.inventory.get("hearthstone",0)),
+		int(state.skills.get("gathering",1)), int(state.skills.get("fishing",1)),
+		int(state.skills.get("memory",1)), int(state.skills.get("combat",1)),
+		int(state.collections.get("silverfin",0)), int(state.collections.get("wood",0)),
+		int(state.collections.get("stone",0)), int(state.collections.get("memory_shard",0)),
+		state.achievements.size()
 	]
 
 func _craft_lamp() -> void:
