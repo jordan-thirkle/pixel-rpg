@@ -28,6 +28,9 @@ The first real game runtime is now implemented in Godot.
 - [x] Dynamic local light presentation
 - [x] Two-stage Echo progression
 - [x] Replaceable runtime audio cue layer
+- [x] Production art pass: enriched terrain/props/player assets
+- [x] Authored world dressing and material-styled UI
+- [x] Lightweight gather/Echo VFX feedback
 
 ## Intentional limitations
 This is not the final game and does not pretend to be. It establishes the executable contract that later art/content systems build on.
@@ -49,3 +52,15 @@ Not yet production-complete:
 - automated gameplay regression suite
 
 Those systems should be added as vertical slices, not as disconnected feature piles.
+
+## Current production gate
+
+The project has crossed from technical prototype into production-runtime territory, but visual quality is still being raised in deliberate passes. The current assets are integrated and replaceable; they are not the final art ceiling.
+
+Next gate:
+1. hero character sheet + directional animation
+2. authored equipment/tool layers
+3. production TileMapLayer map with collision and transition tiles
+4. environmental animation/VFX
+5. authored ambience/music
+6. deeper quest/content slice
