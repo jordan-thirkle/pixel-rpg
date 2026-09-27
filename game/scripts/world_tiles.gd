@@ -258,6 +258,29 @@ func awaken_echo(id: String) -> void:
 		tween.tween_property(marker,"modulate:a",0.15,0.8)
 		tween.tween_property(marker,"modulate:a",1.0,0.8)
 
+func place_hearth_lamp() -> void:
+	var lamp := Sprite2D.new()
+	lamp.texture = load("res://assets/environment_fx.svg") as Texture2D
+	lamp.region_enabled = true
+	lamp.region_rect = Rect2(64,0,32,32)
+	lamp.position = Vector2(335,275)
+	lamp.scale = Vector2(1.15,1.15)
+	lamp.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	lamp.z_index = 8
+	add_child(lamp)
+	var glow := Polygon2D.new()
+	glow.polygon = PackedVector2Array([
+		Vector2(-8,0),Vector2(-5,-5),Vector2(0,-8),Vector2(5,-5),
+		Vector2(8,0),Vector2(5,5),Vector2(0,8),Vector2(-5,5)
+	])
+	glow.position = Vector2(335,260)
+	glow.color = Color("#e8c77c")
+	glow.z_index = 7
+	add_child(glow)
+	var tween := create_tween().set_loops()
+	tween.tween_property(glow,"modulate:a",0.25,0.8)
+	tween.tween_property(glow,"modulate:a",0.75,0.8)
+
 func set_water_animation(enabled: bool) -> void:
 	for wave in water_sprites:
 		wave.visible = enabled
