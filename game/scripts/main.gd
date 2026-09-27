@@ -422,6 +422,8 @@ func _apply_settings(values: Dictionary) -> void:
 	if settings:
 		for key in values.keys():
 			settings.set_value(String(key), values[key])
+	if world and world.has_method("set_water_animation"):
+		world.set_water_animation(bool(values.get("animated_water", true)))
 	if weather:
 		weather.apply_settings(values)
 	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if bool(values.get("fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED
