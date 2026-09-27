@@ -7,14 +7,23 @@ const ROWS := 17
 const TERRAIN := preload("res://assets/terrain_atlas.svg")
 const PROPS := preload("res://assets/props.svg")
 const WATER := preload("res://assets/water_anim.svg")
+const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
 var water_sprites: Array[Sprite2D] = []
 var anim_time := 0.0
 
 var layer: TileMapLayer
 
 func _ready() -> void:
-	_build_tiles()
-	_build_props()
+	_build_reference_art()
+
+func _build_reference_art() -> void:
+	var scene := Sprite2D.new()
+	scene.name = "HearthfallArt"
+	scene.texture = SCENE_ART
+	scene.position = Vector2(480,270)
+	scene.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	scene.z_index = -20
+	add_child(scene)
 
 func _build_tiles() -> void:
 	var set := TileSet.new()
