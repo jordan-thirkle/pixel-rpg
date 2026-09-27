@@ -85,6 +85,10 @@ func _build_props() -> void:
 	_prop(7, Vector2(730,370), Vector2(1.15,1.15))
 
 
+func set_water_animation(enabled: bool) -> void:
+	for wave in water_sprites:
+		wave.visible = enabled
+
 func _process(delta: float) -> void:
 	anim_time += delta
 	var frame := int(anim_time * 3.0) % 4
