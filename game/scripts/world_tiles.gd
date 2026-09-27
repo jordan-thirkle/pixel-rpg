@@ -98,19 +98,16 @@ func _build_world_collision() -> void:
 		shape_node.shape = shape
 		shape_node.position = item[0]
 		body.add_child(shape_node)
-	# Leave the bridge opening clear so the road crossing is physical rather than a player exception.
-	var bridge_left := CollisionShape2D.new()
-	var bridge_shape := RectangleShape2D.new()
-	bridge_shape.size = Vector2(10,160)
-	bridge_left.shape = bridge_shape
-	bridge_left.position = Vector2(595,145)
-	body.add_child(bridge_left)
-	var bridge_right := CollisionShape2D.new()
-	var bridge_shape_2 := RectangleShape2D.new()
-	bridge_shape_2.size = Vector2(10,170)
-	bridge_right.shape = bridge_shape_2
-	bridge_right.position = Vector2(595,405)
-	body.add_child(bridge_right)
+	# The bridge crossing is represented by a physical floor corridor, while the river remains a blocked region.
+	var bridge_floor := StaticBody2D.new()
+	bridge_floor.name = "HearthfallBridge"
+	var floor_shape := CollisionShape2D.new()
+	var floor_rect := RectangleShape2D.new()
+	floor_rect.size = Vector2(38, 96)
+	floor_shape.shape = floor_rect
+	floor_shape.position = Vector2(614, 290)
+	bridge_floor.add_child(floor_shape)
+	add_child(bridge_floor)
 
 func _prop(index: int, pos: Vector2, scale := Vector2.ONE, z := 0) -> Sprite2D:
 	var s := Sprite2D.new()
