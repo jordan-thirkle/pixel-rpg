@@ -225,6 +225,7 @@ func _rest() -> void:
 		state.weather = "Rain"
 	else:
 		state.weather = "Clear"
+	weather.set_weather(state.weather)
 	_show_toast("You rest at home. The valley feels a little quieter.")
 
 func _attack() -> void:
@@ -239,6 +240,7 @@ func _load_game() -> void:
 	if save_system.load_game(state, player):
 		if player:
 			player.refresh_customisation()
+		weather.set_weather(state.weather)
 		_show_toast("Game loaded.")
 	else:
 		_show_toast("No save found yet.")
@@ -246,6 +248,7 @@ func _load_game() -> void:
 func _load_if_present() -> void:
 	if save_system.has_save():
 		save_system.load_game(state, player)
+		weather.set_weather(state.weather)
 
 func _play_cue(kind: String) -> void:
 	if audio:
