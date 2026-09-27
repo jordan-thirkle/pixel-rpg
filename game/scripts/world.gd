@@ -26,6 +26,9 @@ func _draw() -> void:
 	_draw_house(Vector2(430,220),"Home")
 	_draw_market(Vector2(255,265))
 	_draw_well(Vector2(300,300))
+	_draw_npc(Vector2(300,250), "Mara")
+	_draw_npc(Vector2(620,250), "Rowan")
+	_draw_fishing_spot(Vector2(730,370))
 	var previous := road_points[0]
 	for point in road_points:
 		draw_line(previous,point,Color("#9b825d"),22)
@@ -82,3 +85,26 @@ func _draw_flower(pos:Vector2)->void:
 	draw_line(pos,pos+Vector2(0,8),Color("#8eac5d"),2)
 	draw_circle(pos,3,Color("#e3c36c"))
 	for a in [0.0,1.57,3.14,4.71]: draw_circle(pos+Vector2(cos(a),sin(a))*4,2.5,Color("#d08a74"))
+
+func _draw_npc(pos:Vector2, label:String)->void:
+	draw_ellipse(pos+Vector2(0,12),Vector2(9,4),Color("#17241e80"))
+	var coat := Color("#6b4d61") if label=="Mara" else Color("#3e5966")
+	draw_rect(Rect2(pos+Vector2(-7,-3),Vector2(14,17)),coat)
+	draw_rect(Rect2(pos+Vector2(-6,-13),Vector2(12,10)),Color("#d2a477"))
+	draw_rect(Rect2(pos+Vector2(-7,-14),Vector2(14,5)),Color("#3b302d"))
+	draw_rect(Rect2(pos+Vector2(-8,-1),Vector2(16,3)),Color("#d3a85d"))
+	draw_string(ThemeDB.fallback_font,pos+Vector2(-18,-22),label,HORIZONTAL_ALIGNMENT_LEFT,60,10,Color("#f1dfb2"))
+
+func _draw_fishing_spot(pos:Vector2)->void:
+	draw_circle(pos,12,Color("#1f424b"))
+	draw_arc(pos,15,0,TAU,24,Color("#d5bd76"),2)
+	draw_line(pos+Vector2(-8,-6),pos+Vector2(8,7),Color("#c6a76a"),2)
+	draw_circle(pos+Vector2(9,8),3,Color("#e4cf82"))
+
+func _draw_ellipse(center:Vector2,radii:Vector2,color:Color)->void:
+	var points:=PackedVector2Array()
+	for i in range(24):
+		var a:=TAU*float(i)/24.0
+		points.append(center+Vector2(cos(a)*radii.x,sin(a)*radii.y))
+	draw_colored_polygon(points,color)
+
