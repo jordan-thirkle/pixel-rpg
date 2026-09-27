@@ -9,6 +9,7 @@ signal harvested(node)
 var available := true
 var respawn_left := 0.0
 var visual: Sprite2D
+var base_scale := Vector2(1.1,1.1)
 
 func setup(id: String, texture: Texture2D, atlas_index: int, at: Vector2) -> void:
 	resource_id = id
@@ -17,10 +18,26 @@ func setup(id: String, texture: Texture2D, atlas_index: int, at: Vector2) -> voi
 	visual.texture = texture
 	visual.region_enabled = true
 	visual.region_rect = Rect2(atlas_index * 32, 0, 32, 32)
-	visual.scale = Vector2(1.1,1.1)
+	visual.scale = base_scale
 	visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(visual)
 	add_to_group("gather_nodes")
+	_build_prompt_ring()
+
+func _build_prompt_ring() -> void:
+	var ring := Polygon2D.new()
+	ring.name = "InteractionGlow"
+	ring.polygon = PackedVector2Array([
+		Vector2(-7,0),Vector2(-5,-2),Vector2(0,-3),Vector2(5,-2),
+		Vector2(7,0),Vector2(5,2),Vector2(0,3),Vector2(-5,2)
+	])
+	ring.color = Color("#d7b86d")
+	ring.position = Vector2(0,13)
+	ring.modulate.a = 0.18
+	add_child(ring)
+	var tween := create_tween().set_loops()
+	tween.tween_property(ring,"modulate:a",0.08,0.9)
+	tween.tween_property(ring,"modulate:a",0.24,0.9)
 
 func can_gather() -> bool:
 	return available
@@ -29,8 +46,12 @@ func gather() -> bool:
 	if not available:
 		return false
 	available = false
-	if visual: visual.visible = false
 	respawn_left = respawn_seconds
+	if visual:
+		var tween := create_tween()
+		tween.tween_property(visual,"scale",base_scale * 1.28,0.08)
+		tween.tween_property(visual,"scale",base_scale * 0.72,0.14)
+		tween.tween_callback(func(): visual.visible = false)
 	harvested.emit(self)
 	return true
 
@@ -39,4 +60,9 @@ func _process(delta: float) -> void:
 		respawn_left -= delta
 		if respawn_left <= 0.0:
 			available = true
-			if visual: visual.visible = true
+			if visual:
+				visual.visible = true
+				visual.scale = base_scale * 0.72
+				var tween := create_tween()
+				tween.tween_property(visual,"scale",base_scale * 1.12,0.16)
+				tween.tween_property(visual,"scale",base_scale,0.24)

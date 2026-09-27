@@ -38,6 +38,13 @@ jobs:
           test -f game/assets/player_hair.svg
           test -f game/assets/player_coat.svg
           test -f game/assets/hero_tools.svg
+          test -f game/assets/hero_face.svg
+          test -f game/assets/hero_shirt.svg
+          test -f game/assets/hero_trousers.svg
+          test -f game/assets/hero_boots.svg
+          test -f game/assets/hero_accessory.svg
+          test -f game/assets/hero_back.svg
+          test -f game/assets/sleeping_gate.svg
           test -f game/assets/enemy_slime.svg
           test -f game/assets/environment_fx.svg
           test -f game/assets/water_anim.svg

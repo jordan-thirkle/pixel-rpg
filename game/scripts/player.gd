@@ -4,6 +4,12 @@ class_name EverdunePlayer
 const BODY := preload("res://assets/player_body.svg")
 const HAIR := preload("res://assets/player_hair.svg")
 const COAT := preload("res://assets/player_coat.svg")
+const FACE := preload("res://assets/hero_face.svg")
+const SHIRT := preload("res://assets/hero_shirt.svg")
+const TROUSERS := preload("res://assets/hero_trousers.svg")
+const BOOTS := preload("res://assets/hero_boots.svg")
+const ACCESSORY := preload("res://assets/hero_accessory.svg")
+const BACK := preload("res://assets/hero_back.svg")
 const TOOLS := preload("res://assets/hero_tools.svg")
 
 var state: Node
@@ -18,6 +24,12 @@ var tool_sprite: Sprite2D
 var body_sprite: Sprite2D
 var hair_sprite: Sprite2D
 var coat_sprite: Sprite2D
+var face_sprite: Sprite2D
+var shirt_sprite: Sprite2D
+var trousers_sprite: Sprite2D
+var boots_sprite: Sprite2D
+var accessory_sprite: Sprite2D
+var back_sprite: Sprite2D
 var equipment := "axe"
 var step_phase := 0.0
 var last_moving := false
@@ -30,15 +42,19 @@ func _ready() -> void:
 	queue_redraw()
 
 func _build_layers() -> void:
+	back_sprite = _atlas_sprite(BACK)
+	boots_sprite = _atlas_sprite(BOOTS)
+	trousers_sprite = _atlas_sprite(TROUSERS)
+	shirt_sprite = _atlas_sprite(SHIRT)
 	body_sprite = _atlas_sprite(BODY)
-	hair_sprite = _atlas_sprite(HAIR)
+	face_sprite = _atlas_sprite(FACE)
 	coat_sprite = _atlas_sprite(COAT)
+	hair_sprite = _atlas_sprite(HAIR)
+	accessory_sprite = _atlas_sprite(ACCESSORY)
 	tool_sprite = _atlas_sprite(TOOLS)
 	tool_sprite.visible = false
-	add_child(body_sprite)
-	add_child(coat_sprite)
-	add_child(hair_sprite)
-	add_child(tool_sprite)
+	for sprite in [back_sprite, boots_sprite, trousers_sprite, shirt_sprite, body_sprite, face_sprite, coat_sprite, hair_sprite, accessory_sprite, tool_sprite]:
+		add_child(sprite)
 	_apply_customisation()
 
 func _atlas_sprite(texture: Texture2D) -> Sprite2D:
@@ -72,7 +88,7 @@ func _process(delta: float) -> void:
 
 	# Tiny grounded motion makes movement feel less mechanically flat.
 	var stride := sin(step_phase) * (0.8 if moving else 0.0)
-	for sprite in [body_sprite, coat_sprite, hair_sprite]:
+	for sprite in [back_sprite, boots_sprite, trousers_sprite, shirt_sprite, body_sprite, face_sprite, coat_sprite, hair_sprite, accessory_sprite]:
 		if sprite:
 			sprite.position.y = stride
 	if tool_sprite:
@@ -112,17 +128,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, braking * delta)
 
-	var previous_position := position
 	move_and_slide()
 
-	var in_river := position.x > 600.0 and position.x < 850.0 and position.y > 60.0 and position.y < 490.0
-	var on_bridge := position.x > 575.0 and position.x < 610.0 and position.y > 224.0 and position.y < 320.0
-	if in_river and not on_bridge:
-		position = previous_position
-		velocity = Vector2.ZERO
-
-	position.x = clampf(position.x, 54.0, 906.0)
-	position.y = clampf(position.y, 54.0, 486.0)
+	# The Hearthfall world owns its physical boundaries; player logic only keeps us inside the authored viewport.
 
 func _apply_customisation() -> void:
 	if state == null:
@@ -133,6 +141,11 @@ func _apply_customisation() -> void:
 	var coat_colors := {"teal":Color("#355f59"),"wine":Color("#704f65"),"ochre":Color("#80633b")}
 	if hair_sprite: hair_sprite.modulate = hair_colors.get(hair, Color.WHITE)
 	if coat_sprite: coat_sprite.modulate = coat_colors.get(coat, Color.WHITE)
+	if accessory_sprite: accessory_sprite.modulate = Color("#d9b66f") if coat == "teal" else Color("#d2a36a")
+	if shirt_sprite: shirt_sprite.modulate = Color("#d0b28a")
+	if trousers_sprite: trousers_sprite.modulate = Color("#4b5660")
+	if boots_sprite: boots_sprite.modulate = Color("#3e3029")
+	if back_sprite: back_sprite.modulate = Color("#674b3b")
 
 func refresh_customisation() -> void:
 	_apply_customisation()

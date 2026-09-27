@@ -43,11 +43,22 @@ var toast := ""
 var toast_time := 0.0
 var echo_cooldown := 0.0
 var fish_cooldown := 0.0
+var fish_phase := "idle"
+var fish_timer := 0.0
 var nearby_kind := ""
 var nearby_id := ""
 var session_started := false
 var equipment_texture: Texture2D
 var props_texture: Texture2D
+var world_spawn_points := {
+	"hearthfall": Vector2(480,290),
+	"mara": Vector2(330,255),
+	"old_road": Vector2(495,355),
+	"fishing": Vector2(730,370),
+	"glass_orchard": Vector2(520,150),
+	"sleeping_gate": Vector2(820,430),
+	"home": Vector2(300,300)
+}
 
 func _ready() -> void:
 	equipment_texture = load("res://assets/hero_equipment.svg") as Texture2D
@@ -107,7 +118,7 @@ func _ready() -> void:
 
 	player = PLAYER_SCENE.new()
 	player.name = "Wayfarer"
-	player.position = Vector2(480,290)
+	player.position = world_spawn_points.hearthfall
 	add_child(player)
 	player.state = state
 
@@ -142,6 +153,7 @@ func _spawn_npc_visuals() -> void:
 		var visual := NPC_VISUAL_SCENE.new()
 		visual.name = String(data.id).capitalize()
 		visual.setup(data)
+		visual.set_state(state)
 		visual.z_index = 18
 		world.add_child(visual)
 
@@ -178,11 +190,28 @@ func _process(delta: float) -> void:
 			equipment_fx.region_rect = Rect2(int(tool_index)*32,0,32,32)
 	echo_cooldown = maxf(0.0, echo_cooldown-delta)
 	fish_cooldown = maxf(0.0, fish_cooldown-delta)
+	if fish_phase != "idle":
+		fish_timer = maxf(0.0, fish_timer - delta)
+		if fish_phase == "waiting_bite" and fish_timer <= 0.0:
+			fish_phase = "bite"
+			fish_timer = 1.15
+			_play_cue("fish_bite")
+			_spawn_fishing_bite_fx()
+		elif fish_phase == "bite" and fish_timer <= 0.0:
+			fish_phase = "idle"
+			fish_cooldown = 0.8
+			_play_cue("fish_miss")
+			_show_toast("The silverfin slipped away. Cast again when the water settles.")
 	toast_time = maxf(0.0, toast_time-delta)
 	_update_nearby()
 	if weather:
 		weather.follow_player(player)
 		weather.set_time(state.hour)
+	if audio and audio.has_method("set_mood"):
+		var audio_mood := "night" if state.hour >= 20 or state.hour < 6 else "day"
+		if get_tree().get_nodes_in_group("enemies").size() > 0:
+			audio_mood = "gate"
+		audio.set_mood(audio_mood)
 	if ui:
 		ui.set_prompt(prompt, toast if toast_time > 0.0 else "")
 
@@ -201,6 +230,12 @@ func _update_nearby() -> void:
 	var result: Dictionary = interactions.nearest(player.position, get_tree().get_nodes_in_group("gather_nodes"))
 	nearby_kind = String(result.kind)
 	nearby_id = String(result.id)
+	if fish_phase == "waiting_bite":
+		prompt = "Wait for the bite…"
+		return
+	if fish_phase == "bite":
+		prompt = "E  REEL NOW"
+		return
 	if nearby_kind.is_empty():
 		prompt = "WASD / Arrows move  •  E interact  •  I inventory  •  K save"
 		return
@@ -248,12 +283,16 @@ func _discover_echo(id: String) -> void:
 	var data: EverduneEchoData = result.data
 	_play_cue("echo")
 	_spawn_echo_burst(data.position)
-	ui.show_dialogue("An Echo", data.discovery_text)
+	if world and world.has_method("awaken_echo"):
+		world.awaken_echo(data.id)
+	ui.show_dialogue(data.title, data.discovery_text)
 	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
 
 func _craft_lamp() -> void:
 	if crafting.craft_hearth_lamp(state):
 		_play_cue("craft")
+		if world and world.has_method("place_hearth_lamp"):
+			world.place_hearth_lamp()
 		ui.show_dialogue("Hearth Lamp", "The lamp hums softly. A fragment of the old Hearthsong now lives in your hands.")
 	else:
 		ui.show_dialogue("Hearth Lamp", "Requires 3 Wood, 2 Stone and 1 Memory Shard.")
@@ -261,22 +300,48 @@ func _craft_lamp() -> void:
 func _fish() -> void:
 	if fish_cooldown > 0.0:
 		return
-	fish_cooldown = 1.25
-	state.add_item("river_fish",1)
-	state.add_skill_xp("fishing",10)
-	if state.collections.get("silverfin",0) >= 3:
+	if fish_phase == "waiting_bite":
+		return
+	if fish_phase == "bite":
+		_resolve_fish_catch()
+		return
+	fish_phase = "waiting_bite"
+	fish_timer = 0.75 + randf_range(0.35, 0.95)
+	_play_cue("fish_cast")
+	_spawn_fishing_cast_fx()
+	_show_toast("Line cast. Watch the float…")
+	
+func _resolve_fish_catch() -> void:
+	fish_phase = "idle"
+	fish_cooldown = 1.1
+	var silverfin_chance := clampf(0.18 + float(state.fish_luck) * 0.04, 0.18, 0.36)
+	var roll := randf()
+	var catch_id := "river_fish"
+	var catch_label := "river fish"
+	if roll <= silverfin_chance:
+		catch_id = "silverfin"
+		catch_label = "silverfin"
+		state.fish_luck += 1
+	else:
+		state.fish_luck = maxi(0, state.fish_luck - 1)
+	state.add_item(catch_id,1)
+	state.add_skill_xp("fishing",12)
+	if int(state.collections.get("silverfin",0)) >= 3:
 		state._unlock_achievement("angler")
-	_play_cue("fish")
+	_play_cue("fish_catch")
 	_spawn_fishing_fx()
-	state.add_xp(6)
-	_show_toast("You caught a silverfin.")
+	state.add_xp(10 if catch_id == "silverfin" else 5)
+	_show_toast("You caught a %s." % catch_label)
 
 func _rest() -> void:
 	state.energy = state.max_energy
 	state.hp = state.max_hp
 	state.advance_time(2)
+	state.home_returns += 1
+	state.set_flag("returned_home", true)
 	state.weather = "Rain" if state.hour >= 18 and state.hour < 21 else "Clear"
 	weather.set_weather(state.weather)
+	_play_cue("home")
 	_show_toast("You rest at home. The valley feels a little quieter.")
 
 func _attack() -> void:
@@ -318,7 +383,7 @@ func _on_start_requested(continue_game: bool) -> void:
 		weather.set_weather(state.weather)
 	else:
 		state.reset_new_game()
-		player.position = Vector2(480,290)
+		player.position = world_spawn_points.hearthfall
 		weather.set_weather(state.weather)
 	session_started = true
 	player.set_physics_process(true)
@@ -385,6 +450,34 @@ func _spawn_fishing_fx() -> void:
 		var tween := create_tween()
 		tween.tween_property(p,"position",p.position+Vector2((i-2)*5,-8-i*2),0.4)
 		tween.parallel().tween_property(p,"modulate:a",0.0,0.4)
+		tween.tween_callback(p.queue_free)
+
+func _spawn_fishing_cast_fx() -> void:
+	if settings and not bool(settings.get_value("particles",true)):
+		return
+	var ripple := Polygon2D.new()
+	ripple.polygon = PackedVector2Array([Vector2(-9,0),Vector2(-5,-2),Vector2(0,-3),Vector2(5,-2),Vector2(9,0),Vector2(5,2),Vector2(0,3),Vector2(-5,2)])
+	ripple.color = Color("#8fb8bd")
+	ripple.position = Vector2(730,370)
+	vfx_root.add_child(ripple)
+	var tween := create_tween()
+	tween.tween_property(ripple,"scale",Vector2(2.0,2.0),0.55)
+	tween.parallel().tween_property(ripple,"modulate:a",0.0,0.55)
+	tween.tween_callback(ripple.queue_free)
+
+func _spawn_fishing_bite_fx() -> void:
+	if settings and not bool(settings.get_value("particles",true)):
+		return
+	for i in range(8):
+		var p := Polygon2D.new()
+		p.polygon = PackedVector2Array([Vector2(0,-3),Vector2(2,0),Vector2(0,3),Vector2(-2,0)])
+		p.color = Color("#e8c77c")
+		p.position = Vector2(730,370)
+		vfx_root.add_child(p)
+		var angle := TAU * float(i) / 8.0
+		var tween := create_tween()
+		tween.tween_property(p,"position",p.position + Vector2(cos(angle),sin(angle))*18.0,0.28)
+		tween.parallel().tween_property(p,"modulate:a",0.0,0.28)
 		tween.tween_callback(p.queue_free)
 
 func _spawn_hit_fx(pos: Vector2) -> void:

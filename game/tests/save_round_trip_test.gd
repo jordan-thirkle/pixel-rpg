@@ -14,6 +14,9 @@ func _run() -> void:
 	state.set_flag("old_road_echo",true)
 	state.add_item("memory_shard",2)
 	state.quest_stage = 5
+	state.relationship_mara = 4
+	state.home_returns = 2
+	state.combat_streak = 1
 	player.position = Vector2(612,344)
 	assert(save.save_game(state,player))
 	var restored := STATE.new()
@@ -23,6 +26,9 @@ func _run() -> void:
 	assert(restored.flags.old_road_echo)
 	assert(restored.quest_stage == 5)
 	assert(int(restored.inventory.memory_shard) == 2)
+	assert(restored.relationship_mara == 4)
+	assert(restored.home_returns == 2)
+	assert(restored.combat_streak == 1)
 	assert(restored_player.position == Vector2(612,344))
 	if FileAccess.file_exists(save.SAVE_PATH):
 		DirAccess.remove_absolute(save.SAVE_PATH)

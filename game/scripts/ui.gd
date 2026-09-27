@@ -5,6 +5,12 @@ const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
 const PREVIEW_BODY := preload("res://assets/player_body.svg")
 const PREVIEW_HAIR := preload("res://assets/player_hair.svg")
 const PREVIEW_COAT := preload("res://assets/player_coat.svg")
+const PREVIEW_FACE := preload("res://assets/hero_face.svg")
+const PREVIEW_SHIRT := preload("res://assets/hero_shirt.svg")
+const PREVIEW_TROUSERS := preload("res://assets/hero_trousers.svg")
+const PREVIEW_BOOTS := preload("res://assets/hero_boots.svg")
+const PREVIEW_ACCESSORY := preload("res://assets/hero_accessory.svg")
+const PREVIEW_BACK := preload("res://assets/hero_back.svg")
 
 signal creation_finished
 signal start_requested(continue_game: bool)
@@ -41,6 +47,12 @@ var hud_settings_button: Button
 var preview_body: Sprite2D
 var preview_hair: Sprite2D
 var preview_coat: Sprite2D
+var preview_face: Sprite2D
+var preview_shirt: Sprite2D
+var preview_trousers: Sprite2D
+var preview_boots: Sprite2D
+var preview_accessory: Sprite2D
+var preview_back: Sprite2D
 var start_backdrop: TextureRect
 var start_overlay: ColorRect
 
@@ -157,10 +169,11 @@ func _build_start_menu() -> void:
 	start_backdrop.position = Vector2.ZERO
 	start_backdrop.size = Vector2(960,540)
 	start_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	start_backdrop.visible = false
 	start_menu.add_child(start_backdrop)
 
 	start_overlay = ColorRect.new()
-	start_overlay.color = Color(0.015,0.028,0.025,0.48)
+	start_overlay.color = Color(0.015,0.028,0.025,0.34)
 	start_overlay.position = Vector2.ZERO
 	start_overlay.size = Vector2(960,540)
 	start_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -296,16 +309,19 @@ func _build_character_creator() -> void:
 	begin.pressed.connect(_finish_creation)
 	creation_panel.add_child(begin)
 
+	preview_back = _preview_sprite(PREVIEW_BACK)
+	preview_boots = _preview_sprite(PREVIEW_BOOTS)
+	preview_trousers = _preview_sprite(PREVIEW_TROUSERS)
+	preview_shirt = _preview_sprite(PREVIEW_SHIRT)
 	preview_body = _preview_sprite(PREVIEW_BODY)
-	preview_hair = _preview_sprite(PREVIEW_HAIR)
+	preview_face = _preview_sprite(PREVIEW_FACE)
 	preview_coat = _preview_sprite(PREVIEW_COAT)
-	for sprite in [preview_body, preview_coat, preview_hair]:
+	preview_hair = _preview_sprite(PREVIEW_HAIR)
+	preview_accessory = _preview_sprite(PREVIEW_ACCESSORY)
+	for sprite in [preview_back, preview_boots, preview_trousers, preview_shirt, preview_body, preview_face, preview_coat, preview_hair, preview_accessory]:
 		sprite.position = Vector2(420,178)
 		sprite.scale = Vector2(3.0,3.0)
 		creation_panel.add_child(sprite)
-	preview_body.z_index = 1
-	preview_coat.z_index = 2
-	preview_hair.z_index = 3
 	var preview_label := _creation_label("YOUR WAYFARER", Vector2(356,70), 12)
 	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	preview_label.size = Vector2(128,24)
@@ -324,6 +340,11 @@ func _update_preview() -> void:
 		preview_hair.modulate = {"dark":Color("#4b3730"),"ember":Color("#7d4938"),"gold":Color("#9a713e")}.get(selected_hair,Color.WHITE)
 	if preview_coat:
 		preview_coat.modulate = {"teal":Color("#355f59"),"wine":Color("#704f65"),"ochre":Color("#80633b")}.get(selected_coat,Color.WHITE)
+	if preview_accessory: preview_accessory.modulate = Color("#d9b66f")
+	if preview_shirt: preview_shirt.modulate = Color("#d0b28a")
+	if preview_trousers: preview_trousers.modulate = Color("#4b5660")
+	if preview_boots: preview_boots.modulate = Color("#3e3029")
+	if preview_back: preview_back.modulate = Color("#674b3b")
 
 func _creation_label(text:String,pos:Vector2,size:int)->Label:
 	var l:=Label.new()

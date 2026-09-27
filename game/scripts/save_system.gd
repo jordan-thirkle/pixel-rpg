@@ -58,4 +58,8 @@ func _migrate_state(data: Dictionary, version: int) -> Dictionary:
 			migrated["max_energy"] = 100
 		if not migrated.has("equipment"):
 			migrated["equipment"] = {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
+	if not migrated.has("fish_luck"): migrated["fish_luck"] = 0
+	if not migrated.has("home_returns"): migrated["home_returns"] = 0
+	if not migrated.has("relationship_mara"): migrated["relationship_mara"] = 0
+	if not migrated.has("combat_streak"): migrated["combat_streak"] = 0
 	return migrated

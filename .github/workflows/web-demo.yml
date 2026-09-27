@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+  pull_request:
 
 permissions:
   contents: read
@@ -57,6 +58,7 @@ jobs:
           test -f web/play/index.html
           test -f web/vercel-build.sh
           test -f web/vercel.json
+          test -f web/404.html
           test -f game/scenes/boot.tscn
           test -f game/scripts/boot.gd
           test -f game/web/everdune_shell.html

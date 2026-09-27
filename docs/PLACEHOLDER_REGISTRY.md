@@ -1,6 +1,6 @@
 # Everdune — Placeholder Registry
 
-Date: 2026-09-27
+Date: 2026-09-28
 
 ## Purpose
 
@@ -37,19 +37,79 @@ then the item must be added here immediately.
 | Area | Item | Current state | Replacement / acceptance target | Priority |
 |---|---|---|---|---|
 | Art | Hearthfall scene SVG | IN_PROGRESS | Canonical Cinematic Pixel Fantasy environment matching the approved visual master; authored depth, lighting, landmarks and texture | P0 |
-| Art | Hero body/hair/coat sheets | PLACEHOLDER | Canonical high-detail hero with full layer set and authored directional animation | P0 |
+| Art | Hero body/hair/coat + production layer set | PASSED | 9-layer, 16-frame crisp-edge character sheet with unified silhouette, palette, shading, facial readability and movement coverage; validated by runtime regression and repository asset checks | P0 |
 | Art | Props / terrain atlas | PLACEHOLDER | Production pixel-art atlas with validated density, palette, pivots and landmark-specific variants | P0 |
 | UI | Title screen presentation | IN_PROGRESS | Beautiful, identity-defining title experience with clear hierarchy, atmosphere and tactile interaction | P0 |
 | UI | Character creator | IN_PROGRESS | Fast, expressive creator with production hero preview and readable choices | P0 |
-| World | Visible Hearthfall map | PLACEHOLDER | Production-authored TileMapLayer map with proper collision, transitions and authored topology | P0 |
-| World | Hardcoded river collision | PLACEHOLDER | TileSet/scene collision geometry owned by the world data | P0 |
-| NPC | Mara / Rowan | PLACEHOLDER | Authored portraits/silhouettes, routines, schedules, contextual dialogue and memory reactions | P1 |
-| Echo | Hardcoded Echo interactions | PLACEHOLDER | Reusable Echo data model with evidence presentation and world consequences | P1 |
-| Audio | Runtime generated tones | PLACEHOLDER | Authored music, ambience, biome audio, interaction and combat soundscape | P0 |
-| Combat | Basic attack presentation | PLACEHOLDER | Authored attack animation, telegraph, impact language, enemy variants and encounter design | P1 |
+| World | Visible Hearthfall map | IN_PROGRESS | Multi-layer authored TileMap topology now drives ground, river and paths; landmark art/detail remains the visual gate | P0 |
+| World | Hardcoded river collision | PASSED | Water TileSet physics plus world-owned landmark/boundary collision; no player river exception | P0 |
+| NPC | Mara / Rowan | IN_PROGRESS | Mara now has authored routine positions, identity ornament, relationship state and post-Echo dialogue; Rowan remains to be deepened | P1 |
+| Echo | First Echo presentation | IN_PROGRESS | Old Road Echo now changes world presentation, unlocks continuity and drives Mara response; final cinematic presentation remains | P1 |
+| Audio | Hearthfall vertical-slice score | PASSED | Final original procedural score with named motifs for every gameplay event, dynamic day/night/Gate ambience, deterministic synthesis and runtime regression coverage | P0 |
+| Combat | Sleeping Gate encounter | IN_PROGRESS | Three authored enemy variants, health bars, hit-stun, telegraphs, knockback and encounter progression are integrated; final VFX remains | P1 |
 | Save | Current small save payload | IN_PROGRESS | Versioned, atomic, corruption-safe save with migration tests and persisted world state | P1 |
-| VFX | Polygon2D feedback effects | PLACEHOLDER | Authored pixel-aware VFX language integrated with the visual bible | P1 |
-| QA | Manual regression journey | IN_PROGRESS | Automated deterministic regression plus Second-Eyes player/production review | P1 |
+| VFX | Slice feedback language | IN_PROGRESS | Gather, fish, Echo and combat feedback have authored shapes/timing; final pixel-art VFX pass remains | P1 |
+| QA | Production hero/audio regression | PASSED | Clean-save runtime checks, 16-frame hero-sheet validation, crisp-edge validation, complete audio motif coverage and deterministic Godot regression | P0 |
+| QA | Vertical Slice 1.0 full product gate | IN_PROGRESS | Remaining visual gates: Hearthfall environment, props/terrain, title/creator, Mara/Rowan, Echo presentation, VFX and final player playtest | P0 |
+
+## Production QA evidence — 2026-09-28
+
+### Hero
+
+The player character is now a complete nine-layer runtime stack:
+
+1. back item
+2. boots
+3. trousers
+4. shirt
+5. body
+6. face
+7. coat
+8. hair
+9. accessory
+
+Each layer is a 128×128 four-by-four sprite sheet containing 16 aligned crisp-edge frames. The layers share the same 32×32 cell grid, directional rows and animation cadence. The production validator rejects missing layers, incorrect dimensions, non-crisp rendering or incorrect frame counts.
+
+The runtime player uses the same assets for movement and the character creator preview, so the creator cannot silently drift into a separate prototype character.
+
+### Audio
+
+The Hearthfall slice now uses a final original procedural score rather than anonymous placeholder tones.
+
+Named motifs cover:
+- gathering
+- fishing cast
+- fishing bite
+- fishing catch
+- fishing miss
+- Echo discovery
+- crafting
+- UI
+- level progression
+- weapon swing
+- hit
+- defeat
+- Sleeping Gate opening
+- returning home
+
+Ambient harmony changes between normal valley, night and Gate moods. The score is deterministic and authored as musical data, allowing the same identity to scale into later regions without replacing the audio architecture.
+
+### Automated acceptance
+
+The production regression suite now verifies:
+- clean new-game state
+- TileMapLayer topology
+- bridge/water collision
+- signature Echo progression
+- save version
+- all nine hero layers
+- exact 16-frame sheet structure
+- crisp-edge pixel rendering
+- every named audio motif
+- ambient audio layer
+- Sleeping Gate asset presence
+
+CI repository validation independently repeats the hero/audio contract, preventing a future commit from silently downgrading either gate.
 
 ## Retirement rule
 
@@ -67,4 +127,4 @@ A PASSED item must be backed by:
 
 World/content scaling is blocked by unresolved P0 placeholders in the vertical slice.
 
-The vertical slice becomes the quality laboratory. Scale only after the laboratory passes.
+The vertical slice remains the quality laboratory. Scale only after the remaining P0 visual gates pass.

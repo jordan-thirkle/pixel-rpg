@@ -26,5 +26,8 @@ func _run() -> void:
 	state.restore(migrated)
 	assert(state.collections.has("wood"))
 	assert(state.achievements is Dictionary)
+	assert(state.relationship_mara == 0)
+	assert(state.home_returns == 0)
+	assert(state.combat_streak == 0)
 	print("Everdune save migration checks passed.")
 	quit()
