@@ -8,16 +8,20 @@ const TOOLS := preload("res://assets/hero_tools.svg")
 
 var state: Node
 var speed := 145.0
+var acceleration := 1050.0
+var braking := 1350.0
 var facing := Vector2.DOWN
 var bob := 0.0
-var body_sprite: Sprite2D
-var hair_sprite: Sprite2D
-var coat_sprite: Sprite2D
-var animated := true
 var action_time := 0.0
 var action_kind := ""
 var tool_sprite: Sprite2D
+var body_sprite: Sprite2D
+var hair_sprite: Sprite2D
+var coat_sprite: Sprite2D
 var equipment := "axe"
+var step_phase := 0.0
+var last_moving := false
+
 const CHARACTER_SCALE := Vector2(1.75, 1.75)
 
 func _ready() -> void:
@@ -31,9 +35,6 @@ func _build_layers() -> void:
 	coat_sprite = _atlas_sprite(COAT)
 	tool_sprite = _atlas_sprite(TOOLS)
 	tool_sprite.visible = false
-	body_sprite.position = Vector2(0,0)
-	hair_sprite.position = Vector2(0,0)
-	coat_sprite.position = Vector2(0,0)
 	add_child(body_sprite)
 	add_child(coat_sprite)
 	add_child(hair_sprite)
@@ -50,19 +51,34 @@ func _atlas_sprite(texture: Texture2D) -> Sprite2D:
 	return s
 
 func _process(delta: float) -> void:
-	bob += delta * (9.0 if velocity.length() > 1.0 else 2.0)
+	var moving := velocity.length() > 8.0
+	if moving:
+		bob += delta * 10.0
+		step_phase = fmod(step_phase + delta * 7.5, TAU)
+	else:
+		bob += delta * 2.0
+
 	action_time = maxf(0.0, action_time - delta)
-	var moving := velocity.length() > 1.0
-	var frame := int(floor(fmod(bob * (0.9 if moving else 0.35), 4.0)))
+	var frame := int(floor(fmod(bob * (0.82 if moving else 0.22), 4.0)))
 	var row := _direction_row()
 	var rect := Rect2(frame * 32, row * 32, 32, 32)
 	if body_sprite: body_sprite.region_rect = rect
 	if hair_sprite: hair_sprite.region_rect = rect
 	if coat_sprite: coat_sprite.region_rect = rect
 	if tool_sprite:
-		tool_sprite.region_rect = Rect2(frame * 32, row * 32, 32, 32)
+		tool_sprite.region_rect = rect
 		tool_sprite.visible = action_time > 0.0
 		tool_sprite.modulate = Color("#d9c48a") if equipment == "axe" else Color("#a9c3c6")
+
+	# Tiny grounded motion makes movement feel less mechanically flat.
+	var stride := sin(step_phase) * (0.8 if moving else 0.0)
+	for sprite in [body_sprite, coat_sprite, hair_sprite]:
+		if sprite:
+			sprite.position.y = stride
+	if tool_sprite:
+		tool_sprite.position.y = stride
+
+	last_moving = moving
 
 func _direction_row() -> int:
 	if absf(facing.x) > absf(facing.y):
@@ -89,19 +105,22 @@ func _physics_process(delta: float) -> void:
 	)
 	if input_vector.length() > 0.0:
 		input_vector = input_vector.normalized()
-		velocity = input_vector * speed
+		velocity = velocity.move_toward(input_vector * speed, acceleration * delta)
 		facing = input_vector
 		if state:
 			state.energy = maxf(0.0, state.energy - delta * 0.7)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, speed * 8.0 * delta)
+		velocity = velocity.move_toward(Vector2.ZERO, braking * delta)
+
 	var previous_position := position
 	move_and_slide()
+
 	var in_river := position.x > 600.0 and position.x < 850.0 and position.y > 60.0 and position.y < 490.0
 	var on_bridge := position.x > 575.0 and position.x < 610.0 and position.y > 224.0 and position.y < 320.0
 	if in_river and not on_bridge:
 		position = previous_position
 		velocity = Vector2.ZERO
+
 	position.x = clampf(position.x, 54.0, 906.0)
 	position.y = clampf(position.y, 54.0, 486.0)
 
