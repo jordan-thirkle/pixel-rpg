@@ -31,6 +31,7 @@ jobs:
           test -f game/scripts/world_tiles.gd
           test -f game/scripts/gather_node.gd
           test -f game/scripts/weather.gd
+          test -f game/scripts/audio.gd
           test -f game/assets/terrain_atlas.svg
           test -f game/assets/props.svg
           test -f game/assets/player_body.svg
