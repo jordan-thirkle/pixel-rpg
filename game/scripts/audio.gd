@@ -26,6 +26,7 @@ func cue(kind: String) -> void:
 		"hit": _tone(180.0, 0.06, 0.10)
 		"defeat": _chord(261.63, 392.0, 0.18, 0.10)
 		"gate": _chord(220.0, 329.63, 0.40, 0.09)
+		"home": _chord(261.63, 329.63, 0.32, 0.06)
 
 func _tone(freq: float, duration: float, volume: float) -> void:
 	var playback := player.get_stream_playback() as AudioStreamGeneratorPlayback
