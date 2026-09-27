@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name EverduneUI
 
 signal creation_finished
+signal sound_requested(kind: String)
 
 var state: Node
 var prompt_label: Label
@@ -190,6 +191,7 @@ func _refresh_inventory() -> void:
 
 func _craft_lamp() -> void:
 	if state.craft_hearth_lamp():
+		sound_requested.emit("craft")
 		show_dialogue("Hearth Lamp", "The lamp hums softly. A fragment of the old Hearthsong now lives in your hands.")
 	else:
 		show_dialogue("Hearth Lamp", "Requires 3 Wood, 2 Stone and 1 Memory Shard.")
