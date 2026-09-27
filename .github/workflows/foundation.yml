@@ -32,6 +32,11 @@ jobs:
           test -f game/scripts/gather_node.gd
           test -f game/scripts/weather.gd
           test -f game/scripts/audio.gd
+test -f game/scripts/enemy.gd
+test -f game/assets/hero_tools.svg
+test -f game/assets/enemy_slime.svg
+test -f game/assets/environment_fx.svg
+test -f game/assets/water_anim.svg
           test -f game/assets/terrain_atlas.svg
           test -f game/assets/props.svg
           test -f game/assets/player_body.svg
