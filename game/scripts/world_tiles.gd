@@ -8,15 +8,17 @@ const TERRAIN := preload("res://assets/terrain_atlas.svg")
 const PROPS := preload("res://assets/props.svg")
 const WATER := preload("res://assets/water_anim.svg")
 const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
-var water_sprites: Array[Sprite2D] = []
-var anim_time := 0.0
 
+var water_sprites: Array[Sprite2D] = []
+var ambience: Array[Node2D] = []
+var anim_time := 0.0
 var layer: TileMapLayer
 
 func _ready() -> void:
 	_build_reference_art()
 	_build_tiles()
 	_build_props()
+	_build_atmosphere()
 
 func _build_reference_art() -> void:
 	var scene := Sprite2D.new()
@@ -36,22 +38,34 @@ func _build_tiles() -> void:
 	for x in range(6):
 		atlas.create_tile(Vector2i(x, 0))
 	set.add_source(atlas, 0)
+
 	layer = TileMapLayer.new()
 	layer.name = "Terrain"
 	layer.tile_set = set
 	layer.z_index = -30
 	add_child(layer)
+
 	for y in range(ROWS):
 		for x in range(COLS):
 			layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+
+	# A darker, cooler riverbank separates the water from the warm settlement.
 	for y in range(2, 16):
-		for x in range(19, 26):
+		for x in range(18, 27):
 			layer.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
-	# Flower meadow around the settlement makes the valley feel authored rather than tiled.
-	for p in [Vector2i(2,4),Vector2i(4,6),Vector2i(7,4),Vector2i(10,7),Vector2i(13,5),Vector2i(15,12),Vector2i(27,5),Vector2i(26,14)]:
+
+	# Hand-authored meadow pockets prevent the terrain from reading as a repeated grid.
+	for p in [
+		Vector2i(2,4), Vector2i(4,6), Vector2i(7,4), Vector2i(10,7),
+		Vector2i(13,5), Vector2i(15,12), Vector2i(27,5), Vector2i(26,14),
+		Vector2i(5,11), Vector2i(9,13), Vector2i(14,9), Vector2i(23,4)
+	]:
 		layer.set_cell(p, 0, Vector2i(4, 0))
-	for p in [Vector2i(3,14),Vector2i(12,14),Vector2i(16,3),Vector2i(28,10)]:
+
+	for p in [Vector2i(3,14),Vector2i(12,14),Vector2i(16,3),Vector2i(28,10),Vector2i(6,2)]:
 		layer.set_cell(p, 0, Vector2i(5, 0))
+
+	# Curved path into Hearthfall.
 	for x in range(0, 19):
 		var py := 11 - int(abs(x - 8) * 0.12)
 		for dy in range(-1, 2):
@@ -59,57 +73,110 @@ func _build_tiles() -> void:
 				layer.set_cell(Vector2i(x, py + dy), 0, Vector2i(2, 0))
 	for y in range(7, 10):
 		layer.set_cell(Vector2i(18, y), 0, Vector2i(2, 0))
+
+	# Animated water is deliberately sparse: the river remains a readable mass.
 	for y in range(2, 16):
 		for x in range(19, 26):
 			var wave := Sprite2D.new()
 			wave.texture = WATER
 			wave.region_enabled = true
 			wave.region_rect = Rect2(0, 0, 32, 32)
-			wave.position = Vector2(x * 32 + 16, y * 32 + 16)
+			wave.position = Vector2(x * TILE_SIZE + 16, y * TILE_SIZE + 16)
 			wave.z_index = -28
 			wave.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			wave.modulate = Color(0.82, 0.92, 0.91, 0.72)
 			add_child(wave)
 			water_sprites.append(wave)
 
-func _prop(index: int, pos: Vector2, scale := Vector2.ONE) -> Sprite2D:
+func _prop(index: int, pos: Vector2, scale := Vector2.ONE, z := 0) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.texture = PROPS
 	s.region_enabled = true
 	s.region_rect = Rect2(index * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE)
 	s.position = pos
 	s.scale = scale
+	s.z_index = z
 	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(s)
 	return s
 
+func _shadow(pos: Vector2, size := Vector2(18, 7), alpha := 0.24) -> Polygon2D:
+	var p := Polygon2D.new()
+	p.polygon = PackedVector2Array([
+		Vector2(-size.x,0), Vector2(-size.x * 0.55,-size.y * 0.35),
+		Vector2(0,-size.y * 0.5), Vector2(size.x * 0.7,-size.y * 0.25),
+		Vector2(size.x,0), Vector2(size.x * 0.5,size.y * 0.45),
+		Vector2(-size.x * 0.55,size.y * 0.4)
+	])
+	p.color = Color(0.03,0.06,0.055,alpha)
+	p.position = pos
+	p.z_index = -1
+	add_child(p)
+	return p
+
 func _build_props() -> void:
 	# Hearthfall landmark cluster.
-	_prop(1, Vector2(360, 220), Vector2(2.2, 2.2))
-	_prop(1, Vector2(430, 220), Vector2(2.2, 2.2))
-	_prop(2, Vector2(300, 300), Vector2(1.3, 1.3))
-	_prop(3, Vector2(255, 265), Vector2(1.5, 1.5))
-	for p in [Vector2(100,100),Vector2(155,92),Vector2(205,150),Vector2(760,165),Vector2(860,120),Vector2(110,455),Vector2(875,450),Vector2(72,300),Vector2(890,250)]:
-		_prop(0, p, Vector2(1.25, 1.25))
-	_prop(4, Vector2(300,250), Vector2(1.25,1.25))
-	_prop(5, Vector2(620,250), Vector2(1.25,1.25))
-	_prop(6, Vector2(495,355), Vector2(1.15,1.15))
-	_prop(7, Vector2(730,370), Vector2(1.15,1.15))
+	for p in [Vector2(360,220), Vector2(430,220)]:
+		_shadow(p + Vector2(0,20), Vector2(25,8), 0.28)
+		_prop(1, p, Vector2(2.2,2.2), 1)
 
-	# Authored Hearthfall dressing: small clusters create landmarks and readable
-	# "lived-in" pockets without turning the valley into random prop noise.
-	for p in [Vector2(250,220), Vector2(275,205), Vector2(335,215), Vector2(350,235)]:
-		_prop(9, p, Vector2(1.0, 1.0))
-	for p in [Vector2(280,285), Vector2(345,290), Vector2(395,275)]:
-		_prop(2, p, Vector2(1.0, 1.0))
-	for p in [Vector2(205,315), Vector2(230,330), Vector2(270,345), Vector2(315,335), Vector2(365,345)]:
-		_prop(9, p, Vector2(0.9, 0.9))
-	for p in [Vector2(120,190), Vector2(145,205), Vector2(175,215), Vector2(825,190), Vector2(855,210)]:
-		_prop(0, p, Vector2(1.0, 1.0))
-	_prop(3, Vector2(565,300), Vector2(1.1, 1.1))
-	_prop(2, Vector2(545,320), Vector2(1.05, 1.05))
-	_prop(3, Vector2(665,305), Vector2(1.1, 1.1))
-	_prop(9, Vector2(685,325), Vector2(1.0, 1.0))
+	_shadow(Vector2(300,315), Vector2(16,6))
+	_prop(2, Vector2(300,300), Vector2(1.3,1.3), 2)
+	_shadow(Vector2(255,280), Vector2(15,6))
+	_prop(3, Vector2(255,265), Vector2(1.5,1.5), 2)
 
+	for p in [
+		Vector2(100,100),Vector2(155,92),Vector2(205,150),Vector2(760,165),
+		Vector2(860,120),Vector2(110,455),Vector2(875,450),Vector2(72,300),Vector2(890,250)
+	]:
+		_shadow(p + Vector2(0,12), Vector2(15,5), 0.22)
+		_prop(0, p, Vector2(1.25,1.25), 2)
+
+	_prop(4, Vector2(300,250), Vector2(1.25,1.25), 2)
+	_prop(5, Vector2(620,250), Vector2(1.25,1.25), 2)
+	_prop(6, Vector2(495,355), Vector2(1.15,1.15), 2)
+	_prop(7, Vector2(730,370), Vector2(1.15,1.15), 2)
+
+	# Small lived-in clusters around the settlement.
+	for p in [Vector2(250,220),Vector2(275,205),Vector2(335,215),Vector2(350,235)]:
+		_prop(9,p,Vector2.ONE,2)
+	for p in [Vector2(280,285),Vector2(345,290),Vector2(395,275)]:
+		_prop(2,p,Vector2.ONE,2)
+	for p in [Vector2(205,315),Vector2(230,330),Vector2(270,345),Vector2(315,335),Vector2(365,345)]:
+		_prop(9,p,Vector2(0.9,0.9),2)
+	for p in [Vector2(120,190),Vector2(145,205),Vector2(175,215),Vector2(825,190),Vector2(855,210)]:
+		_prop(0,p,Vector2.ONE,2)
+	_prop(3,Vector2(565,300),Vector2(1.1,1.1),2)
+	_prop(2,Vector2(545,320),Vector2(1.05,1.05),2)
+	_prop(3,Vector2(665,305),Vector2(1.1,1.1),2)
+	_prop(9,Vector2(685,325),Vector2.ONE,2)
+
+func _build_atmosphere() -> void:
+	# Soft ground glows and drifting fireflies add depth without changing the art direction.
+	for p in [
+		Vector2(170,130),Vector2(230,175),Vector2(315,185),Vector2(405,300),
+		Vector2(520,180),Vector2(590,340),Vector2(700,125),Vector2(820,285)
+	]:
+		var glow := Polygon2D.new()
+		glow.polygon = PackedVector2Array([
+			Vector2(-3,-1),Vector2(-1,-3),Vector2(1,-3),Vector2(3,-1),
+			Vector2(3,1),Vector2(1,3),Vector2(-1,3),Vector2(-3,1)
+		])
+		glow.color = Color(0.93,0.80,0.47,0.0)
+		glow.position = p
+		glow.z_index = 6
+		add_child(glow)
+		ambience.append(glow)
+
+	# A low vignette keeps the playable centre visually dominant.
+	var vignette := Polygon2D.new()
+	vignette.polygon = PackedVector2Array([
+		Vector2(0,0),Vector2(960,0),Vector2(960,32),Vector2(0,32),
+		Vector2(0,508),Vector2(960,508),Vector2(960,540),Vector2(0,540)
+	])
+	vignette.color = Color(0.02,0.04,0.035,0.10)
+	vignette.z_index = 5
+	add_child(vignette)
 
 func set_water_animation(enabled: bool) -> void:
 	for wave in water_sprites:
@@ -119,4 +186,10 @@ func _process(delta: float) -> void:
 	anim_time += delta
 	var frame := int(anim_time * 3.0) % 4
 	for wave in water_sprites:
-		wave.region_rect = Rect2(frame * 32, 0, 32, 32)
+		wave.region_rect = Rect2(frame * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE)
+
+	for i in range(ambience.size()):
+		var glow := ambience[i] as Polygon2D
+		var pulse := (sin(anim_time * 1.8 + float(i) * 1.37) + 1.0) * 0.5
+		glow.modulate.a = 0.16 + pulse * 0.34
+		glow.position.y += sin(anim_time * 0.7 + float(i)) * delta * 0.6
