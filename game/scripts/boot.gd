@@ -8,6 +8,7 @@ var percent_label: Label
 var stage_label: Label
 var detail_label: Label
 var load_started := false
+var dependency_count := 0
 
 func _ready() -> void:
     _build()
@@ -16,8 +17,10 @@ func _ready() -> void:
         _fail("Could not request the main game scene (error %d)." % error)
         return
     load_started = true
+    var deps := ResourceLoader.get_dependencies(MAIN_SCENE_PATH)
+    dependency_count = deps.size()
     stage_label.text = "LOADING GAME"
-    detail_label.text = "Reading Larkmere Valley and its real dependencies…"
+    detail_label.text = "res://scenes/main.tscn • %d real dependencies" % dependency_count
 
 func _process(_delta: float) -> void:
     if not load_started:
@@ -29,7 +32,7 @@ func _process(_delta: float) -> void:
         value = clampf(float(progress[0]), 0.0, 1.0)
     progress_bar.value = value * 100.0
     percent_label.text = "%d%%" % int(round(value * 100.0))
-    detail_label.text = "Loading main scene dependencies • %d%%" % int(round(value * 100.0))
+    detail_label.text = "res://scenes/main.tscn • %d dependencies • %d%%" % [dependency_count, int(round(value * 100.0))]
     if status == ResourceLoader.THREAD_LOAD_LOADED:
         stage_label.text = "PREPARING WORLD"
         detail_label.text = "Instantiating the actual game scene…"
