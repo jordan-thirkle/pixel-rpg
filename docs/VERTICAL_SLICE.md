@@ -18,6 +18,15 @@ The first real game runtime is now implemented in Godot.
 - [x] Save/load
 - [x] Deterministic keyboard controls
 - [x] CI headless project validation
+- [x] Real TileMapLayer terrain
+- [x] Imported pixel asset atlases
+- [x] Layered player visual customisation
+- [x] Character creation persistence
+- [x] Reusable gathering nodes with respawn
+- [x] Actionable crafting UI
+- [x] Weather overlay and day/night ambience
+- [x] Dynamic local light presentation
+- [x] Two-stage Echo progression
 
 ## Intentional limitations
 This is not the final game and does not pretend to be. It establishes the executable contract that later art/content systems build on.
