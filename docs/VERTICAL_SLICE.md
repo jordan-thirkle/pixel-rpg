@@ -28,8 +28,8 @@ The first real game runtime is now implemented in Godot.
 - [x] Dynamic local light presentation
 - [x] Two-stage Echo progression
 - [x] Replaceable runtime audio cue layer
-- [x] Production art pass: enriched terrain/props/player assets
-- [x] Authored world dressing and material-styled UI
+- [~] Art foundation integrated; final canonical art fidelity is not yet achieved
+- [~] Authored dressing/UI foundation; final density and polish remain
 - [x] Lightweight gather/Echo VFX feedback
 - [x] Four-direction hero animation
 - [x] Visible equipment/tool action layer
@@ -40,7 +40,7 @@ The first real game runtime is now implemented in Godot.
 - [x] Quest-stage progression beyond the initial Echo
 - [x] First combat enemy with chase/damage/defeat
 - [x] Sleeping Gate combat trial
-- [x] Expanded audio identity and ambient layer
+- [~] Runtime audio identity layer; final authored music/audio remains
 
 ## Intentional limitations
 This is not the final game and does not pretend to be. It establishes the executable contract that later art/content systems build on.
@@ -65,7 +65,7 @@ Those systems should be added as vertical slices, not as disconnected feature pi
 
 ## Current production gate
 
-The project has crossed from technical prototype into production-runtime territory, but visual quality is still being raised in deliberate passes. The current assets are integrated and replaceable; they are not the final art ceiling.
+The project has crossed from technical prototype into executable production-runtime territory, but it has not crossed the commercial visual-quality gate. Visual fidelity, content depth, collision, audio and first-run polish are still being raised in deliberate passes. The current assets are integrated and replaceable; they are not the final art ceiling.
 
 Next gate:
 1. hero character sheet + directional animation
