@@ -119,14 +119,23 @@ func _build_ui() -> void:
 	_build_character_creator()
 	_build_settings_panel()
 
+func _start_label(text:String,pos:Vector2,size:int)->Label:
+	var l:=Label.new()
+	l.text=text
+	l.position=pos
+	l.add_theme_font_size_override("font_size",size)
+	l.add_theme_color_override("font_color",Color("#f3ead2"))
+	start_menu.add_child(l)
+	return l
+
 func _build_start_menu() -> void:
 	start_menu = Panel.new()
 	start_menu.add_theme_stylebox_override("panel", panel_style)
 	start_menu.position = Vector2(220,92)
 	start_menu.size = Vector2(520,360)
 	add_child(start_menu)
-	var title := _label_to_panel("EVERDUNE", Vector2(30,24), 38)
-	var subtitle := _label_to_panel("THE WORLD REMEMBERS", Vector2(31,70), 13)
+	var title := _start_label("EVERDUNE", Vector2(30,24), 38)
+	var subtitle := _start_label("THE WORLD REMEMBERS", Vector2(31,70), 13)
 	var line := ColorRect.new()
 	line.color = Color("#b48b51")
 	line.position = Vector2(31,102)
@@ -153,7 +162,7 @@ func _build_start_menu() -> void:
 	settings_button.add_theme_stylebox_override("normal", button_style)
 	settings_button.pressed.connect(toggle_settings)
 	start_menu.add_child(settings_button)
-	var exit_label := _label_to_panel("A single-player RPG built around exploration, memory and home.", Vector2(60,315), 11)
+	var exit_label := _start_label("A single-player RPG built around exploration, memory and home.", Vector2(60,315), 11)
 	exit_label.add_theme_color_override("font_color", Color("#b8aa90"))
 
 func set_save_available(available: bool) -> void:
