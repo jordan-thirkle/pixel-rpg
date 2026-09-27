@@ -6,6 +6,9 @@ const COLS := 30
 const ROWS := 17
 const TERRAIN := preload("res://assets/terrain_atlas.svg")
 const PROPS := preload("res://assets/props.svg")
+const WATER := preload("res://assets/water_anim.svg")
+var water_sprites: Array[Sprite2D] = []
+var anim_time := 0.0
 
 var layer: TileMapLayer
 
@@ -45,6 +48,16 @@ func _build_tiles() -> void:
 				layer.set_cell(Vector2i(x, py + dy), 0, Vector2i(2, 0))
 	for y in range(7, 10):
 		layer.set_cell(Vector2i(18, y), 0, Vector2i(2, 0))
+	for y in range(2, 16):
+		var wave := Sprite2D.new()
+		wave.texture = WATER
+		wave.region_enabled = true
+		wave.region_rect = Rect2(0, 0, 32, 32)
+		wave.position = Vector2(19 * 32 + 16, y * 32 + 16)
+		wave.z_index = -9
+		wave.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		add_child(wave)
+		water_sprites.append(wave)
 
 func _prop(index: int, pos: Vector2, scale := Vector2.ONE) -> Sprite2D:
 	var s := Sprite2D.new()
@@ -69,3 +82,10 @@ func _build_props() -> void:
 	_prop(5, Vector2(620,250), Vector2(1.25,1.25))
 	_prop(6, Vector2(495,355), Vector2(1.15,1.15))
 	_prop(7, Vector2(730,370), Vector2(1.15,1.15))
+
+
+func _process(delta: float) -> void:
+	anim_time += delta
+	var frame := int(anim_time * 3.0) % 4
+	for wave in water_sprites:
+		wave.region_rect = Rect2(frame * 32, 0, 32, 32)
