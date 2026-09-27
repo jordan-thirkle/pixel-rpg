@@ -220,6 +220,13 @@ func _build_props() -> void:
 	_prop(2,Vector2(545,320),Vector2(1.05,1.05),2)
 	_prop(3,Vector2(665,305),Vector2(1.1,1.1),2)
 	_prop(9,Vector2(685,325),Vector2.ONE,2)
+	var gate := Sprite2D.new()
+	gate.texture = load("res://assets/sleeping_gate.svg") as Texture2D
+	gate.position = Vector2(820,430)
+	gate.scale = Vector2(1.0,1.0)
+	gate.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	gate.z_index = 4
+	add_child(gate)
 
 func _build_atmosphere() -> void:
 	for p in [
