@@ -1,14 +1,51 @@
 extends CharacterBody2D
 class_name EverdunePlayer
 
+const BODY := preload("res://assets/player_body.svg")
+const HAIR := preload("res://assets/player_hair.svg")
+const COAT := preload("res://assets/player_coat.svg")
+
 var state: Node
 var speed := 145.0
 var facing := Vector2.DOWN
 var bob := 0.0
+var body_sprite: Sprite2D
+var hair_sprite: Sprite2D
+var coat_sprite: Sprite2D
+var animated := true
 
 func _ready() -> void:
 	z_index = 20
+	_build_layers()
 	queue_redraw()
+
+func _build_layers() -> void:
+	body_sprite = _atlas_sprite(BODY)
+	hair_sprite = _atlas_sprite(HAIR)
+	coat_sprite = _atlas_sprite(COAT)
+	body_sprite.position = Vector2(0,0)
+	hair_sprite.position = Vector2(0,0)
+	coat_sprite.position = Vector2(0,0)
+	add_child(body_sprite)
+	add_child(coat_sprite)
+	add_child(hair_sprite)
+	_apply_customisation()
+
+func _atlas_sprite(texture: Texture2D) -> Sprite2D:
+	var s := Sprite2D.new()
+	s.texture = texture
+	s.region_enabled = true
+	s.region_rect = Rect2(0,0,32,32)
+	s.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	return s
+
+func _process(delta: float) -> void:
+	bob += delta * (8.0 if velocity.length() > 1.0 else 2.0)
+	var frame := int(floor(fmod(bob * 0.75, 4.0)))
+	var rect := Rect2(frame * 32, 0, 32, 32)
+	if body_sprite: body_sprite.region_rect = rect
+	if hair_sprite: hair_sprite.region_rect = rect
+	if coat_sprite: coat_sprite.region_rect = rect
 
 func _physics_process(delta: float) -> void:
 	var input_vector := Vector2(
@@ -23,34 +60,25 @@ func _physics_process(delta: float) -> void:
 			state.energy = maxf(0.0, state.energy - delta * 0.7)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed * 8.0 * delta)
-	bob += delta * (8.0 if input_vector.length() > 0.0 else 2.0)
 	var previous_position := position
 	move_and_slide()
 	var in_river := position.x > 600.0 and position.x < 850.0 and position.y > 60.0 and position.y < 490.0
-	var on_bridge := position.x > 575.0 and position.x < 649.0 and position.y > 248.0 and position.y < 310.0
+	var on_bridge := position.x > 575.0 and position.x < 610.0 and position.y > 224.0 and position.y < 320.0
 	if in_river and not on_bridge:
 		position = previous_position
 		velocity = Vector2.ZERO
 	position.x = clampf(position.x, 54.0, 906.0)
-	position.y = clampf(position.y, 72.0, 488.0)
-	queue_redraw()
+	position.y = clampf(position.y, 54.0, 486.0)
 
-func _draw() -> void:
-	var lift := sin(bob) * 1.5
-	draw_ellipse(Vector2(0, 10), Vector2(9, 4), Color("#17241e80"))
-	draw_rect(Rect2(-7, -3 + lift, 14, 16), Color("#284b46"))
-	draw_rect(Rect2(-6, 1 + lift, 12, 12), Color("#3d6b60"))
-	draw_rect(Rect2(-6, -12 + lift, 12, 10), Color("#d7aa7a"))
-	draw_rect(Rect2(-6, -13 + lift, 12, 5), Color("#49352e"))
-	draw_rect(Rect2(-4, -8 + lift, 2, 2), Color("#242326"))
-	draw_rect(Rect2(2, -8 + lift, 2, 2), Color("#242326"))
-	draw_rect(Rect2(-8, -1 + lift, 16, 3), Color("#c77d5a"))
-	draw_rect(Rect2(-7, 13 + lift, 5, 4), Color("#352c2b"))
-	draw_rect(Rect2(2, 13 + lift, 5, 4), Color("#352c2b"))
+func _apply_customisation() -> void:
+	if state == null:
+		return
+	var hair := String(state.character.get("hair", "dark"))
+	var coat := String(state.character.get("coat", "teal"))
+	var hair_colors := {"dark":Color("#4b3730"),"ember":Color("#7d4938"),"gold":Color("#9a713e")}
+	var coat_colors := {"teal":Color("#355f59"),"wine":Color("#704f65"),"ochre":Color("#80633b")}
+	if hair_sprite: hair_sprite.modulate = hair_colors.get(hair, Color.WHITE)
+	if coat_sprite: coat_sprite.modulate = coat_colors.get(coat, Color.WHITE)
 
-func draw_ellipse(center: Vector2, radii: Vector2, color: Color) -> void:
-	var points := PackedVector2Array()
-	for i in range(24):
-		var a := TAU * float(i) / 24.0
-		points.append(center + Vector2(cos(a) * radii.x, sin(a) * radii.y))
-	draw_colored_polygon(points, color)
+func refresh_customisation() -> void:
+	_apply_customisation()
