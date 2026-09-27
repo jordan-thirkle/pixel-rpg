@@ -52,10 +52,7 @@ func _run() -> void:
 	assert(bool(fresh.flags.get("old_road_echo",false)))
 	assert(fresh.echoes == 1)
 	assert(int(fresh.inventory.get("memory_shard",0)) == 1)
-	var locked: Dictionary = echo_system.discover("glass_orchard",registry,fresh)
-	assert(bool(locked.get("ok",false)) == true)
-
-	# The Orchard must become available only after the first memory.
+	# The Orchard becomes available only after the first memory.
 	var orchard_result: Dictionary = echo_system.discover("glass_orchard",registry,fresh)
 	assert(bool(orchard_result.get("ok",false)))
 	assert(bool(fresh.flags.get("glass_orchard_echo",false)))
