@@ -18,8 +18,6 @@ const GATHERING_SCENE := preload("res://scripts/systems/gathering_system.gd")
 const COMBAT_SCENE := preload("res://scripts/systems/combat_system.gd")
 const CRAFTING_SCENE := preload("res://scripts/systems/crafting_system.gd")
 const LOCATION_SCENE := preload("res://scripts/systems/location_system.gd")
-const EQUIPMENT := preload("res://assets/hero_equipment.svg")
-const PROPS := preload("res://assets/props.svg")
 
 var world: Node2D
 var player: CharacterBody2D
@@ -47,8 +45,12 @@ var fish_cooldown := 0.0
 var nearby_kind := ""
 var nearby_id := ""
 var session_started := false
+var equipment_texture: Texture2D
+var props_texture: Texture2D
 
 func _ready() -> void:
+	equipment_texture = load("res://assets/hero_equipment.svg") as Texture2D
+	props_texture = load("res://assets/props.svg") as Texture2D
 	state = STATE_SCENE.new()
 	state.name = "GameState"
 	add_child(state)
@@ -108,7 +110,7 @@ func _ready() -> void:
 	player.state = state
 
 	equipment_fx = Sprite2D.new()
-	equipment_fx.texture = EQUIPMENT
+	equipment_fx.texture = equipment_texture
 	equipment_fx.region_enabled = true
 	equipment_fx.region_rect = Rect2(0,0,32,32)
 	equipment_fx.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -142,7 +144,7 @@ func _spawn_gather_nodes() -> void:
 	for data in definitions:
 		var node := GATHER_SCENE.new()
 		node.name = String(data.id)
-		node.setup(String(data.resource), PROPS, int(data.index), data.pos)
+		node.setup(String(data.resource), props_texture, int(data.index), data.pos)
 		node.harvested.connect(_on_gathered)
 		world.add_child(node)
 
@@ -158,7 +160,7 @@ func _process(delta: float) -> void:
 	if equipment_fx and player:
 		equipment_fx.position = player.position + Vector2(0,-10)
 		var equipped_tool := String(state.equipment.get("tool","hands"))
-		var tool_index := {"axe":0,"pickaxe":1,"wayfarer_blade":2,"fishing_rod":3}.get(equipped_tool,-1)
+		var tool_index: int = int({"axe":0,"pickaxe":1,"wayfarer_blade":2,"fishing_rod":3}.get(equipped_tool,-1))
 		equipment_fx.visible = tool_index >= 0
 		if tool_index >= 0:
 			equipment_fx.region_rect = Rect2(int(tool_index)*32,0,32,32)
@@ -389,7 +391,7 @@ func _spawn_hit_fx(pos: Vector2) -> void:
 
 func _add_world_fx() -> void:
 	var fire := Sprite2D.new()
-	fire.texture = load("res://assets/environment_fx.svg")
+	fire.texture = load("res://assets/environment_fx.svg") as Texture2D
 	fire.region_enabled = true
 	fire.region_rect = Rect2(32,0,32,32)
 	fire.position = Vector2(335,275)
@@ -397,7 +399,7 @@ func _add_world_fx() -> void:
 	fire.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	world.add_child(fire)
 	var foliage := Sprite2D.new()
-	foliage.texture = load("res://assets/environment_fx.svg")
+	foliage.texture = load("res://assets/environment_fx.svg") as Texture2D
 	foliage.region_enabled = true
 	foliage.region_rect = Rect2(96,0,32,32)
 	foliage.position = Vector2(570,100)
