@@ -11,7 +11,7 @@ var load_started := false
 
 func _ready() -> void:
     _build()
-    var error := ResourceLoader.load_threaded_request(MAIN_SCENE_PATH, "PackedScene", true)
+    var error := ResourceLoader.load_threaded_request(MAIN_SCENE_PATH)
     if error != OK:
         _fail("Could not request the main game scene (error %d)." % error)
         return
