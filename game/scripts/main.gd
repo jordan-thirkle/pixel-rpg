@@ -347,9 +347,14 @@ func _on_start_requested(continue_game: bool) -> void:
 	_show_toast("Welcome to Larkmere Valley.")
 
 func _on_creation_finished() -> void:
+	if session_started:
+		return
 	player.refresh_customisation()
 	player.set_physics_process(true)
+	session_started = true
+	ui.begin_session()
 	_save_game()
+	ui.set_save_available(true)
 	_show_toast("Welcome, %s." % state.character.name)
 
 func _show_toast(message: String) -> void:
