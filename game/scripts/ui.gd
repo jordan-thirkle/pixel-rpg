@@ -21,6 +21,8 @@ var hair_label: Label
 var coat_label: Label
 var selected_hair := "dark"
 var selected_coat := "teal"
+var panel_style: StyleBoxFlat
+var button_style: StyleBoxFlat
 
 func _ready() -> void:
 	layer = 100
@@ -36,7 +38,7 @@ func _label(text: String, pos: Vector2, size := 16) -> Label:
 	return l
 
 func _build_ui() -> void:
-	var panel_style := StyleBoxFlat.new()
+	panel_style = StyleBoxFlat.new()
 	panel_style.bg_color = Color("#272b2a", 0.94)
 	panel_style.border_color = Color("#9b845f", 0.8)
 	panel_style.set_border_width_all(2)
@@ -44,7 +46,7 @@ func _build_ui() -> void:
 	panel_style.corner_radius_top_right = 6
 	panel_style.corner_radius_bottom_left = 6
 	panel_style.corner_radius_bottom_right = 6
-	var button_style := StyleBoxFlat.new()
+	button_style = StyleBoxFlat.new()
 	button_style.bg_color = Color("#3e5148")
 	button_style.border_color = Color("#bda56e")
 	button_style.set_border_width_all(1)
