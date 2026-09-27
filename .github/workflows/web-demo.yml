@@ -7,11 +7,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: browser-demo
   cancel-in-progress: true
 
 jobs:
@@ -29,7 +27,7 @@ jobs:
           unzip -q /tmp/godot.zip -d /tmp/godot
           unzip -q /tmp/templates.tpz -d /tmp/templates
           mkdir -p "$HOME/.local/share/godot/export_templates/4.7.2.stable"
-          cp -R /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
+          cp -R /tmp/templates/templates/. "$HOME/.local/share/godot/export_templates/4.7.2.stable/"
           GODOT_BIN="$(find /tmp/godot -type f -name godot --perm -111 | head -n 1)"
           if [ -z "$GODOT_BIN" ]; then
             GODOT_BIN="$(find /tmp/godot -type f -iname "Godot_v*linux.x86_64" -perm -111 | head -n 1)"
@@ -43,7 +41,20 @@ jobs:
           rm -rf build/web
           mkdir -p build/web
           "$GODOT_BIN" --headless --path game --export-release "Web" ../build/web/index.html
-          test -f build/web/index.html
+          test -s build/web/index.html
+          test -s build/web/index.js
+          test -s build/web/index.wasm
+          test -s build/web/index.pck || test -s build/web/index.zip
+          grep -q "Everdune" build/web/index.html
+
+      - name: Verify website integration contract
+        run: |
+          test -f web/index.html
+          test -f web/play/index.html
+          test -f web/vercel-build.sh
+          test -f web/vercel.json
+          grep -q '/game/index.html' web/index.html
+          grep -q '/game/index.html' web/play/index.html
 
       - name: Upload browser build artifact
         uses: actions/upload-artifact@v4
@@ -51,22 +62,3 @@ jobs:
           name: everdune-web-demo
           path: build/web
           retention-days: 14
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: build/web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
