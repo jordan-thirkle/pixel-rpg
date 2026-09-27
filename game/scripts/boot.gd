@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 class_name EverduneBoot
 
 const MAIN_SCENE_PATH := "res://scenes/main.tscn"
