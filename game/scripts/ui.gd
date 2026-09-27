@@ -32,6 +32,9 @@ var continue_button: Button
 var session_active := false
 var settings_from_start := false
 var hud_settings_button: Button
+var preview_body: Sprite2D
+var preview_hair: Sprite2D
+var preview_coat: Sprite2D
 
 func _ready() -> void:
 	layer = 100
@@ -185,15 +188,15 @@ func begin_session() -> void:
 func _build_character_creator() -> void:
 	creation_panel = Panel.new()
 	creation_panel.add_theme_stylebox_override("panel", panel_style)
-	creation_panel.position = Vector2(270,110)
-	creation_panel.size = Vector2(420,320)
+	creation_panel.position = Vector2(220,92)
+	creation_panel.size = Vector2(520,360)
 	add_child(creation_panel)
 	_label_to_panel("YOUR WAYFARER", Vector2(28,22), 24)
 	_label_to_panel("Choose a name and a simple visual identity.", Vector2(28,58), 14)
 	name_edit = LineEdit.new()
 	name_edit.placeholder_text = "Wayfarer name"
 	name_edit.position = Vector2(28,92)
-	name_edit.size = Vector2(364,38)
+	name_edit.size = Vector2(300,38)
 	creation_panel.add_child(name_edit)
 	hair_label = _label_to_panel("Hair: Dark", Vector2(28,145), 15)
 	_add_choice_button("Dark", Vector2(28,172), func(): _choose_hair("dark"))
@@ -205,11 +208,40 @@ func _build_character_creator() -> void:
 	_add_choice_button("Ochre", Vector2(208,242), func(): _choose_coat("ochre"))
 	var begin := Button.new()
 	begin.add_theme_stylebox_override("normal", button_style)
-	begin.text = "Begin the journey"
-	begin.position = Vector2(250,242)
-	begin.size = Vector2(142,42)
+	begin.text = "BEGIN JOURNEY"
+	begin.position = Vector2(28,286)
+	begin.size = Vector2(300,44)
 	begin.pressed.connect(_finish_creation)
 	creation_panel.add_child(begin)
+
+	preview_body = _preview_sprite(PREVIEW_BODY)
+	preview_hair = _preview_sprite(PREVIEW_HAIR)
+	preview_coat = _preview_sprite(PREVIEW_COAT)
+	for sprite in [preview_body, preview_coat, preview_hair]:
+		sprite.position = Vector2(420,178)
+		sprite.scale = Vector2(3.0,3.0)
+		creation_panel.add_child(sprite)
+	preview_body.z_index = 1
+	preview_coat.z_index = 2
+	preview_hair.z_index = 3
+	var preview_label := _start_label("YOUR WAYFARER", Vector2(356,70), 12)
+	preview_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	preview_label.size = Vector2(128,24)
+	_update_preview()
+
+func _preview_sprite(texture: Texture2D) -> Sprite2D:
+	var s:=Sprite2D.new()
+	s.texture=texture
+	s.region_enabled=true
+	s.region_rect=Rect2(0,0,32,32)
+	s.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST
+	return s
+
+func _update_preview() -> void:
+	if preview_hair:
+		preview_hair.modulate = {"dark":Color("#4b3730"),"ember":Color("#7d4938"),"gold":Color("#9a713e")}.get(selected_hair,Color.WHITE)
+	if preview_coat:
+		preview_coat.modulate = {"teal":Color("#355f59"),"wine":Color("#704f65"),"ochre":Color("#80633b")}.get(selected_coat,Color.WHITE)
 
 func _label_to_panel(text: String, pos: Vector2, size: int) -> Label:
 	var l := Label.new()
@@ -232,10 +264,12 @@ func _add_choice_button(text: String, pos: Vector2, callback: Callable) -> void:
 func _choose_hair(value: String) -> void:
 	selected_hair = value
 	hair_label.text = "Hair: " + value.capitalize()
+	_update_preview()
 
 func _choose_coat(value: String) -> void:
 	selected_coat = value
 	coat_label.text = "Coat: " + value.capitalize()
+	_update_preview()
 
 func _finish_creation() -> void:
 	var chosen := name_edit.text.strip_edges()
