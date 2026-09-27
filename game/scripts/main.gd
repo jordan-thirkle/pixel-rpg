@@ -43,6 +43,8 @@ var toast := ""
 var toast_time := 0.0
 var echo_cooldown := 0.0
 var fish_cooldown := 0.0
+var fish_phase := "idle"
+var fish_timer := 0.0
 var nearby_kind := ""
 var nearby_id := ""
 var session_started := false
@@ -151,6 +153,7 @@ func _spawn_npc_visuals() -> void:
 		var visual := NPC_VISUAL_SCENE.new()
 		visual.name = String(data.id).capitalize()
 		visual.setup(data)
+		visual.set_state(state)
 		visual.z_index = 18
 		world.add_child(visual)
 
@@ -187,6 +190,18 @@ func _process(delta: float) -> void:
 			equipment_fx.region_rect = Rect2(int(tool_index)*32,0,32,32)
 	echo_cooldown = maxf(0.0, echo_cooldown-delta)
 	fish_cooldown = maxf(0.0, fish_cooldown-delta)
+	if fish_phase != "idle":
+		fish_timer = maxf(0.0, fish_timer - delta)
+		if fish_phase == "waiting_bite" and fish_timer <= 0.0:
+			fish_phase = "bite"
+			fish_timer = 1.15
+			_play_cue("fish_bite")
+			_spawn_fishing_bite_fx()
+		elif fish_phase == "bite" and fish_timer <= 0.0:
+			fish_phase = "idle"
+			fish_cooldown = 0.8
+			_play_cue("fish_miss")
+			_show_toast("The silverfin slipped away. Cast again when the water settles.")
 	toast_time = maxf(0.0, toast_time-delta)
 	_update_nearby()
 	if weather:
@@ -210,6 +225,12 @@ func _update_nearby() -> void:
 	var result: Dictionary = interactions.nearest(player.position, get_tree().get_nodes_in_group("gather_nodes"))
 	nearby_kind = String(result.kind)
 	nearby_id = String(result.id)
+	if fish_phase == "waiting_bite":
+		prompt = "Wait for the bite…"
+		return
+	if fish_phase == "bite":
+		prompt = "E  REEL NOW"
+		return
 	if nearby_kind.is_empty():
 		prompt = "WASD / Arrows move  •  E interact  •  I inventory  •  K save"
 		return
@@ -257,12 +278,16 @@ func _discover_echo(id: String) -> void:
 	var data: EverduneEchoData = result.data
 	_play_cue("echo")
 	_spawn_echo_burst(data.position)
+	if world and world.has_method("awaken_echo"):
+		world.awaken_echo(data.id)
 	ui.show_dialogue("An Echo", data.discovery_text)
 	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
 
 func _craft_lamp() -> void:
 	if crafting.craft_hearth_lamp(state):
 		_play_cue("craft")
+		if world and world.has_method("place_hearth_lamp"):
+			world.place_hearth_lamp()
 		ui.show_dialogue("Hearth Lamp", "The lamp hums softly. A fragment of the old Hearthsong now lives in your hands.")
 	else:
 		ui.show_dialogue("Hearth Lamp", "Requires 3 Wood, 2 Stone and 1 Memory Shard.")
@@ -270,23 +295,37 @@ func _craft_lamp() -> void:
 func _fish() -> void:
 	if fish_cooldown > 0.0:
 		return
-	fish_cooldown = 1.25
+	if fish_phase == "waiting_bite":
+		return
+	if fish_phase == "bite":
+		_resolve_fish_catch()
+		return
+	fish_phase = "waiting_bite"
+	fish_timer = 0.75 + randf_range(0.35, 0.95)
+	_play_cue("fish_cast")
+	_spawn_fishing_cast_fx()
+	_show_toast("Line cast. Watch the float…")
+	
+func _resolve_fish_catch() -> void:
+	fish_phase = "idle"
+	fish_cooldown = 1.1
+	var silverfin_chance := clampf(0.18 + float(state.fish_luck) * 0.04, 0.18, 0.36)
 	var roll := randf()
 	var catch_id := "river_fish"
 	var catch_label := "river fish"
-	if roll > 0.82:
+	if roll <= silverfin_chance:
 		catch_id = "silverfin"
 		catch_label = "silverfin"
 		state.fish_luck += 1
 	else:
 		state.fish_luck = maxi(0, state.fish_luck - 1)
 	state.add_item(catch_id,1)
-	state.add_skill_xp("fishing",10)
+	state.add_skill_xp("fishing",12)
 	if int(state.collections.get("silverfin",0)) >= 3:
 		state._unlock_achievement("angler")
-	_play_cue("fish")
+	_play_cue("fish_catch")
 	_spawn_fishing_fx()
-	state.add_xp(8 if catch_id == "silverfin" else 4)
+	state.add_xp(10 if catch_id == "silverfin" else 5)
 	_show_toast("You caught a %s." % catch_label)
 
 func _rest() -> void:
