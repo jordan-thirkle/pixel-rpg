@@ -11,7 +11,6 @@ func _init() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	# Clean-save first-run contract.
 	var fresh := STATE.new()
 	fresh.reset_new_game()
 	assert(String(fresh.character.name).is_empty())
@@ -29,7 +28,6 @@ func _run() -> void:
 	assert(registry.location("home") != null)
 	assert(registry.location("dungeon") != null)
 
-	# TileMap topology + collision must exist in the actual runtime world.
 	var world := WORLD.new()
 	root.add_child(world)
 	await process_frame
@@ -47,30 +45,44 @@ func _run() -> void:
 	assert(water_data.get_collision_polygons_count(0) == 1)
 	world.queue_free()
 
-	# Signature Echo contract.
 	var echo_system := ECHO.new()
 	var result: Dictionary = echo_system.discover("old_road",registry,fresh)
 	assert(bool(result.get("ok",false)))
 	assert(bool(fresh.flags.get("old_road_echo",false)))
 	assert(fresh.echoes == 1)
 	assert(int(fresh.inventory.get("memory_shard",0)) == 1)
-	# The Orchard becomes available only after the first memory.
 	var orchard_result: Dictionary = echo_system.discover("glass_orchard",registry,fresh)
 	assert(bool(orchard_result.get("ok",false)))
 	assert(bool(fresh.flags.get("glass_orchard_echo",false)))
 
-	# Save schema remains versioned.
 	var save := SAVE.new()
 	assert(int(save.CURRENT_VERSION) >= 3)
 
-	# Production hero layers are part of the runtime contract.
-	for asset in [
-		"res://assets/hero_face.svg","res://assets/hero_shirt.svg",
-		"res://assets/hero_trousers.svg","res://assets/hero_boots.svg",
-		"res://assets/hero_accessory.svg","res://assets/hero_back.svg",
-		"res://assets/sleeping_gate.svg"
-	]:
+	# Production hero layers: all nine layers must be real 4x4 crisp-edge sheets.
+	var hero_assets := [
+		"res://assets/player_body.svg","res://assets/player_hair.svg","res://assets/player_coat.svg",
+		"res://assets/hero_face.svg","res://assets/hero_shirt.svg","res://assets/hero_trousers.svg",
+		"res://assets/hero_boots.svg","res://assets/hero_accessory.svg","res://assets/hero_back.svg"
+	]
+	for asset in hero_assets:
 		assert(ResourceLoader.exists(asset))
+		var file := FileAccess.open(asset, FileAccess.READ)
+		assert(file != null)
+		var svg := file.get_as_text()
+		assert(svg.contains('width="128"'))
+		assert(svg.contains('height="128"'))
+		assert(svg.count('<g transform="translate(') == 16)
+		assert(svg.contains('shape-rendering="crispEdges"'))
 
-	print("Everdune Hearthfall Vertical Slice 1.0 regression checks passed.")
+	# Final score contract: every gameplay event has a named authored motif.
+	var audio := FileAccess.open("res://scripts/audio.gd", FileAccess.READ)
+	assert(audio != null)
+	var audio_source := audio.get_as_text()
+	for cue in ["gather","fish_cast","fish_bite","fish_catch","fish_miss","echo","craft","ui","level","swing","hit","defeat","gate_open","home"]:
+		assert(audio_source.contains('"'+cue+'":'))
+	assert(audio_source.contains("func _ambient_chord"))
+	assert(audio_source.contains('mood := "day"'))
+
+	assert(ResourceLoader.exists("res://assets/sleeping_gate.svg"))
+	print("Everdune Hearthfall production visual/audio regression checks passed.")
 	quit()
