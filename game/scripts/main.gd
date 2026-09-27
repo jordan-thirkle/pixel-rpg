@@ -207,6 +207,11 @@ func _process(delta: float) -> void:
 	if weather:
 		weather.follow_player(player)
 		weather.set_time(state.hour)
+	if audio and audio.has_method("set_mood"):
+		var audio_mood := "night" if state.hour >= 20 or state.hour < 6 else "day"
+		if get_tree().get_nodes_in_group("enemies").size() > 0:
+			audio_mood = "gate"
+		audio.set_mood(audio_mood)
 	if ui:
 		ui.set_prompt(prompt, toast if toast_time > 0.0 else "")
 
