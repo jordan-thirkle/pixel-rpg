@@ -35,6 +35,10 @@ jobs:
           test -n "$GODOT_BIN"
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
 
+      - name: Validate repository contract
+        run: |
+          python tools/validate_repo.py
+
       - name: Validate and export Web demo
         run: |
           "$GODOT_BIN" --headless --path game --editor --quit
