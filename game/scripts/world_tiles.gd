@@ -49,15 +49,16 @@ func _build_tiles() -> void:
 	for y in range(7, 10):
 		layer.set_cell(Vector2i(18, y), 0, Vector2i(2, 0))
 	for y in range(2, 16):
-		var wave := Sprite2D.new()
-		wave.texture = WATER
-		wave.region_enabled = true
-		wave.region_rect = Rect2(0, 0, 32, 32)
-		wave.position = Vector2(19 * 32 + 16, y * 32 + 16)
-		wave.z_index = -9
-		wave.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		add_child(wave)
-		water_sprites.append(wave)
+		for x in range(19, 26):
+			var wave := Sprite2D.new()
+			wave.texture = WATER
+			wave.region_enabled = true
+			wave.region_rect = Rect2(0, 0, 32, 32)
+			wave.position = Vector2(x * 32 + 16, y * 32 + 16)
+			wave.z_index = -9
+			wave.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			add_child(wave)
+			water_sprites.append(wave)
 
 func _prop(index: int, pos: Vector2, scale := Vector2.ONE) -> Sprite2D:
 	var s := Sprite2D.new()
