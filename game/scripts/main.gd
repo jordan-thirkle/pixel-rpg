@@ -35,22 +35,18 @@ func _ready() -> void:
 	add_child(state)
 	save_system = SAVE_SCENE.new()
 	add_child(save_system)
-
 	world = WORLD_SCENE.new()
 	world.name = "LarkmereValley"
 	add_child(world)
-
 	player = PLAYER_SCENE.new()
 	player.name = "Wayfarer"
 	player.position = Vector2(480, 290)
 	add_child(player)
 	player.state = state
-
 	ui = UI_SCENE.new()
 	ui.name = "HUD"
 	add_child(ui)
 	ui.state = state
-
 	_load_if_present()
 	_show_toast("Welcome to Larkmere Valley.")
 	queue_redraw()
@@ -62,7 +58,6 @@ func _process(delta: float) -> void:
 	_update_nearby()
 	if ui:
 		ui.set_prompt(prompt, toast if toast_time > 0.0 else "")
-	queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
@@ -89,7 +84,7 @@ func _update_nearby() -> void:
 			nearby_kind = item.kind
 			nearby_id = item.id
 	if nearby_kind == "":
-		prompt = "WASD / Arrow Keys  •  E interact  •  I inventory  •  K save"
+		prompt = "WASD / Arrows move  •  E interact  •  I inventory  •  K save"
 	else:
 		match nearby_kind:
 			"npc": prompt = "E  Talk"
@@ -101,14 +96,10 @@ func _update_nearby() -> void:
 
 func _interact() -> void:
 	match nearby_kind:
-		"npc":
-			_talk(nearby_id)
-		"echo":
-			_discover_echo()
-		"fish":
-			_fish()
-		"home":
-			_rest()
+		"npc": _talk(nearby_id)
+		"echo": _discover_echo()
+		"fish": _fish()
+		"home": _rest()
 		"wood":
 			state.add_item("wood", 1)
 			state.add_xp(3)
