@@ -54,6 +54,7 @@ func _ready() -> void:
 	ui.state = state
 	ui.creation_finished.connect(_on_creation_finished)
 	_load_if_present()
+	player.set_physics_process(not String(state.character.get("name","")).is_empty())
 	weather.set_weather(state.weather)
 	_show_toast("Welcome to Larkmere Valley.")
 	queue_redraw()
@@ -232,6 +233,8 @@ func _load_if_present() -> void:
 
 func _on_creation_finished() -> void:
 	player.refresh_customisation()
+	player.set_physics_process(true)
+	_save_game()
 	_show_toast("Welcome, %s." % state.character.name)
 
 func _show_toast(message: String) -> void:
