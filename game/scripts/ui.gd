@@ -36,6 +36,22 @@ func _label(text: String, pos: Vector2, size := 16) -> Label:
 	return l
 
 func _build_ui() -> void:
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color("#272b2a", 0.94)
+	panel_style.border_color = Color("#9b845f", 0.8)
+	panel_style.set_border_width_all(2)
+	panel_style.corner_radius_top_left = 6
+	panel_style.corner_radius_top_right = 6
+	panel_style.corner_radius_bottom_left = 6
+	panel_style.corner_radius_bottom_right = 6
+	var button_style := StyleBoxFlat.new()
+	button_style.bg_color = Color("#3e5148")
+	button_style.border_color = Color("#bda56e")
+	button_style.set_border_width_all(1)
+	button_style.corner_radius_top_left = 4
+	button_style.corner_radius_top_right = 4
+	button_style.corner_radius_bottom_left = 4
+	button_style.corner_radius_bottom_right = 4
 	prompt_label = _label("", Vector2(28,492), 14)
 	prompt_label.add_theme_color_override("font_color", Color("#f4e8c5"))
 	toast_label = _label("", Vector2(28,452), 16)
@@ -45,6 +61,7 @@ func _build_ui() -> void:
 	quest_label.add_theme_color_override("font_color", Color("#f1dfb2"))
 
 	dialog_panel = Panel.new()
+	dialog_panel.add_theme_stylebox_override("panel", panel_style)
 	dialog_panel.position = Vector2(150,365)
 	dialog_panel.size = Vector2(660,120)
 	dialog_panel.visible = false
@@ -63,6 +80,7 @@ func _build_ui() -> void:
 	dialog_panel.add_child(dialog_text)
 
 	inventory_panel = Panel.new()
+	inventory_panel.add_theme_stylebox_override("panel", panel_style)
 	inventory_panel.position = Vector2(250,105)
 	inventory_panel.size = Vector2(460,320)
 	inventory_panel.visible = false
@@ -74,6 +92,7 @@ func _build_ui() -> void:
 	inventory_text.add_theme_color_override("font_color",Color("#f3ead2"))
 	inventory_panel.add_child(inventory_text)
 	craft_button = Button.new()
+	craft_button.add_theme_stylebox_override("normal", button_style)
 	craft_button.text = "Craft Hearth Lamp"
 	craft_button.position = Vector2(28,248)
 	craft_button.size = Vector2(190,36)
@@ -84,6 +103,7 @@ func _build_ui() -> void:
 
 func _build_character_creator() -> void:
 	creation_panel = Panel.new()
+	creation_panel.add_theme_stylebox_override("panel", panel_style)
 	creation_panel.position = Vector2(270,110)
 	creation_panel.size = Vector2(420,320)
 	add_child(creation_panel)
@@ -103,6 +123,7 @@ func _build_character_creator() -> void:
 	_add_choice_button("Wine", Vector2(118,242), func(): _choose_coat("wine"))
 	_add_choice_button("Ochre", Vector2(208,242), func(): _choose_coat("ochre"))
 	var begin := Button.new()
+	begin.add_theme_stylebox_override("normal", button_style)
 	begin.text = "Begin the journey"
 	begin.position = Vector2(250,242)
 	begin.size = Vector2(142,42)
@@ -120,6 +141,7 @@ func _label_to_panel(text: String, pos: Vector2, size: int) -> Label:
 
 func _add_choice_button(text: String, pos: Vector2, callback: Callable) -> void:
 	var b := Button.new()
+	b.add_theme_stylebox_override("normal", button_style)
 	b.text = text
 	b.position = pos
 	b.size = Vector2(80,34)
