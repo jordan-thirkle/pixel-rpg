@@ -1,6 +1,6 @@
 {
   "project": "Everdune",
-  "version": "0.3",
+  "version": "0.4",
   "rules": {
     "canonical": true,
     "requireSemanticNaming": true,
@@ -22,17 +22,17 @@
     {
       "path": "game/assets/player_body.svg",
       "category": "characters",
-      "status": "production-layer-base"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/player_hair.svg",
       "category": "characters",
-      "status": "production-layer-base"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/player_coat.svg",
       "category": "characters",
-      "status": "production-layer-base"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_tools.svg",
@@ -87,32 +87,32 @@
     {
       "path": "game/assets/hero_face.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_shirt.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_trousers.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_boots.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_accessory.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/hero_back.svg",
       "category": "characters",
-      "status": "production-hero-layer"
+      "status": "production-final-qa-passed"
     },
     {
       "path": "game/assets/sleeping_gate.svg",
@@ -195,5 +195,11 @@
       "category": "ui",
       "status": "concept-reference"
     }
-  ]
+  ],
+  "productionQA": {
+    "date": "2026-09-28",
+    "hero": "passed",
+    "audio": "passed",
+    "notes": "Hero sheets and Hearthfall score are covered by deterministic repository and runtime regression checks."
+  }
 }
