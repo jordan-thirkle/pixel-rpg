@@ -1,6 +1,6 @@
 {
   "project": "Everdune",
-  "version": "0.2",
+  "version": "0.3",
   "rules": {
     "canonical": true,
     "requireSemanticNaming": true,
@@ -22,17 +22,17 @@
     {
       "path": "game/assets/player_body.svg",
       "category": "characters",
-      "status": "placeholder-production-pass"
+      "status": "production-layer-base"
     },
     {
       "path": "game/assets/player_hair.svg",
       "category": "characters",
-      "status": "placeholder-production-pass"
+      "status": "production-layer-base"
     },
     {
       "path": "game/assets/player_coat.svg",
       "category": "characters",
-      "status": "placeholder-production-pass"
+      "status": "production-layer-base"
     },
     {
       "path": "game/assets/hero_tools.svg",
@@ -82,7 +82,42 @@
     {
       "path": "game/assets/hearthfall_scene.svg",
       "category": "world",
-      "status": "visual-upgrade-in-progress"
+      "status": "retired-reference-only"
+    },
+    {
+      "path": "game/assets/hero_face.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/hero_shirt.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/hero_trousers.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/hero_boots.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/hero_accessory.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/hero_back.svg",
+      "category": "characters",
+      "status": "production-hero-layer"
+    },
+    {
+      "path": "game/assets/sleeping_gate.svg",
+      "category": "world",
+      "status": "integrated-production-pass"
     }
   ],
   "dataResources": [
