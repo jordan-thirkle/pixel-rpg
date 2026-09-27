@@ -230,6 +230,7 @@ func _add_check(panel: Panel, label: String, key: String, pos: Vector2) -> void:
 	check.text = label
 	check.position = pos
 	check.size = Vector2(210,32)
+	check.set_meta("setting_key", key)
 	check.button_pressed = bool(settings_values.get(key, true))
 	check.toggled.connect(func(v): _set_setting(key, v))
 	panel.add_child(check)
@@ -242,8 +243,10 @@ func set_settings(values: Dictionary) -> void:
 	settings_values = values.duplicate(true)
 	if settings_panel:
 		for child in settings_panel.get_children():
-			if child is CheckButton and settings_values.has(child.text.to_snake_case()):
-				child.button_pressed = bool(settings_values[child.text.to_snake_case()])
+			if child is CheckButton and child.has_meta("setting_key"):
+				var key: String = child.get_meta("setting_key")
+				if settings_values.has(key):
+					child.button_pressed = bool(settings_values[key])
 
 func toggle_settings() -> void:
 	settings_panel.visible = not settings_panel.visible
