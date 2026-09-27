@@ -11,9 +11,10 @@ func configure(registry: Node) -> void:
 	for id in registry.echoes.keys():
 		var echo: EverduneEchoData = registry.echoes[id]
 		locations.append({"id": echo.id, "kind": "echo", "pos": echo.position, "radius": 42.0})
-	locations.append({"id": "fishing", "kind": "fish", "pos": Vector2(730,370), "radius": 58.0})
-	locations.append({"id": "home", "kind": "home", "pos": Vector2(430,235), "radius": 48.0})
-	locations.append({"id": "dungeon", "kind": "dungeon", "pos": Vector2(820,430), "radius": 50.0})
+	for id in registry.locations.keys():
+		var location: EverduneLocationData = registry.locations[id]
+		if location.kind != "region":
+			locations.append({"id": location.id, "kind": location.kind, "pos": location.position, "radius": location.interaction_radius})
 
 func nearest(player_position: Vector2, gather_nodes: Array[Node]) -> Dictionary:
 	var result := {"kind": "", "id": "", "distance": 99999.0}
