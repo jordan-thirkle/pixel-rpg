@@ -31,17 +31,27 @@ The first real game runtime is now implemented in Godot.
 - [x] Production art pass: enriched terrain/props/player assets
 - [x] Authored world dressing and material-styled UI
 - [x] Lightweight gather/Echo VFX feedback
+- [x] Four-direction hero animation
+- [x] Visible equipment/tool action layer
+- [x] Animated river surface
+- [x] Environmental fire/foliage dressing
+- [x] Skill progression and persistent equipment state
+- [x] Collections and achievement tracking
+- [x] Quest-stage progression beyond the initial Echo
+- [x] First combat enemy with chase/damage/defeat
+- [x] Sleeping Gate combat trial
+- [x] Expanded audio identity and ambient layer
 
 ## Intentional limitations
 This is not the final game and does not pretend to be. It establishes the executable contract that later art/content systems build on.
 
 Not yet production-complete:
-- canonical sprite sheets and animation
+- higher-detail canonical hero art and authored animation
 - TileMapLayer-authored production map
 - proper collision geometry for the full world
-- audio/music
-- complete combat
-- quests/objectives beyond the first Echo
+- final authored audio/music assets
+- expanded combat, dungeon design and boss encounters
+- full quest/content library beyond the vertical slice
 - equipment and character customisation
 - procedural content systems
 - Gauntlet
@@ -64,3 +74,14 @@ Next gate:
 4. environmental animation/VFX
 5. authored ambience/music
 6. deeper quest/content slice
+
+
+## 20–30 minute vertical-slice target
+
+The current production slice is now structured as a complete short-form player journey:
+
+**Create Wayfarer → Hearthfall → meet Mara/Rowan → gather → fish → discover Old Road Echo → return to Mara → reach Glass Orchard → craft Hearth Lamp → follow the awakened memory → discover Sleeping Gate → optional combat trial → clear the chamber → return home.**
+
+The architecture intentionally leaves the player free to fish, gather, explore and return home rather than forcing combat. The Sleeping Gate is the first explicit high-intensity branch.
+
+Production-quality expansion now focuses on replacing placeholder-quality art/audio with authored final assets while preserving this executable content spine.
