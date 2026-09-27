@@ -1,0 +1,24 @@
+name: Foundation checks
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify foundation
+        run: |
+          test -f README.md
+          test -f docs/GENESIS.md
+          test -f docs/PIXEL_ART_BIBLE.md
+          test -f docs/TECHNICAL_FOUNDATION.md
+          test -f docs/PRODUCTION_RULES.md
+          test -f assets/ASSET_MANIFEST.json
+          python - <<'PY'
+          import json
+          with open("assets/ASSET_MANIFEST.json", encoding="utf-8") as f:
+              data=json.load(f)
+          print("Foundation manifest valid:", data["project"])
+          PY
