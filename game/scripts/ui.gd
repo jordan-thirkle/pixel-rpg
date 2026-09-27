@@ -2,6 +2,9 @@ extends CanvasLayer
 class_name EverduneUI
 
 const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
+const PREVIEW_BODY := preload("res://assets/player_body.svg")
+const PREVIEW_HAIR := preload("res://assets/player_hair.svg")
+const PREVIEW_COAT := preload("res://assets/player_coat.svg")
 
 signal creation_finished
 signal start_requested(continue_game: bool)
@@ -248,10 +251,6 @@ func _build_start_menu() -> void:
 	var build := _start_label("GODOT 4.7.2  •  SINGLE-PLAYER  •  BUILD FOUNDATION", Vector2(58,494), 10)
 	build.add_theme_color_override("font_color", Color("#a9a28f"))
 
-func set_save_available(available: bool) -> void:
-	if continue_button:
-		continue_button.disabled = not available
-		continue_button.modulate = Color.WHITE if available else Color("#66645f")
 func set_save_available(available: bool) -> void:
 	if continue_button:
 		continue_button.disabled = not available
