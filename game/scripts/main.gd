@@ -68,6 +68,13 @@ func _ready() -> void:
 	player.position = Vector2(480, 290)
 	add_child(player)
 	player.state = state
+	equipment_fx = Sprite2D.new()
+	equipment_fx.texture = EQUIPMENT
+	equipment_fx.region_enabled = true
+	equipment_fx.region_rect = Rect2(0, 0, 32, 32)
+	equipment_fx.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	equipment_fx.z_index = 23
+	add_child(equipment_fx)
 	ui = UI_SCENE.new()
 	ui.name = "HUD"
 	add_child(ui)
@@ -121,7 +128,11 @@ func _on_gathered(node: Node) -> void:
 func _process(delta: float) -> void:
 	if equipment_fx and player:
 		equipment_fx.position = player.position + Vector2(0, -10)
-		equipment_fx.visible = state.equipment.get("tool", "hands") != "hands"
+		var equipped_tool := String(state.equipment.get("tool", "hands"))
+		var tool_index := {"axe": 0, "pickaxe": 1, "wayfarer_blade": 2, "fishing_rod": 3}.get(equipped_tool, -1)
+		equipment_fx.visible = tool_index >= 0
+		if tool_index >= 0:
+			equipment_fx.region_rect = Rect2(int(tool_index) * 32, 0, 32, 32)
 
 	echo_cooldown = maxf(0.0, echo_cooldown - delta)
 	fish_cooldown = maxf(0.0, fish_cooldown - delta)
