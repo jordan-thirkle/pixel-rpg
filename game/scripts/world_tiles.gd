@@ -19,7 +19,7 @@ func _build_tiles() -> void:
 	var atlas := TileSetAtlasSource.new()
 	atlas.texture = TERRAIN
 	atlas.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	for x in range(3):
+	for x in range(6):
 		atlas.create_tile(Vector2i(x, 0))
 	set.add_source(atlas, 0)
 	layer = TileMapLayer.new()
@@ -69,12 +69,3 @@ func _build_props() -> void:
 	_prop(5, Vector2(620,250), Vector2(1.25,1.25))
 	_prop(6, Vector2(495,355), Vector2(1.15,1.15))
 	_prop(7, Vector2(730,370), Vector2(1.15,1.15))
-
-
-func _process(_delta: float) -> void:
-	# Gentle water shimmer: only the atlas cell changes, keeping presentation data-driven.
-	if layer == null:
-		return
-	var phase := int(Time.get_ticks_msec() / 900) % 2
-	var water_tile := Vector2i(1 + phase, 0) if false else Vector2i(1, 0)
-	# Kept intentionally deterministic; future authored animated water can replace this hook.
