@@ -18,7 +18,9 @@ var gold := 25
 var echoes := 0
 var inventory := {"wood": 3, "stone": 2, "river_fish": 0, "memory_shard": 0, "hearthstone": 0}
 var flags := {}
-var crafted := {}\nvar weather := "Clear"\nvar character := {"name":"","hair":"dark","coat":"teal"}
+var crafted := {}
+var weather := "Clear"
+var character := {"name":"","hair":"dark","coat":"teal"}
 
 func add_item(id: String, amount: int) -> void:
 	inventory[id] = int(inventory.get(id, 0)) + amount
@@ -84,4 +86,8 @@ func restore(data: Dictionary) -> void:
 		flags = data.flags.duplicate(true)
 	if data.has("crafted"):
 		crafted = data.crafted.duplicate(true)
+	if data.has("weather"):
+		weather = String(data.weather)
+	if data.has("character"):
+		character = data.character.duplicate(true)
 	changed.emit()
