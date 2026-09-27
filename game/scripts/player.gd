@@ -72,6 +72,14 @@ func perform_action(kind: String) -> void:
 	action_time = 0.42
 	bob += 0.8
 
+func take_enemy_hit(amount: int) -> void:
+	if state:
+		state.hp = maxi(0, state.hp - amount)
+		if state.hp <= 0:
+			state.hp = state.max_hp
+			position = Vector2(480, 290)
+		state.changed.emit()
+
 func _physics_process(delta: float) -> void:
 	var input_vector := Vector2(
 		(1.0 if (Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT)) else 0.0) - (1.0 if (Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT)) else 0.0),
