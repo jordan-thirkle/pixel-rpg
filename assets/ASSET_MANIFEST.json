@@ -59,5 +59,42 @@
       "category": "ui",
       "status": "concept-reference"
     }
+  ],
+  "runtimeAssets": [
+    {
+      "path": "game/assets/player_body.svg",
+      "category": "characters",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/player_hair.svg",
+      "category": "characters",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/player_coat.svg",
+      "category": "characters",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/hero_tools.svg",
+      "category": "items",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/enemy_slime.svg",
+      "category": "creatures",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/environment_fx.svg",
+      "category": "vfx",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/water_anim.svg",
+      "category": "environment",
+      "status": "integrated-production-pass"
+    }
   ]
 }
