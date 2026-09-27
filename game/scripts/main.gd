@@ -48,6 +48,15 @@ var nearby_id := ""
 var session_started := false
 var equipment_texture: Texture2D
 var props_texture: Texture2D
+var world_spawn_points := {
+	"hearthfall": Vector2(480,290),
+	"mara": Vector2(330,255),
+	"old_road": Vector2(495,355),
+	"fishing": Vector2(730,370),
+	"glass_orchard": Vector2(520,150),
+	"sleeping_gate": Vector2(820,430),
+	"home": Vector2(300,300)
+}
 
 func _ready() -> void:
 	equipment_texture = load("res://assets/hero_equipment.svg") as Texture2D
@@ -107,7 +116,7 @@ func _ready() -> void:
 
 	player = PLAYER_SCENE.new()
 	player.name = "Wayfarer"
-	player.position = Vector2(480,290)
+	player.position = world_spawn_points.hearthfall
 	add_child(player)
 	player.state = state
 
@@ -318,7 +327,7 @@ func _on_start_requested(continue_game: bool) -> void:
 		weather.set_weather(state.weather)
 	else:
 		state.reset_new_game()
-		player.position = Vector2(480,290)
+		player.position = world_spawn_points.hearthfall
 		weather.set_weather(state.weather)
 	session_started = true
 	player.set_physics_process(true)
