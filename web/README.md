@@ -1,14 +1,16 @@
 # Everdune Web
 
-The public-facing Everdune site belongs here.
+The public Everdune site is a fixed, cinematic game-world interface rather than a conventional long marketing page.
 
-The visual reference is the approved Everdune concept composition:
-- persistent top navigation
-- left navigation/brand rail
-- central cinematic gameplay frame
-- parchment lore panel
-- atmospheric pixel-art feature cards
+The approved concept composition is the visual source of truth:
+- dark navy / ink background and antique parchment surfaces
+- left Everdune identity rail
+- restrained top navigation
+- central playable-game frame
+- right lore book panel and tab rail
+- four feature cards below the game
 - Steam CTA
-- lore/game/world/characters/creatures/locations/factions/gallery sections
 
-The final website should use canonical assets instead of approximating the artwork with CSS alone.
+`/play/` is the dedicated browser-play route. The deployed Godot Web export is mounted at `/game/`.
+
+The website and game stay separate: HTML/CSS provides the presentation shell while the playable runtime remains Godot. Godot 4.7 supports custom HTML shells for click-to-play/fullscreen and custom loading UI, and Web export can be automated from the command line.
