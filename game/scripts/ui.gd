@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name EverduneUI
 
+const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
+
 signal creation_finished
 signal start_requested(continue_game: bool)
 signal sound_requested(kind: String)
@@ -35,6 +37,8 @@ var hud_settings_button: Button
 var preview_body: Sprite2D
 var preview_hair: Sprite2D
 var preview_coat: Sprite2D
+var start_backdrop: TextureRect
+var start_overlay: ColorRect
 
 func _ready() -> void:
 	layer = 100
@@ -135,41 +139,119 @@ func _start_label(text:String,pos:Vector2,size:int)->Label:
 
 func _build_start_menu() -> void:
 	start_menu = Panel.new()
-	start_menu.add_theme_stylebox_override("panel", panel_style)
-	start_menu.position = Vector2(220,92)
-	start_menu.size = Vector2(520,360)
+	var transparent := StyleBoxFlat.new()
+	transparent.bg_color = Color(0,0,0,0)
+	start_menu.add_theme_stylebox_override("panel", transparent)
+	start_menu.position = Vector2.ZERO
+	start_menu.size = Vector2(960,540)
 	add_child(start_menu)
-	var title := _start_label("EVERDUNE", Vector2(30,24), 38)
-	var subtitle := _start_label("THE WORLD REMEMBERS", Vector2(31,70), 13)
-	var line := ColorRect.new()
-	line.color = Color("#b48b51")
-	line.position = Vector2(31,102)
-	line.size = Vector2(458,1)
-	start_menu.add_child(line)
+
+	start_backdrop = TextureRect.new()
+	start_backdrop.texture = SCENE_ART
+	start_backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	start_backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	start_backdrop.position = Vector2.ZERO
+	start_backdrop.size = Vector2(960,540)
+	start_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	start_menu.add_child(start_backdrop)
+
+	start_overlay = ColorRect.new()
+	start_overlay.color = Color(0.015,0.028,0.025,0.48)
+	start_overlay.position = Vector2.ZERO
+	start_overlay.size = Vector2(960,540)
+	start_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	start_menu.add_child(start_overlay)
+
+	var identity := _start_label("EVERDUNE", Vector2(54,48), 52)
+	identity.add_theme_color_override("font_color", Color("#f4e7c5"))
+	var identity_shadow := _start_label("EVERDUNE", Vector2(56,50), 52)
+	identity_shadow.add_theme_color_override("font_color", Color(0.03,0.07,0.06,0.55))
+	start_menu.move_child(identity_shadow, start_menu.get_child_count() - 1)
+	start_menu.move_child(identity, start_menu.get_child_count() - 1)
+	var subtitle := _start_label("THE WORLD REMEMBERS", Vector2(58,108), 15)
+	subtitle.add_theme_color_override("font_color", Color("#d8bd78"))
+	var rule := ColorRect.new()
+	rule.color = Color("#b58d50")
+	rule.position = Vector2(58,137)
+	rule.size = Vector2(230,2)
+	start_menu.add_child(rule)
+	var premise := _start_label("A quiet fantasy RPG about\nexploration, memory and home.", Vector2(58,158), 18)
+	premise.size = Vector2(330,62)
+	premise.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	premise.add_theme_color_override("font_color", Color("#f0e7d4"))
+
+	var card := Panel.new()
+	var card_style := StyleBoxFlat.new()
+	card_style.bg_color = Color("#18211d",0.91)
+	card_style.border_color = Color("#b89a62",0.82)
+	card_style.set_border_width_all(1)
+	card_style.corner_radius_top_left = 8
+	card_style.corner_radius_top_right = 8
+	card_style.corner_radius_bottom_left = 8
+	card_style.corner_radius_bottom_right = 8
+	card_style.shadow_color = Color(0,0,0,0.38)
+	card_style.shadow_size = 14
+	card.add_theme_stylebox_override("panel", card_style)
+	card.position = Vector2(555,82)
+	card.size = Vector2(350,340)
+	start_menu.add_child(card)
+
+	var card_title := Label.new()
+	card_title.text = "BEGIN YOUR JOURNEY"
+	card_title.position = Vector2(30,24)
+	card_title.add_theme_font_size_override("font_size",18)
+	card_title.add_theme_color_override("font_color",Color("#e7c77b"))
+	card.add_child(card_title)
+
+	var card_note := Label.new()
+	card_note.text = "Step into Larkmere Valley.\nYour first memory is waiting."
+	card_note.position = Vector2(30,55)
+	card_note.size = Vector2(285,52)
+	card_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card_note.add_theme_font_size_override("font_size",13)
+	card_note.add_theme_color_override("font_color",Color("#c9c0ad"))
+	card.add_child(card_note)
+
 	var new_game := Button.new()
 	new_game.text = "NEW JOURNEY"
-	new_game.position = Vector2(60,132)
-	new_game.size = Vector2(400,52)
+	new_game.position = Vector2(30,122)
+	new_game.size = Vector2(290,52)
 	new_game.add_theme_stylebox_override("normal", button_style)
+	new_game.add_theme_stylebox_override("hover", button_style)
 	new_game.pressed.connect(func(): _open_creator())
-	start_menu.add_child(new_game)
+	card.add_child(new_game)
+
 	continue_button = Button.new()
 	continue_button.text = "CONTINUE"
-	continue_button.position = Vector2(60,196)
-	continue_button.size = Vector2(400,52)
+	continue_button.position = Vector2(30,184)
+	continue_button.size = Vector2(290,46)
 	continue_button.add_theme_stylebox_override("normal", button_style)
+	continue_button.add_theme_stylebox_override("hover", button_style)
 	continue_button.pressed.connect(func(): start_requested.emit(true))
-	start_menu.add_child(continue_button)
+	card.add_child(continue_button)
+
 	var settings_button := Button.new()
 	settings_button.text = "SETTINGS"
-	settings_button.position = Vector2(60,260)
-	settings_button.size = Vector2(190,42)
+	settings_button.position = Vector2(30,240)
+	settings_button.size = Vector2(140,40)
 	settings_button.add_theme_stylebox_override("normal", button_style)
 	settings_button.pressed.connect(toggle_settings)
-	start_menu.add_child(settings_button)
-	var exit_label := _start_label("A single-player RPG built around exploration, memory and home.", Vector2(60,315), 11)
-	exit_label.add_theme_color_override("font_color", Color("#b8aa90"))
+	card.add_child(settings_button)
 
+	var footer := Label.new()
+	footer.text = "WASD / Arrows   •   E interact   •   I inventory"
+	footer.position = Vector2(30,295)
+	footer.add_theme_font_size_override("font_size",11)
+	footer.add_theme_color_override("font_color",Color("#8e927f"))
+	card.add_child(footer)
+
+	var build := _start_label("GODOT 4.7.2  •  SINGLE-PLAYER  •  BUILD FOUNDATION", Vector2(58,494), 10)
+	build.add_theme_color_override("font_color", Color("#a9a28f"))
+
+func set_save_available(available: bool) -> void:
+	if continue_button:
+		continue_button.disabled = not available
+		continue_button.modulate = Color.WHITE if available else Color("#66645f")
 func set_save_available(available: bool) -> void:
 	if continue_button:
 		continue_button.disabled = not available
