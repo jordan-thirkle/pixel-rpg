@@ -1,0 +1,63 @@
+{
+  "project": "Everdune",
+  "version": "0.1",
+  "categories": [
+    "brand",
+    "world",
+    "characters",
+    "creatures",
+    "items",
+    "ui",
+    "environment",
+    "vfx",
+    "audio"
+  ],
+  "rules": {
+    "canonical": true,
+    "requireSemanticNaming": true,
+    "requireValidation": true,
+    "requireSourceTraceability": true
+  },
+  "initialAssets": [
+    {
+      "id": "everdune-logo",
+      "category": "brand",
+      "status": "concept-reference"
+    },
+    {
+      "id": "larkmere-village",
+      "category": "world",
+      "status": "concept-reference"
+    },
+    {
+      "id": "ancient-ruins",
+      "category": "world",
+      "status": "concept-reference"
+    },
+    {
+      "id": "forest-exploration",
+      "category": "world",
+      "status": "concept-reference"
+    },
+    {
+      "id": "cozy-workshop",
+      "category": "world",
+      "status": "concept-reference"
+    },
+    {
+      "id": "character-lineup",
+      "category": "characters",
+      "status": "concept-reference"
+    },
+    {
+      "id": "item-icons",
+      "category": "items",
+      "status": "concept-reference"
+    },
+    {
+      "id": "ui-ornaments",
+      "category": "ui",
+      "status": "concept-reference"
+    }
+  ]
+}
