@@ -182,8 +182,10 @@ func _process(_delta: float) -> void:
 		quest_label.text = "THE WORLD REMEMBERS\nReturn to Mara\n○ Tell her what you heard"
 	elif not state.flags.get("glass_orchard_echo", false):
 		quest_label.text = "THE WORLD REMEMBERS\nFind the Glass Orchard Echo\n○ Follow the memory"
+	elif state.quest_stage < 6:
+		quest_label.text = "THE WORLD REMEMBERS\nFind the Sleeping Gate\n○ Optional: test your blade"
 	else:
-		quest_label.text = "THE WORLD REMEMBERS\nThe valley is remembering\n✓ Two Echoes awakened"
+		quest_label.text = "THE WORLD REMEMBERS\nThe valley is remembering\n✓ The Gate has answered"
 	if inventory_panel.visible:
 		_refresh_inventory()
 
