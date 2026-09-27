@@ -2,6 +2,8 @@
 
 **Status: LOCKED — September 2026**
 
+**Production pin: Godot 4.7.2-stable.** The official Godot archive lists 4.7.2 as the current stable 4.7 maintenance release; 4.8 is still development/pre-release. citeturn0search0turn0search3
+
 The first commercial Everdune game is built as a native Godot game.
 
 ## Runtime
