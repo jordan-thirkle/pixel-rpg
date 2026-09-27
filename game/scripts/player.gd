@@ -12,8 +12,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var input_vector := Vector2(
-		float(Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT)) - float(Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT)),
-		float(Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)) - float(Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP))
+		(1.0 if (Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT)) else 0.0) - (1.0 if (Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT)) else 0.0),
+		(1.0 if (Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN)) else 0.0) - (1.0 if (Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP)) else 0.0)
 	)
 	if input_vector.length() > 0.0:
 		input_vector = input_vector.normalized()
@@ -24,7 +24,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, speed * 8.0 * delta)
 	bob += delta * (8.0 if input_vector.length() > 0.0 else 2.0)
+	var previous_position := position
 	move_and_slide()
+	var in_river := position.x > 600.0 and position.x < 850.0 and position.y > 60.0 and position.y < 490.0
+	var on_bridge := position.x > 575.0 and position.x < 649.0 and position.y > 248.0 and position.y < 310.0
+	if in_river and not on_bridge:
+		position = previous_position
+		velocity = Vector2.ZERO
 	position.x = clampf(position.x, 54.0, 906.0)
 	position.y = clampf(position.y, 72.0, 488.0)
 	queue_redraw()
