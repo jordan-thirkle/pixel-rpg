@@ -43,3 +43,9 @@ This is intentionally a production foundation rather than a final-art release. S
 - `game/` — actual runtime
 
 **No HTML prototype is a substitute for the Godot runtime.**
+
+## Architecture consolidation
+
+The current foundation follows Content → Systems → State → Presentation. Canonical ownership is defined in [docs/SYSTEM_MAP.md](docs/SYSTEM_MAP.md), AI implementation boundaries in [docs/AI_AGENT_CONTRACT.md](docs/AI_AGENT_CONTRACT.md), and the consolidation record in [docs/ARCHITECTURE_CONSOLIDATION.md](docs/ARCHITECTURE_CONSOLIDATION.md).
+
+Gameplay content is moving into Godot Resources so Echoes, NPCs and locations can scale without expanding the orchestration script. CI validates repository drift, runtime asset manifests, Godot parsing and deterministic vertical-slice/save regressions.

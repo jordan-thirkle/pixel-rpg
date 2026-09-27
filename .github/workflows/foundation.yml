@@ -25,7 +25,6 @@ jobs:
           test -f game/scripts/main.gd
           test -f game/scripts/game_state.gd
           test -f game/scripts/player.gd
-          test -f game/scripts/world.gd
           test -f game/scripts/ui.gd
           test -f game/scripts/save_system.gd
           test -f game/scripts/world_tiles.gd
@@ -44,12 +43,7 @@ jobs:
           test -f game/assets/water_anim.svg
           test -f game/assets/rain_overlay.svg
           test -f game/assets/light.svg
-          python - <<'PY'
-          import json
-          with open("assets/ASSET_MANIFEST.json", encoding="utf-8") as f:
-              data=json.load(f)
-          print("Foundation manifest valid:", data["project"])
-          PY
+          python tools/validate_repo.py
 
       - name: Install pinned Godot 4.7.2
         run: |
@@ -68,3 +62,9 @@ jobs:
         run: |
           "$GODOT_BIN" --headless --path game --editor --quit
           "$GODOT_BIN" --headless --path game --quit-after 3
+
+      - name: Run deterministic regression suite
+        run: |
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/vertical_slice_test.gd
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/save_migration_test.gd
+          "$GODOT_BIN" --headless --path game --quit-after 10 --script tests/save_round_trip_test.gd

@@ -1,32 +1,48 @@
 extends Node
 class_name EverduneSaveSystem
 
-const SAVE_PATH:="user://everdune_save.json"
-const CURRENT_VERSION := 2
+const SAVE_PATH := "user://everdune_save.json"
+const TEMP_PATH := "user://everdune_save.tmp.json"
+const CURRENT_VERSION := 3
 
-func has_save()->bool:
+func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
-func save_game(state:Node,player:Node)->void:
-	var payload={"version":CURRENT_VERSION,"state":state.snapshot(),"player":{"x":player.position.x,"y":player.position.y}}
-	var file:=FileAccess.open(SAVE_PATH,FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(payload))
-		file.close()
-
-func load_game(state:Node,player:Node)->bool:
-	if not has_save(): return false
-	var file:=FileAccess.open(SAVE_PATH,FileAccess.READ)
-	if file==null:return false
-	var parsed=JSON.parse_string(file.get_as_text())
+func save_game(state: Node, player: Node) -> bool:
+	var payload := {"version":CURRENT_VERSION,"state":state.snapshot(),"player":{"x":player.position.x,"y":player.position.y}}
+	var file := FileAccess.open(TEMP_PATH,FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify(payload))
 	file.close()
-	if typeof(parsed)!=TYPE_DICTIONARY:return false
-	var version := int(parsed.get("version", 0))
+	if not FileAccess.file_exists(TEMP_PATH):
+		return false
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(SAVE_PATH)
+	return DirAccess.rename_absolute(TEMP_PATH,SAVE_PATH) == OK
+
+func load_game(state: Node, player: Node) -> bool:
+	if not has_save():
+		return false
+	var file := FileAccess.open(SAVE_PATH,FileAccess.READ)
+	if file == null:
+		return false
+	var parsed = JSON.parse_string(file.get_as_text())
+	file.close()
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return false
+	var version := int(parsed.get("version",0))
 	if version <= 0 or version > CURRENT_VERSION:
 		return false
-	if parsed.has("state"):state.restore(_migrate_state(parsed.state, version))
-	if parsed.has("player"):player.position=Vector2(float(parsed.player.x),float(parsed.player.y))
+	if parsed.has("state"):
+		state.restore(_migrate_state(parsed.state,version))
+	if parsed.has("player"):
+		var player_data: Dictionary = parsed.player
+		player.position = Vector2(float(player_data.get("x",480.0)),float(player_data.get("y",290.0)))
 	return true
+
+func migrate_state_for_test(data: Dictionary, version: int) -> Dictionary:
+	return _migrate_state(data,version)
 
 func _migrate_state(data: Dictionary, version: int) -> Dictionary:
 	var migrated := data.duplicate(true)
@@ -35,4 +51,11 @@ func _migrate_state(data: Dictionary, version: int) -> Dictionary:
 			migrated["collections"] = {"silverfin":0,"memory_shard":0,"wood":0,"stone":0}
 		if not migrated.has("achievements"):
 			migrated["achievements"] = {}
+	if version < 3:
+		if not migrated.has("max_hp"):
+			migrated["max_hp"] = 100
+		if not migrated.has("max_energy"):
+			migrated["max_energy"] = 100
+		if not migrated.has("equipment"):
+			migrated["equipment"] = {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
 	return migrated

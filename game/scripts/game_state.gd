@@ -3,6 +3,12 @@ class_name EverduneGameState
 
 signal changed
 
+const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0}
+const DEFAULT_SKILLS := {"gathering":1,"fishing":1,"memory":1,"combat":1}
+const DEFAULT_SKILL_XP := {"gathering":0,"fishing":0,"memory":0,"combat":0}
+const DEFAULT_EQUIPMENT := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
+const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0}
+
 var day := 1
 var hour := 8
 var minute := 15
@@ -16,17 +22,44 @@ var level := 1
 var xp := 0
 var gold := 25
 var echoes := 0
-var inventory := {"wood": 3, "stone": 2, "river_fish": 0, "memory_shard": 0, "hearthstone": 0}
+var inventory := DEFAULT_INVENTORY.duplicate(true)
 var flags := {}
 var crafted := {}
 var weather := "Clear"
 var character := {"name":"","hair":"dark","coat":"teal"}
 var quest_stage := 0
-var skills := {"gathering":1,"fishing":1,"memory":1,"combat":1}
-var skill_xp := {"gathering":0,"fishing":0,"memory":0,"combat":0}
-var equipment := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
-var collections := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0}
+var skills := DEFAULT_SKILLS.duplicate(true)
+var skill_xp := DEFAULT_SKILL_XP.duplicate(true)
+var equipment := DEFAULT_EQUIPMENT.duplicate(true)
+var collections := DEFAULT_COLLECTIONS.duplicate(true)
 var achievements := {}
+
+func reset_new_game() -> void:
+	day = 1
+	hour = 8
+	minute = 15
+	season = "Spring"
+	year = 1
+	hp = 100
+	max_hp = 100
+	energy = 100
+	max_energy = 100
+	level = 1
+	xp = 0
+	gold = 25
+	echoes = 0
+	inventory = DEFAULT_INVENTORY.duplicate(true)
+	flags = {}
+	crafted = {}
+	weather = "Clear"
+	character = {"name":"","hair":"dark","coat":"teal"}
+	quest_stage = 0
+	skills = DEFAULT_SKILLS.duplicate(true)
+	skill_xp = DEFAULT_SKILL_XP.duplicate(true)
+	equipment = DEFAULT_EQUIPMENT.duplicate(true)
+	collections = DEFAULT_COLLECTIONS.duplicate(true)
+	achievements = {}
+	changed.emit()
 
 func add_item(id: String, amount: int) -> void:
 	inventory[id] = int(inventory.get(id, 0)) + amount
@@ -46,6 +79,7 @@ func add_skill_xp(skill: String, amount: int) -> void:
 
 func _unlock_achievement(id: String) -> void:
 	achievements[id] = true
+	changed.emit()
 
 func has_achievement(id: String) -> bool:
 	return bool(achievements.get(id, false))
@@ -90,46 +124,49 @@ func advance_time(hours: int) -> void:
 	changed.emit()
 
 func craft_hearth_lamp() -> bool:
-	if not has_item("wood", 3) or not has_item("stone", 2) or not has_item("memory_shard", 1):
+	if not has_item("wood",3) or not has_item("stone",2) or not has_item("memory_shard",1):
 		return false
-	remove_item("wood", 3)
-	remove_item("stone", 2)
-	remove_item("memory_shard", 1)
-	inventory["hearthstone"] += 1
-	crafted["hearth_lamp"] = int(crafted.get("hearth_lamp", 0)) + 1
+	remove_item("wood",3)
+	remove_item("stone",2)
+	remove_item("memory_shard",1)
+	inventory["hearthstone"] = int(inventory.get("hearthstone",0)) + 1
+	crafted["hearth_lamp"] = int(crafted.get("hearth_lamp",0)) + 1
 	_unlock_achievement("first_craft")
-	add_skill_xp("memory", 10)
+	add_skill_xp("memory",10)
 	add_xp(20)
 	changed.emit()
 	return true
 
 func snapshot() -> Dictionary:
-	return {"day":day,"hour":hour,"minute":minute,"season":season,"year":year,"hp":hp,"energy":energy,"level":level,"xp":xp,"gold":gold,"echoes":echoes,"inventory":inventory,"flags":flags,"crafted":crafted,"weather":weather,"character":character,"quest_stage":quest_stage,"skills":skills,"skill_xp":skill_xp,"equipment":equipment,"collections":collections,"achievements":achievements}
+	return {
+		"day":day,"hour":hour,"minute":minute,"season":season,"year":year,
+		"hp":hp,"max_hp":max_hp,"energy":energy,"max_energy":max_energy,
+		"level":level,"xp":xp,"gold":gold,"echoes":echoes,
+		"inventory":inventory.duplicate(true),"flags":flags.duplicate(true),
+		"crafted":crafted.duplicate(true),"weather":weather,
+		"character":character.duplicate(true),"quest_stage":quest_stage,
+		"skills":skills.duplicate(true),"skill_xp":skill_xp.duplicate(true),
+		"equipment":equipment.duplicate(true),"collections":collections.duplicate(true),
+		"achievements":achievements.duplicate(true)
+	}
 
 func restore(data: Dictionary) -> void:
-	for key in ["day","hour","minute","season","year","hp","energy","level","xp","gold","echoes"]:
+	for key in ["day","hour","minute","season","year","hp","max_hp","energy","max_energy","level","xp","gold","echoes"]:
 		if data.has(key):
 			set(key, data[key])
-	if data.has("inventory"):
-		inventory = data.inventory.duplicate(true)
-	if data.has("flags"):
-		flags = data.flags.duplicate(true)
-	if data.has("crafted"):
-		crafted = data.crafted.duplicate(true)
-	if data.has("weather"):
-		weather = String(data.weather)
-	if data.has("character"):
-		character = data.character.duplicate(true)
-	if data.has("quest_stage"):
-		quest_stage = int(data.quest_stage)
-	if data.has("skills"):
-		skills = data.skills.duplicate(true)
-	if data.has("skill_xp"):
-		skill_xp = data.skill_xp.duplicate(true)
-	if data.has("equipment"):
-		equipment = data.equipment.duplicate(true)
-	if data.has("collections"):
-		collections = data.collections.duplicate(true)
-	if data.has("achievements"):
-		achievements = data.achievements.duplicate(true)
+	inventory = _dict_or_default(data,"inventory",DEFAULT_INVENTORY)
+	flags = _dict_or_default(data,"flags",{})
+	crafted = _dict_or_default(data,"crafted",{})
+	weather = String(data.get("weather","Clear"))
+	character = _dict_or_default(data,"character",{"name":"","hair":"dark","coat":"teal"})
+	quest_stage = int(data.get("quest_stage",0))
+	skills = _dict_or_default(data,"skills",DEFAULT_SKILLS)
+	skill_xp = _dict_or_default(data,"skill_xp",DEFAULT_SKILL_XP)
+	equipment = _dict_or_default(data,"equipment",DEFAULT_EQUIPMENT)
+	collections = _dict_or_default(data,"collections",DEFAULT_COLLECTIONS)
+	achievements = _dict_or_default(data,"achievements",{})
 	changed.emit()
+
+func _dict_or_default(data: Dictionary, key: String, fallback: Dictionary) -> Dictionary:
+	var value = data.get(key, fallback)
+	return value.duplicate(true) if value is Dictionary else fallback.duplicate(true)

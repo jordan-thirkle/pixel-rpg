@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "dungeon"
+display_name = "Sleeping Gate"
+kind = "dungeon"
+position = Vector2(820, 430)
+interaction_radius = 50.0
+prerequisite_flags = ["glass_orchard_echo"]

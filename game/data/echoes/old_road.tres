@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "old_road"
+title = "The Old Road"
+discovery_text = "A hundred travellers crossed this road before you. For a moment, you hear their laughter in the rain."
+repeat_text = "The road remembers you now."
+prerequisite_flags = []
+completion_flag = "old_road_echo"
+quest_stage = 2
+memory_xp = 15
+xp_reward = 25
+item_id = "memory_shard"
+item_amount = 1
+position = Vector2(495, 355)

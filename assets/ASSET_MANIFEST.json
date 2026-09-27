@@ -1,24 +1,125 @@
 {
   "project": "Everdune",
-  "version": "0.1",
-  "categories": [
-    "brand",
-    "world",
-    "characters",
-    "creatures",
-    "items",
-    "ui",
-    "environment",
-    "vfx",
-    "audio"
-  ],
+  "version": "0.2",
   "rules": {
     "canonical": true,
     "requireSemanticNaming": true,
     "requireValidation": true,
-    "requireSourceTraceability": true
+    "requireSourceTraceability": true,
+    "unknownRuntimeAssetsFailCI": true
   },
-  "initialAssets": [
+  "runtimeAssets": [
+    {
+      "path": "game/assets/terrain_atlas.svg",
+      "category": "environment",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/props.svg",
+      "category": "world",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/player_body.svg",
+      "category": "characters",
+      "status": "placeholder-production-pass"
+    },
+    {
+      "path": "game/assets/player_hair.svg",
+      "category": "characters",
+      "status": "placeholder-production-pass"
+    },
+    {
+      "path": "game/assets/player_coat.svg",
+      "category": "characters",
+      "status": "placeholder-production-pass"
+    },
+    {
+      "path": "game/assets/hero_tools.svg",
+      "category": "items",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/hero_equipment.svg",
+      "category": "items",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/enemy_slime.svg",
+      "category": "creatures",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/environment_fx.svg",
+      "category": "vfx",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/water_anim.svg",
+      "category": "environment",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/rain_overlay.svg",
+      "category": "environment",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/light.svg",
+      "category": "vfx",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/npc_ornaments.svg",
+      "category": "characters",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/environment_detail.svg",
+      "category": "environment",
+      "status": "integrated-production-pass"
+    },
+    {
+      "path": "game/assets/hearthfall_scene.svg",
+      "category": "world",
+      "status": "placeholder-production-pass"
+    }
+  ],
+  "dataResources": [
+    {
+      "path": "game/data/echoes/old_road.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/echoes/glass_orchard.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/npcs/mara.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/npcs/rowan.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/larkmere.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/fishing.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/home.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/sleeping_gate.tres",
+      "status": "canonical-data"
+    }
+  ],
+  "conceptReferences": [
     {
       "id": "everdune-logo",
       "category": "brand",
@@ -58,43 +159,6 @@
       "id": "ui-ornaments",
       "category": "ui",
       "status": "concept-reference"
-    }
-  ],
-  "runtimeAssets": [
-    {
-      "path": "game/assets/player_body.svg",
-      "category": "characters",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/player_hair.svg",
-      "category": "characters",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/player_coat.svg",
-      "category": "characters",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/hero_tools.svg",
-      "category": "items",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/enemy_slime.svg",
-      "category": "creatures",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/environment_fx.svg",
-      "category": "vfx",
-      "status": "integrated-production-pass"
-    },
-    {
-      "path": "game/assets/water_anim.svg",
-      "category": "environment",
-      "status": "integrated-production-pass"
     }
   ]
 }
