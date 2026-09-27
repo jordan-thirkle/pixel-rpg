@@ -67,13 +67,18 @@ Those systems should be added as vertical slices, not as disconnected feature pi
 
 The project has crossed from technical prototype into executable production-runtime territory, but it has not crossed the commercial visual-quality gate. Visual fidelity, content depth, collision, audio and first-run polish are still being raised in deliberate passes. The current assets are integrated and replaceable; they are not the final art ceiling.
 
-Next gate:
-1. hero character sheet + directional animation
-2. authored equipment/tool layers
-3. production TileMapLayer map with collision and transition tiles
-4. environmental animation/VFX
-5. authored ambience/music
-6. deeper quest/content slice
+Next gate: **Everdune Vertical Slice Quality Gate** (`docs/EVEDUNE_VERTICAL_SLICE_QUALITY_GATE.md`)
+
+The existing 20–30 minute journey is now the quality laboratory. Work proceeds through the full player-facing chain rather than feature-by-feature expansion. Every knowingly temporary implementation is tracked in `docs/PLACEHOLDER_REGISTRY.md`.
+
+Priority order:
+1. real loading → beautiful title → excellent character creation
+2. first Hearthfall frame → movement feel → authored/alive world
+3. Mara characterisation → satisfying gathering/fishing
+4. signature Echo → meaningful crafting
+5. dramatic Sleeping Gate → satisfying combat
+6. emotionally satisfying return home
+7. only then scale the world and replayability systems
 
 
 ## 20–30 minute vertical-slice target
