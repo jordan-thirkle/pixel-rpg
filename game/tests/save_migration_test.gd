@@ -3,7 +3,7 @@ extends SceneTree
 const STATE := preload("res://scripts/game_state.gd")
 const SAVE := preload("res://scripts/save_system.gd")
 
-func _initialize() -> void:
+func _init() -> void:
 	var save := SAVE.new()
 	var legacy := {
 		"inventory":{"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0},
