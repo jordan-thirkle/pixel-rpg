@@ -18,7 +18,7 @@ var gold := 25
 var echoes := 0
 var inventory := {"wood": 3, "stone": 2, "river_fish": 0, "memory_shard": 0, "hearthstone": 0}
 var flags := {}
-var crafted := {}
+var crafted := {}\nvar weather := "Clear"\nvar character := {"name":"","hair":"dark","coat":"teal"}
 
 func add_item(id: String, amount: int) -> void:
 	inventory[id] = int(inventory.get(id, 0)) + amount
@@ -72,7 +72,7 @@ func craft_hearth_lamp() -> bool:
 	return true
 
 func snapshot() -> Dictionary:
-	return {"day":day,"hour":hour,"minute":minute,"season":season,"year":year,"hp":hp,"energy":energy,"level":level,"xp":xp,"gold":gold,"echoes":echoes,"inventory":inventory,"flags":flags,"crafted":crafted}
+	return {"day":day,"hour":hour,"minute":minute,"season":season,"year":year,"hp":hp,"energy":energy,"level":level,"xp":xp,"gold":gold,"echoes":echoes,"inventory":inventory,"flags":flags,"crafted":crafted,"weather":weather,"character":character}
 
 func restore(data: Dictionary) -> void:
 	for key in ["day","hour","minute","season","year","hp","energy","level","xp","gold","echoes"]:
