@@ -131,8 +131,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# The Hearthfall world owns its physical boundaries; player logic only keeps us inside the authored viewport.
-	position.x = clampf(position.x, 54.0, 906.0)
-	position.y = clampf(position.y, 54.0, 486.0)
 
 func _apply_customisation() -> void:
 	if state == null:
