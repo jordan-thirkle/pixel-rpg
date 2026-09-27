@@ -112,15 +112,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, braking * delta)
 
-	var previous_position := position
 	move_and_slide()
 
-	var in_river := position.x > 600.0 and position.x < 850.0 and position.y > 60.0 and position.y < 490.0
-	var on_bridge := position.x > 575.0 and position.x < 610.0 and position.y > 224.0 and position.y < 320.0
-	if in_river and not on_bridge:
-		position = previous_position
-		velocity = Vector2.ZERO
-
+	# The Hearthfall world owns its physical boundaries; player logic only keeps us inside the authored viewport.
 	position.x = clampf(position.x, 54.0, 906.0)
 	position.y = clampf(position.y, 54.0, 486.0)
 
