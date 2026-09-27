@@ -33,6 +33,9 @@ var skill_xp := DEFAULT_SKILL_XP.duplicate(true)
 var equipment := DEFAULT_EQUIPMENT.duplicate(true)
 var collections := DEFAULT_COLLECTIONS.duplicate(true)
 var achievements := {}
+var fish_luck := 0
+var home_returns := 0
+var relationship_mara := 0
 
 func reset_new_game() -> void:
 	day = 1
@@ -59,6 +62,9 @@ func reset_new_game() -> void:
 	equipment = DEFAULT_EQUIPMENT.duplicate(true)
 	collections = DEFAULT_COLLECTIONS.duplicate(true)
 	achievements = {}
+	fish_luck = 0
+	home_returns = 0
+	relationship_mara = 0
 	changed.emit()
 
 func add_item(id: String, amount: int) -> void:
@@ -147,7 +153,8 @@ func snapshot() -> Dictionary:
 		"character":character.duplicate(true),"quest_stage":quest_stage,
 		"skills":skills.duplicate(true),"skill_xp":skill_xp.duplicate(true),
 		"equipment":equipment.duplicate(true),"collections":collections.duplicate(true),
-		"achievements":achievements.duplicate(true)
+		"achievements":achievements.duplicate(true), "fish_luck":fish_luck,
+		"home_returns":home_returns, "relationship_mara":relationship_mara
 	}
 
 func restore(data: Dictionary) -> void:
@@ -165,6 +172,9 @@ func restore(data: Dictionary) -> void:
 	equipment = _dict_or_default(data,"equipment",DEFAULT_EQUIPMENT)
 	collections = _dict_or_default(data,"collections",DEFAULT_COLLECTIONS)
 	achievements = _dict_or_default(data,"achievements",{})
+	fish_luck = int(data.get("fish_luck",0))
+	home_returns = int(data.get("home_returns",0))
+	relationship_mara = int(data.get("relationship_mara",0))
 	changed.emit()
 
 func _dict_or_default(data: Dictionary, key: String, fallback: Dictionary) -> Dictionary:
