@@ -60,18 +60,15 @@ func _process(delta: float) -> void:
 		ui.set_prompt(prompt, toast if toast_time > 0.0 else "")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact"):
-		_interact()
-	elif event.is_action_pressed("inventory"):
-		ui.toggle_inventory()
-	elif event.is_action_pressed("save"):
-		_save_game()
-	elif event.is_action_pressed("load"):
-		_load_game()
-	elif event.is_action_pressed("attack"):
-		_attack()
-	elif event.is_action_pressed("ui_cancel"):
-		ui.close_panels()
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	match event.keycode:
+		KEY_E: _interact()
+		KEY_I: ui.toggle_inventory()
+		KEY_K: _save_game()
+		KEY_L: _load_game()
+		KEY_SPACE: _attack()
+		KEY_ESCAPE: ui.close_panels()
 
 func _update_nearby() -> void:
 	nearby_kind = ""
