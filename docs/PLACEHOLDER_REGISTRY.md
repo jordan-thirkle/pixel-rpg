@@ -36,7 +36,7 @@ then the item must be added here immediately.
 
 | Area | Item | Current state | Replacement / acceptance target | Priority |
 |---|---|---|---|---|
-| Art | Hearthfall scene SVG | PLACEHOLDER | Canonical Cinematic Pixel Fantasy environment matching the approved visual master; authored depth, lighting, landmarks and texture | P0 |
+| Art | Hearthfall scene SVG | IN_PROGRESS | Canonical Cinematic Pixel Fantasy environment matching the approved visual master; authored depth, lighting, landmarks and texture | P0 |
 | Art | Hero body/hair/coat sheets | PLACEHOLDER | Canonical high-detail hero with full layer set and authored directional animation | P0 |
 | Art | Props / terrain atlas | PLACEHOLDER | Production pixel-art atlas with validated density, palette, pivots and landmark-specific variants | P0 |
 | UI | Title screen presentation | IN_PROGRESS | Beautiful, identity-defining title experience with clear hierarchy, atmosphere and tactile interaction | P0 |
