@@ -1,38 +1,45 @@
-# Everdune / Pixel RPG
+# Everdune
 
-> Pre-production → canonical foundation
+**The World Remembers.**
 
-Everdune is a cinematic pixel fantasy RPG built around one core idea:
+Everdune is a native Godot 4.x pixel-fantasy RPG being built as an AI-native solo-development project.
 
-**The world remembers what you restore, discover, and care for.**
+## Locked production stack
+- Godot 4.7.2-stable
+- GDScript
+- Godot 2D runtime
+- Data-driven simulation
+- GitHub + GitHub Actions
+- Steam-first premium release
+- Astro/TypeScript + Three.js reserved for the companion web experience
 
-This repository is the source of truth for:
-- game architecture
-- lore
-- visual direction
-- web presence
-- canonical asset manifest
-- production rules
+See [docs/STACK_LOCK.md](docs/STACK_LOCK.md).
 
-## Status
+## Real vertical slice
+The repository now contains the first playable Godot runtime in `game/`.
 
-Genesis / foundation phase.
+The slice proves:
 
-The repository starts intentionally small. Systems and content are added only after they are consistent with the canonical design documents.
+**Character → Hearthfall → Move → Gather → Craft → Fish → Talk → Discover Echo → Rest → Save → Load**
 
-## Structure
+Controls:
+- WASD / arrows — move
+- E — interact
+- I — inventory
+- C — craft
+- K — save
+- L — load
+- Space — prototype combat action
+- Esc — close panels
 
-- `docs/` — source-of-truth design, lore and technical decisions
-- `game/` — game runtime and gameplay code
-- `web/` — public website
-- `assets/` — canonical art library and asset metadata
-- `tools/` — validation/build tooling
-- `.github/` — CI and project automation
+This is intentionally the gameplay foundation rather than the final art pass. The next production layer is the canonical pixel asset pipeline, authored TileMapLayer world, animation, audio, combat depth, quest systems, and the full Echo simulation.
 
-## Core loop
+## Source of truth
+- `docs/GENESIS.md` — game identity and lore foundation
+- `docs/STACK_LOCK.md` — locked technology decisions
+- `docs/PIXEL_ART_BIBLE.md` — visual rules
+- `docs/TECHNICAL_FOUNDATION.md` — architecture
+- `docs/PRODUCTION_RULES.md` — AI production/governance rules
+- `game/` — actual runtime
 
-Explore → notice → gather → make → help → discover → improve → return → remember.
-
-## Production rule
-
-Do not add a feature, asset, character, quest, mechanic, UI pattern or technology merely because it is interesting. First check the existing source of truth and preserve coherence.
+**No HTML prototype is a substitute for the Godot runtime.**
