@@ -16,7 +16,7 @@ Everdune is a native Godot 4.x pixel-fantasy RPG being built as an AI-native sol
 See [docs/STACK_LOCK.md](docs/STACK_LOCK.md).
 
 ## Real vertical slice
-The repository now contains the first playable Godot runtime in `game/`.
+The repository contains the real Godot runtime in `game/`. It is an executable vertical-slice foundation, not a final-art release.
 
 The slice proves:
 
@@ -32,7 +32,7 @@ Controls:
 - Space — prototype combat action
 - Esc — close panels
 
-This is intentionally the gameplay foundation rather than the final art pass. The next production layer is the canonical pixel asset pipeline, authored TileMapLayer world, animation, audio, combat depth, quest systems, and the full Echo simulation.
+This is intentionally a production foundation rather than a final-art release. See `docs/SECOND_EYES_AUDIT.md` for the current ruthless gate assessment. Final visual fidelity, authored content depth, audio, collision, simulation breadth and commercial polish remain active work.
 
 ## Source of truth
 - `docs/GENESIS.md` — game identity and lore foundation
