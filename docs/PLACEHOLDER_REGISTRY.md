@@ -37,19 +37,19 @@ then the item must be added here immediately.
 | Area | Item | Current state | Replacement / acceptance target | Priority |
 |---|---|---|---|---|
 | Art | Hearthfall scene SVG | IN_PROGRESS | Canonical Cinematic Pixel Fantasy environment matching the approved visual master; authored depth, lighting, landmarks and texture | P0 |
-| Art | Hero body/hair/coat sheets | PLACEHOLDER | Canonical high-detail hero with full layer set and authored directional animation | P0 |
+| Art | Hero body/hair/coat + production layer set | IN_PROGRESS | Full high-detail hero remains the remaining visual gate; new face/shirt/trouser/boot/accessory/back layers are integrated and animated | P0 |
 | Art | Props / terrain atlas | PLACEHOLDER | Production pixel-art atlas with validated density, palette, pivots and landmark-specific variants | P0 |
 | UI | Title screen presentation | IN_PROGRESS | Beautiful, identity-defining title experience with clear hierarchy, atmosphere and tactile interaction | P0 |
 | UI | Character creator | IN_PROGRESS | Fast, expressive creator with production hero preview and readable choices | P0 |
-| World | Visible Hearthfall map | PLACEHOLDER | Production-authored TileMapLayer map with proper collision, transitions and authored topology | P0 |
-| World | Hardcoded river collision | PLACEHOLDER | TileSet/scene collision geometry owned by the world data | P0 |
-| NPC | Mara / Rowan | PLACEHOLDER | Authored portraits/silhouettes, routines, schedules, contextual dialogue and memory reactions | P1 |
-| Echo | Hardcoded Echo interactions | PLACEHOLDER | Reusable Echo data model with evidence presentation and world consequences | P1 |
-| Audio | Runtime generated tones | PLACEHOLDER | Authored music, ambience, biome audio, interaction and combat soundscape | P0 |
-| Combat | Basic attack presentation | PLACEHOLDER | Authored attack animation, telegraph, impact language, enemy variants and encounter design | P1 |
+| World | Visible Hearthfall map | IN_PROGRESS | Multi-layer authored TileMap topology now drives ground, river and paths; landmark art/detail remains the visual gate | P0 |
+| World | Hardcoded river collision | PASSED | Water TileSet physics plus world-owned landmark/boundary collision; no player river exception | P0 |
+| NPC | Mara / Rowan | IN_PROGRESS | Mara now has authored routine positions, identity ornament, relationship state and post-Echo dialogue; Rowan remains to be deepened | P1 |
+| Echo | First Echo presentation | IN_PROGRESS | Old Road Echo now changes world presentation, unlocks continuity and drives Mara response; final cinematic presentation remains | P1 |
+| Audio | Hearthfall vertical-slice score | IN_PROGRESS | Authored note motifs now cover exploration, Echo, fishing, crafting, home and Sleeping Gate; final recorded assets remain a later audio gate | P0 |
+| Combat | Sleeping Gate encounter | IN_PROGRESS | Three authored enemy variants, health bars, hit-stun, telegraphs, knockback and encounter progression are integrated; final VFX/audio remain | P1 |
 | Save | Current small save payload | IN_PROGRESS | Versioned, atomic, corruption-safe save with migration tests and persisted world state | P1 |
-| VFX | Polygon2D feedback effects | PLACEHOLDER | Authored pixel-aware VFX language integrated with the visual bible | P1 |
-| QA | Manual regression journey | IN_PROGRESS | Automated deterministic regression plus Second-Eyes player/production review | P1 |
+| VFX | Slice feedback language | IN_PROGRESS | Gather, fish, Echo and combat feedback have authored shapes/timing; final pixel-art VFX pass remains | P1 |
+| QA | Vertical Slice 1.0 regression | IN_PROGRESS | Clean-save, TileMap physics, Echo, hero assets and migration checks are automated; real player first-run review remains | P1 |
 
 ## Retirement rule
 
