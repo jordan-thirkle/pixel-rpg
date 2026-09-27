@@ -31,7 +31,7 @@ func _ready() -> void:
 
 func set_weather(kind: String) -> void:
 	if rain_layer:
-		rain_layer.modulate.a = 0.26 if kind == "Rain" else 0.0
+		rain_layer.modulate.a = 0.32 if kind == "Rain" else 0.0
 
 func set_time(hour: int) -> void:
 	var night := hour >= 20 or hour < 6
@@ -48,3 +48,4 @@ func _process(delta: float) -> void:
 	t += delta
 	if rain_layer:
 		rain_layer.position.y = 270.0 + sin(t * 0.6) * 2.0
+		rain_layer.position.x = 480.0 + sin(t * 0.35) * 3.0
