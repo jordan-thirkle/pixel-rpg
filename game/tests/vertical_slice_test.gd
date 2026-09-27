@@ -5,7 +5,7 @@ const SAVE := preload("res://scripts/save_system.gd")
 const REGISTRY := preload("res://scripts/content_registry.gd")
 const ECHO := preload("res://scripts/systems/echo_system.gd")
 
-func _initialize() -> void:
+func _init() -> void:
 	var state := STATE.new()
 	assert(state.has_item("wood", 3))
 	var registry := REGISTRY.new()
