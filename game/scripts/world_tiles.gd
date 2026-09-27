@@ -84,6 +84,21 @@ func _build_props() -> void:
 	_prop(6, Vector2(495,355), Vector2(1.15,1.15))
 	_prop(7, Vector2(730,370), Vector2(1.15,1.15))
 
+	# Authored Hearthfall dressing: small clusters create landmarks and readable
+	# "lived-in" pockets without turning the valley into random prop noise.
+	for p in [Vector2(250,220), Vector2(275,205), Vector2(335,215), Vector2(350,235)]:
+		_prop(9, p, Vector2(1.0, 1.0))
+	for p in [Vector2(280,285), Vector2(345,290), Vector2(395,275)]:
+		_prop(2, p, Vector2(1.0, 1.0))
+	for p in [Vector2(205,315), Vector2(230,330), Vector2(270,345), Vector2(315,335), Vector2(365,345)]:
+		_prop(9, p, Vector2(0.9, 0.9))
+	for p in [Vector2(120,190), Vector2(145,205), Vector2(175,215), Vector2(825,190), Vector2(855,210)]:
+		_prop(0, p, Vector2(1.0, 1.0))
+	_prop(3, Vector2(565,300), Vector2(1.1, 1.1))
+	_prop(2, Vector2(545,320), Vector2(1.05, 1.05))
+	_prop(3, Vector2(665,305), Vector2(1.1, 1.1))
+	_prop(9, Vector2(685,325), Vector2(1.0, 1.0))
+
 
 func set_water_animation(enabled: bool) -> void:
 	for wave in water_sprites:
