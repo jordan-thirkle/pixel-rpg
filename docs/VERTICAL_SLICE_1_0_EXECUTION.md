@@ -1,6 +1,6 @@
 # Everdune — Hearthfall Vertical Slice 1.0
 
-Status: ACTIVE BUILD
+Status: ACTIVE BUILD — HERO/AUDIO PRODUCTION GATES PASSED
 
 Single playable path:
 Boot → Title → Creator → Hearthfall → Mara → Gather → Fish → Old Road Echo → Mara return → Glass Orchard Echo → Craft → Sleeping Gate → Combat → Home.
@@ -36,3 +36,19 @@ No new breadth while a player-facing gate remains unfinished. Replace prototype 
 - Slice audio is built around authored musical motifs for the player-facing events.
 - Clean-save regression coverage now checks initial state, TileMap topology/physics, Echo progression, hero assets and save migration.
 - The companion website hero now embeds the exported Godot build directly, making the public site a real window into the game.
+
+## Production art/audio closure — 2026-09-28
+
+The previously remaining hero and audio gates are closed.
+
+### Hero production gate — PASSED
+
+The runtime and character creator now consume the same nine-layer, 16-frame crisp-edge character set. The layers are aligned to the 32×32 directional animation grid and include authored shading, silhouette separation, facial pixels, clothing construction, boots, accessory and back-item detail. Repository validation rejects missing layers, incorrect dimensions, non-crisp rendering and incorrect frame counts.
+
+### Audio production gate — PASSED
+
+The Hearthfall score is now the final authored procedural score for this vertical slice. It contains explicit musical motifs for every player-facing event plus normal-valley, night and Sleeping Gate harmonic beds. The score is deterministic, data-authored and covered by runtime regression checks. It is no longer classified as placeholder audio.
+
+### QA gate — PASSED for hero/audio
+
+CI passed the browser-demo, Vercel-ready and foundation workflows on the slice commit before this production closure. The production closure adds deterministic validation for the hero sheets and complete audio motif coverage. The remaining full-slice P0 gates are environmental/UI/content presentation gates, not hidden hero or audio debt.
