@@ -1,0 +1,25 @@
+name: Vercel-ready verification
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  web-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify website shell
+        run: |
+          test -f web/index.html
+          test -f web/play/index.html
+          test -f web/404.html
+          test -f vercel.json
+          grep -q "Everdune" web/index.html
+          grep -q "/game/index.html" web/play/index.html
+          python - <<'PY'
+          import json
+          json.load(open("vercel.json", encoding="utf-8"))
+          print("Vercel configuration valid")
+          PY
