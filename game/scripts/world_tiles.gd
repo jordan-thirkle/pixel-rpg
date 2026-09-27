@@ -92,9 +92,12 @@ func _build_tiles() -> void:
 			if py + dy >= 0 and py + dy < ROWS:
 				path_layer.set_cell(Vector2i(x, py + dy), 0, Vector2i(2, 0))
 
-	# Bridge spans the river at the settlement crossing.
+	# Bridge spans the entire river width. Water cells are erased at the bridge
+	# crossing, so TileSet physics produces a genuine walkable corridor.
 	for y in range(7, 10):
-		path_layer.set_cell(Vector2i(18, y), 0, Vector2i(3, 0))
+		for x in range(18, 26):
+			water_layer.erase_cell(Vector2i(x, y))
+			path_layer.set_cell(Vector2i(x, y), 0, Vector2i(3, 0))
 
 	# Secondary footpath toward the orchard and gate.
 	for y in range(5, 16):
@@ -106,6 +109,8 @@ func _build_tiles() -> void:
 	# Water animation follows the same authored river cells.
 	for y in range(1, 16):
 		for x in range(19, 26):
+			if y >= 7 and y <= 9:
+				continue
 			var wave := Sprite2D.new()
 			wave.texture = WATER
 			wave.region_enabled = true
