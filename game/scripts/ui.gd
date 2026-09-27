@@ -30,6 +30,7 @@ var settings_values := {}
 var start_menu: Panel
 var continue_button: Button
 var session_active := false
+var settings_from_start := false
 
 func _ready() -> void:
 	layer = 100
@@ -315,9 +316,15 @@ func set_settings(values: Dictionary) -> void:
 					child.button_pressed = bool(settings_values[key])
 
 func toggle_settings() -> void:
-	settings_panel.visible = not settings_panel.visible
-	if settings_panel.visible and start_menu:
-		start_menu.visible = false
+		if not settings_panel.visible:
+			settings_from_start = (not session_active and start_menu != null and start_menu.visible)
+			settings_panel.visible = true
+			if settings_from_start:
+				start_menu.visible = false
+		else:
+			settings_panel.visible = false
+			if settings_from_start and not session_active:
+				start_menu.visible = true
 	if settings_panel.visible:
 		inventory_panel.visible = false
 		dialog_panel.visible = false
@@ -325,7 +332,7 @@ func toggle_settings() -> void:
 func _process(_delta: float) -> void:
 	if state == null:
 		return
-	creation_panel.visible = (not session_active) and start_menu != null and not start_menu.visible
+	creation_panel.visible = (not session_active) and start_menu != null and not start_menu.visible and not settings_panel.visible
 	stats_label.text = "%s  •  Day %d  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d" % [
 		state.character.get("name","Wayfarer"), state.day, state.hour, state.minute,
 		state.hp, state.max_hp, state.energy, state.max_energy, state.level, state.xp, state.echoes
