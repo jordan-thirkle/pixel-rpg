@@ -7,6 +7,7 @@ const STATE_SCENE := preload("res://scripts/game_state.gd")
 const SAVE_SCENE := preload("res://scripts/save_system.gd")
 const WEATHER_SCENE := preload("res://scripts/weather.gd")
 const GATHER_SCENE := preload("res://scripts/gather_node.gd")
+const AUDIO_SCENE := preload("res://scripts/audio.gd")
 const PROPS := preload("res://assets/props.svg")
 
 var world: Node2D
@@ -15,6 +16,7 @@ var ui: CanvasLayer
 var state: Node
 var save_system: Node
 var weather: Node
+var audio: Node
 var prompt := ""
 var toast := ""
 var toast_time := 0.0
@@ -43,6 +45,8 @@ func _ready() -> void:
 	_add_orchard_echo_visual()
 	weather = WEATHER_SCENE.new()
 	add_child(weather)
+	audio = AUDIO_SCENE.new()
+	add_child(audio)
 	player = PLAYER_SCENE.new()
 	player.name = "Wayfarer"
 	player.position = Vector2(480, 290)
@@ -53,6 +57,7 @@ func _ready() -> void:
 	add_child(ui)
 	ui.state = state
 	ui.creation_finished.connect(_on_creation_finished)
+	ui.sound_requested.connect(_play_cue)
 	_load_if_present()
 	player.set_physics_process(not String(state.character.get("name","")).is_empty())
 	weather.set_weather(state.weather)
@@ -86,6 +91,7 @@ func _add_orchard_echo_visual() -> void:
 
 func _on_gathered(node: Node) -> void:
 	state.add_item(node.resource_id, node.amount)
+	_play_cue("gather")
 	state.add_xp(4)
 	_show_toast("Gathered %s +%d  •  node will regrow." % [node.resource_id.capitalize(), node.amount])
 
@@ -177,6 +183,7 @@ func _discover_echo(id: String) -> void:
 		state.echoes += 1
 		state.add_xp(25)
 		state.add_item("memory_shard", 1)
+		_play_cue("echo")
 		ui.show_dialogue("An Echo", "A hundred travellers crossed this road before you. For a moment, you hear their laughter in the rain.")
 		_show_toast("Echo I discovered  •  Memory Shard +1  •  XP +25")
 	elif id == "glass_orchard":
@@ -190,6 +197,7 @@ func _discover_echo(id: String) -> void:
 		state.echoes += 1
 		state.add_xp(40)
 		state.add_item("memory_shard", 1)
+		_play_cue("echo")
 		ui.show_dialogue("An Echo", "You remember a garden that once fed the whole valley. Somewhere beneath the roots, a bell is still ringing.")
 		_show_toast("Echo II discovered  •  Memory Shard +1  •  XP +40")
 
@@ -198,6 +206,7 @@ func _fish() -> void:
 		return
 	fish_cooldown = 1.25
 	state.add_item("river_fish", 1)
+	_play_cue("fish")
 	state.add_xp(6)
 	_show_toast("You caught a silverfin.")
 
@@ -230,6 +239,10 @@ func _load_game() -> void:
 func _load_if_present() -> void:
 	if save_system.has_save():
 		save_system.load_game(state, player)
+
+func _play_cue(kind: String) -> void:
+	if audio:
+		audio.cue(kind)
 
 func _on_creation_finished() -> void:
 	player.refresh_customisation()
