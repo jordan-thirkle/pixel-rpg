@@ -213,6 +213,8 @@ func _process(delta: float) -> void:
 			_show_toast("The silverfin slipped away. Cast again when the water settles.")
 	toast_time = maxf(0.0, toast_time-delta)
 	_update_nearby()
+	if world and world.has_method("sync_state"):
+		world.sync_state(state)
 	if weather:
 		weather.follow_player(player)
 		weather.set_time(state.hour)
@@ -277,6 +279,8 @@ func _perform_activity(id: String) -> void:
 	var result: Dictionary = freeplay.perform(id, state)
 	if bool(result.ok):
 		_play_cue("craft" if id in ["cookfire","building","decorating"] else "gather")
+		if world and world.has_method("sync_state"):
+			world.sync_state(state)
 		_show_toast(String(result.message))
 	else:
 		_show_toast(String(result.message))
@@ -393,6 +397,8 @@ func _load_game() -> void:
 	if save_system.load_game(state, player):
 		player.refresh_customisation()
 		weather.set_weather(state.weather)
+		if world and world.has_method("sync_state"):
+			world.sync_state(state)
 		_show_toast("Game loaded.")
 	else:
 		_show_toast("No save found yet.")
