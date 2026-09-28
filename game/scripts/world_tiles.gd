@@ -272,6 +272,11 @@ func awaken_echo(id: String) -> void:
 		tween.tween_property(marker,"modulate:a",1.0,0.8)
 
 func sync_state(state: Node) -> void:
+	if bool(state.flags.get("old_road_echo", false)) and not hearthsong_awake:
+		awaken_echo("old_road")
+	if "hearth_lamp" in state.home_display_items and not bool(synced_world_state.get("hearth_lamp", false)):
+		synced_world_state["hearth_lamp"] = true
+		place_hearth_lamp()
 	if bool(state.flags.get("mapped_old_road", false)) and not bool(synced_world_state.get("mapped_old_road", false)):
 		synced_world_state["mapped_old_road"] = true
 		for p in [Vector2(455,345),Vector2(470,330),Vector2(485,315)]:
@@ -283,6 +288,48 @@ func sync_state(state: Node) -> void:
 		synced_world_state["garden_harvested"] = true
 		for p in [Vector2(275,292),Vector2(320,292),Vector2(300,310)]:
 			_prop(9, p, Vector2(0.8,0.8), 5)
+
+	if bool(state.flags.get("activity_fishing_established", false)) and not bool(synced_world_state.get("fishing_established", false)):
+		synced_world_state["fishing_established"] = true
+		for p in [Vector2(705,380),Vector2(748,382)]:
+			_prop(3, p, Vector2(0.9,0.9), 4)
+	if bool(state.flags.get("activity_fishing_mastered", false)) and not bool(synced_world_state.get("fishing_mastered", false)):
+		synced_world_state["fishing_mastered"] = true
+		_prop(7, Vector2(405,225), Vector2(1.0,1.0), 5)
+	if bool(state.flags.get("activity_woodcutting_mastered", false)) and not bool(synced_world_state.get("woodcutting_mastered", false)):
+		synced_world_state["woodcutting_mastered"] = true
+		for p in [Vector2(235,230),Vector2(255,235)]:
+			_prop(5, p, Vector2(0.8,0.8), 5)
+	if bool(state.flags.get("activity_foraging_mastered", false)) and not bool(synced_world_state.get("foraging_mastered", false)):
+		synced_world_state["foraging_mastered"] = true
+		for p in [Vector2(180,255),Vector2(205,260),Vector2(230,255)]:
+			_prop(9, p, Vector2(0.7,0.7), 5)
+	if bool(state.flags.get("activity_mining_mastered", false)) and not bool(synced_world_state.get("mining_mastered", false)):
+		synced_world_state["mining_mastered"] = true
+		_prop(8, Vector2(215,425), Vector2(0.9,0.9), 5)
+	if bool(state.flags.get("orchard_tended", false)) and not bool(synced_world_state.get("orchard_tended", false)):
+		synced_world_state["orchard_tended"] = true
+		for p in [Vector2(545,125),Vector2(575,120),Vector2(590,145)]:
+			_prop(9, p, Vector2(0.85,0.85), 5)
+	if bool(state.flags.get("silverrun_legend", false)) and not bool(synced_world_state.get("silverrun_legend", false)):
+		synced_world_state["silverrun_legend"] = true
+		for p in [Vector2(680,295),Vector2(705,300),Vector2(730,305)]:
+			_prop(7, p, Vector2(0.7,0.7), 5)
+
+	for display_item in state.home_display_items:
+		var key := "home_display_" + String(display_item)
+		if bool(synced_world_state.get(key, false)):
+			continue
+		synced_world_state[key] = true
+		match String(display_item):
+			"silverfin_trophy","fisher_rack":
+				_prop(7, Vector2(405,225), Vector2(0.7,0.7), 6)
+			"old_road_map":
+				_prop(6, Vector2(430,210), Vector2(0.7,0.7), 6)
+			"herb_shelf":
+				_prop(3, Vector2(455,210), Vector2(0.7,0.7), 6)
+			"archive_case":
+				_prop(5, Vector2(430,195), Vector2(0.7,0.7), 6)
 
 func place_hearth_lamp() -> void:
 	var lamp := Sprite2D.new()
