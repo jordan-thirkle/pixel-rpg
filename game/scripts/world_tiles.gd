@@ -16,6 +16,7 @@ var path_layer: TileMapLayer
 var anim_time := 0.0
 var hearthsong_awake := false
 var synced_world_state := {}
+var echo_markers: Dictionary = {}
 
 func _ready() -> void:
 	_build_tiles()
@@ -251,10 +252,18 @@ func _build_atmosphere() -> void:
 		ambience.append(glow)
 
 func awaken_echo(id: String) -> void:
-	if id != "old_road" or hearthsong_awake:
+	match id:
+		"old_road":
+			_apply_old_road_echo()
+		"glass_orchard":
+			_apply_glass_orchard_echo()
+
+func _apply_old_road_echo() -> void:
+	if bool(echo_markers.get("old_road", false)):
 		return
+	echo_markers["old_road"] = true
 	hearthsong_awake = true
-	# The first Echo changes the world presentation rather than only awarding XP.
+	# The road becomes visibly remembered: warm markers now trace the route.
 	for glow in ambience:
 		var polygon := glow as Polygon2D
 		polygon.color = Color("#e8c77c")
@@ -271,7 +280,29 @@ func awaken_echo(id: String) -> void:
 		tween.tween_property(marker,"modulate:a",0.15,0.8)
 		tween.tween_property(marker,"modulate:a",1.0,0.8)
 
+func _apply_glass_orchard_echo() -> void:
+	if bool(echo_markers.get("glass_orchard", false)):
+		return
+	echo_markers["glass_orchard"] = true
+	# The orchard answers the remembered garden with small, persistent signs of life.
+	for p in [Vector2(495,130),Vector2(520,142),Vector2(545,128),Vector2(565,150)]:
+		var petal := Polygon2D.new()
+		petal.polygon = PackedVector2Array([
+			Vector2(0,-3),Vector2(3,0),Vector2(0,3),Vector2(-3,0)
+		])
+		petal.position = p
+		petal.z_index = 6
+		petal.color = Color("#e7d19a")
+		add_child(petal)
+		var tween := create_tween().set_loops()
+		tween.tween_property(petal,"position:y",p.y - 5.0,1.4)
+		tween.tween_property(petal,"position:y",p.y,1.4)
+
 func sync_state(state: Node) -> void:
+	if bool(state.flags.get("old_road_echo", false)):
+		_apply_old_road_echo()
+	if bool(state.flags.get("glass_orchard_echo", false)):
+		_apply_glass_orchard_echo()
 	if bool(state.flags.get("mapped_old_road", false)) and not bool(synced_world_state.get("mapped_old_road", false)):
 		synced_world_state["mapped_old_road"] = true
 		for p in [Vector2(455,345),Vector2(470,330),Vector2(485,315)]:
