@@ -307,6 +307,8 @@ func _discover_echo(id: String) -> void:
 		if data != null:
 			if result.reason == "locked":
 				ui.show_dialogue(data.title, "The memory is silent. Another memory must be awakened first.")
+			elif result.reason == "experience":
+				ui.show_dialogue(data.title, "The memory is listening for lived experience. Keep fishing, walking, mining or tending the valley; it will make more sense when you return.")
 			else:
 				ui.show_dialogue(data.title, data.repeat_text)
 		return
@@ -318,7 +320,8 @@ func _discover_echo(id: String) -> void:
 	if data.world_memory_id == "silverrun_kindness":
 		state.fish_luck += 2
 	ui.show_dialogue(data.title, data.discovery_text)
-	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
+	var next_hint := " The valley has changed." if data.unlock_flags.size() > 0 else ""
+	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d%s" % [data.title, data.item_amount, data.xp_reward, next_hint])
 
 func _craft_lamp() -> void:
 	if crafting.craft_hearth_lamp(state):
@@ -346,7 +349,9 @@ func _fish() -> void:
 func _resolve_fish_catch() -> void:
 	fish_phase = "idle"
 	fish_cooldown = 1.1
-	var silverfin_chance := clampf(0.18 + float(state.fish_luck) * 0.04, 0.18, 0.36)
+	var fishing_level := int(state.skills.get("fishing", 1))
+	var dawn_bonus := 0.10 if bool(state.flags.get("dawn_fishing_known", false)) and state.hour < 11 else 0.0
+	var silverfin_chance := clampf(0.16 + float(fishing_level - 1) * 0.025 + float(state.fish_luck) * 0.04 + dawn_bonus, 0.16, 0.48)
 	var roll := randf()
 	var catch_id := "river_fish"
 	var catch_label := "river fish"
