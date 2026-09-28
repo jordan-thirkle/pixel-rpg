@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "survey"
+display_name = "Hollow Steps Survey Point"
+kind = "activity"
+position = Vector2(600, 185)
+interaction_radius = 38.0
+prerequisite_flags = ["mapped_old_road"]
+skill = "wayfinding"
+activity_hint = "Survey the valley edge."
