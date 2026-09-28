@@ -226,7 +226,8 @@ Foundation regression path is green in CI.
 ## [ ] Full clean-save playthrough
 One complete run from title to home return.
 
-## [ ] 45-minute free-play test
+## [~] 45-minute free-play test
+Automated foundation and Vercel-ready checks pass on the current main commit, including headless Godot startup and deterministic vertical-slice/save tests. A genuine 45-minute self-directed player session still requires interactive runtime observation; do not mark complete from CI alone.
 Player may ignore story, choose an activity, wander, change activities and return home.
 Record dead time, confusion, friction, discoveries and visible consequences.
 
