@@ -17,6 +17,7 @@ signal start_requested(continue_game: bool)
 signal sound_requested(kind: String)
 signal settings_changed(values: Dictionary)
 signal craft_requested
+signal craft_next_requested
 
 var state: Node
 var prompt_label: Label
@@ -123,23 +124,32 @@ func _build_ui() -> void:
 
 	inventory_panel = Panel.new()
 	inventory_panel.add_theme_stylebox_override("panel", panel_style)
-	inventory_panel.position = Vector2(250,105)
-	inventory_panel.size = Vector2(460,320)
+	inventory_panel.position = Vector2(230,58)
+	inventory_panel.size = Vector2(500,438)
 	inventory_panel.visible = false
 	add_child(inventory_panel)
 	inventory_text = Label.new()
-	inventory_text.position = Vector2(28,24)
-	inventory_text.size = Vector2(404,235)
-	inventory_text.add_theme_font_size_override("font_size",17)
+	inventory_text.position = Vector2(28,20)
+	inventory_text.size = Vector2(444,348)
+	inventory_text.add_theme_font_size_override("font_size",14)
 	inventory_text.add_theme_color_override("font_color",Color("#f3ead2"))
 	inventory_panel.add_child(inventory_text)
 	craft_button = Button.new()
 	craft_button.add_theme_stylebox_override("normal", button_style)
 	craft_button.text = "Craft Hearth Lamp"
-	craft_button.position = Vector2(28,248)
-	craft_button.size = Vector2(190,36)
+	craft_button.position = Vector2(28,372)
+	craft_button.size = Vector2(205,38)
 	craft_button.pressed.connect(_craft_lamp)
 	inventory_panel.add_child(craft_button)
+
+	var craft_next := Button.new()
+	craft_next.name = "CraftNextButton"
+	craft_next.add_theme_stylebox_override("normal", button_style)
+	craft_next.text = "Craft Available Project"
+	craft_next.position = Vector2(245,372)
+	craft_next.size = Vector2(205,38)
+	craft_next.pressed.connect(func(): craft_next_requested.emit())
+	inventory_panel.add_child(craft_next)
 
 	_build_start_menu()
 	_build_character_creator()
