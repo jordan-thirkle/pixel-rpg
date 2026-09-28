@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "orchard_care"
+display_name = "Glass Orchard"
+kind = "activity"
+position = Vector2(565, 150)
+interaction_radius = 38.0
+prerequisite_flags = ["glass_orchard_echo"]
+skill = "farming"
+activity_hint = "Tend the impossible orchard."
