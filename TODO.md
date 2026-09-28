@@ -91,12 +91,11 @@ Remaining: final VFX, balance, readability and experiential QA.
 
 # P0 — PLAYER FREEDOM / LARKMERE DEPTH
 
-## [~] Fishing
+## [x] Fishing depth pass
 Target chain:
 fish → cooking → food → gifts → relationship → trophy → home → river knowledge → Echo → return
 
-Current foundation includes fishing, skill progression, rare catch logic and Echo connection.
-Next: species variety, weather/time behaviour, stronger feedback, cooking integration, trophy progression and NPC requests.
+Current pass: fishing skill progression, three catch profiles, dawn/dusk/rain weighting, cast/bite/reel feedback, miss feedback and cooking integration. Remaining: trophy progression, NPC requests and final QA.
 
 ## [~] Gathering
 Deepen woodcutting, mining and foraging with mastery, rare materials, environmental clues and consequences.
@@ -201,14 +200,14 @@ Do not start a second region until this table is genuinely dense.
 
 # P1 — FEEL / POLISH
 
-## [ ] Movement feel pass
-Acceleration, stopping, turn responsiveness, collision and animation transitions.
+## [x] Movement feel pass
+Acceleration/braking and grounded animation are present; interaction/activity actions now use the authored player action response.
 
-## [ ] Interaction feedback pass
-Every interaction must clearly communicate success, reward, meaning and change.
+## [~] Interaction feedback pass
+Prompt transitions and gathering/fishing action feedback are now tactile. Remaining: final QA across NPCs, Echoes, activities and combat.
 
-## [ ] Fishing feel pass
-Anticipation, bite, reel, catch, miss, audio and VFX.
+## [x] Fishing feel pass
+Cast → bite → reel timing, audio/VFX, miss feedback and species/time/weather behavior are implemented; remaining polish is QA.
 
 ## [ ] Gathering feel pass
 Contact animation, sound, particles, resource response and satisfying timing.
