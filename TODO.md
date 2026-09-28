@@ -159,14 +159,14 @@ Visual language, audio motif, environmental response, discovery animation and em
 
 # P1 — HOME
 
-## [~] Persistent home state
-Home level, displays, garden state and home identity exist.
+## [x] Persistent home state
+Home level, displays, garden state and home identity exist and now restore into the world presentation.
 
-## [ ] Room-level personalisation
-Furniture, functional stations, trophies, maps, collections and Echo artefacts.
+## [~] Room-level personalisation
+Existing functional stations, meals, trophies, maps, decorations and Echo-linked displays now become persistent visual home records. Further room variety remains.
 
-## [ ] Emergent home identity
-Different players should naturally produce different homes.
+## [~] Emergent home identity
+Different activity/display choices already alter the visible home; deeper variation remains after density QA.
 
 ## [ ] NPC home interactions
 Visits, comments, gifts, memories and events.
