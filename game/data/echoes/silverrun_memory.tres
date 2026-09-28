@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "silverrun_memory"
+title = "The River's First Catch"
+discovery_text = "The river remembers a child releasing a fish instead of keeping it. For a moment, the water seems to brighten around your hands."
+repeat_text = "The river remembers kindness as easily as hunger."
+prerequisite_flags = ["old_road_echo"]
+completion_flag = "silverrun_memory_echo"
+quest_stage = 3
+memory_xp = 16
+xp_reward = 28
+item_id = "decor"
+item_amount = 1
+position = Vector2(730, 370)
+memory_kind = "creature"
+knowledge_tag = "silverrun"
+world_memory_id = "silverrun_kindness"
+consequence_text = "The river becomes a little less wary of you; fishing luck improves for the evening."
+relationship_bonus = 1
