@@ -56,6 +56,7 @@ var preview_accessory: Sprite2D
 var preview_back: Sprite2D
 var start_backdrop: TextureRect
 var start_overlay: ColorRect
+var last_prompt_text := ""
 var echo_reveal: Panel
 var echo_reveal_title: Label
 var echo_reveal_text: Label
@@ -540,6 +541,14 @@ func _process(_delta: float) -> void:
 
 func set_prompt(prompt: String, toast: String) -> void:
 	prompt_label.text = prompt
+	if session_active and prompt != last_prompt_text and not prompt.is_empty():
+		last_prompt_text = prompt
+		prompt_label.modulate = Color(1,1,1,0.65)
+		prompt_label.scale = Vector2(0.985,0.985)
+		var tween := create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(prompt_label,"modulate",Color.WHITE,0.16)
+		tween.tween_property(prompt_label,"scale",Vector2.ONE,0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	toast_label.text = toast
 
 func show_dialogue(title: String, body: String) -> void:
