@@ -333,7 +333,7 @@ func _sync_home_displays(state: Node) -> void:
 			"old_road_map":
 				_home_display_prop(6, Vector2(385,236), Vector2(0.82,0.82))
 			"found_decor":
-				_home_display_prop(9, Vector2(420,236), Vector2(0.72,0.72)
+				_home_display_prop(9, Vector2(420,236), Vector2(0.72,0.72))
 			"workbench":
 				_home_display_prop(5, Vector2(455,220), Vector2(0.9,0.9))
 
