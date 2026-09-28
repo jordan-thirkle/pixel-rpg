@@ -28,6 +28,10 @@ func _finish(id: String, state: Node, skill: String, xp: int, message: String) -
 func _cook(state: Node) -> Dictionary:
 	if state.has_item("river_fish"):
 		state.remove_item("river_fish", 1)
+	elif state.has_item("brook_trout"):
+		state.remove_item("brook_trout", 1)
+	elif state.has_item("silverfin"):
+		state.remove_item("silverfin", 1)
 	elif state.has_item("berries", 2) and state.has_item("herbs"):
 		state.remove_item("berries", 2)
 		state.remove_item("herbs", 1)

@@ -573,9 +573,9 @@ func close_panels() -> void:
 	inventory_panel.visible = false
 
 func _refresh_inventory() -> void:
-	inventory_text.text = "INVENTORY\n\nWood %d  Stone %d  Fish %d  Silverfin %d\nBerries %d  Mushrooms %d  Herbs %d  Seeds %d\nMeals %d  Memory Shards %d  Decor %d\n\nSKILLS\nGather %d  Woodcut %d  Mining %d  Forage %d\nFish %d  Farm %d  Cook %d  Build %d\nWayfind %d  Memory %d  Combat %d\n\nHOME\nLevel %d   Displays %d   Returns %d\nGarden: %s\n\nMEMORY\nEchoes %d   World memories %d\nActivities %d   Achievements %d\n\nCRAFTING\nCraft at the home hearth; build and display what your life leaves behind." % [
+	inventory_text.text = "INVENTORY\n\nWood %d  Stone %d  Fish %d  Trout %d  Silverfin %d\nBerries %d  Mushrooms %d  Herbs %d  Seeds %d\nMeals %d  Memory Shards %d  Decor %d\n\nSKILLS\nGather %d  Woodcut %d  Mining %d  Forage %d\nFish %d  Farm %d  Cook %d  Build %d\nWayfind %d  Memory %d  Combat %d\n\nHOME\nLevel %d   Displays %d   Returns %d\nGarden: %s\n\nMEMORY\nEchoes %d   World memories %d\nActivities %d   Achievements %d\n\nCRAFTING\nCraft at the home hearth; build and display what your life leaves behind." % [
 		int(state.inventory.get("wood",0)), int(state.inventory.get("stone",0)),
-		int(state.inventory.get("river_fish",0)), int(state.inventory.get("silverfin",0)),
+		int(state.inventory.get("river_fish",0)), int(state.inventory.get("brook_trout",0)), int(state.inventory.get("silverfin",0)),
 		int(state.inventory.get("berries",0)), int(state.inventory.get("mushrooms",0)),
 		int(state.inventory.get("herbs",0)), int(state.inventory.get("seeds",0)),
 		int(state.inventory.get("cooked_meal",0)), int(state.inventory.get("memory_shard",0)),
