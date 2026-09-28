@@ -275,7 +275,6 @@ func sync_state(state: Node) -> void:
 	if bool(state.flags.get("old_road_echo", false)) and not hearthsong_awake:
 		awaken_echo("old_road")
 	if "hearth_lamp" in state.home_display_items and not bool(synced_world_state.get("hearth_lamp", false)):
-		synced_world_state["hearth_lamp"] = true
 		place_hearth_lamp()
 	if bool(state.flags.get("mapped_old_road", false)) and not bool(synced_world_state.get("mapped_old_road", false)):
 		synced_world_state["mapped_old_road"] = true
