@@ -22,13 +22,14 @@ body{display:grid;place-items:center}
     <div class="title">EVERDUNE</div>
     <div class="sub">THE WORLD REMEMBERS</div>
     <p class="copy">The game is the source of truth. This page does not simulate gameplay or place marketing UI over it. Enter the actual Godot build.</p>
-    <a class="enter" href="/game/index.html">ENTER LARKMERE</a>
+    <a class="enter" id="enter" href="/game/index.html">ENTER LARKMERE</a>
     <div class="note">GODOT 4.7.2 • WEB BUILD • 960×540</div>
   </div>
 </div>
 <script>
 const enter=document.querySelector('.enter');
 enter.addEventListener('click',()=>{document.getElementById('launch').style.opacity='0';setTimeout(()=>document.getElementById('launch').remove(),350);});
+<script>setTimeout(()=>location.replace("/game/index.html"),650);</script>
 </script>
 </body>
 </html>
