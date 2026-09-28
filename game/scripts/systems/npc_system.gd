@@ -51,6 +51,8 @@ func _activity_dialogue(data: EverduneNPCData, state: Node) -> String:
 
 func _memory_dialogue(id: String, state: Node) -> String:
 	if id == "mara":
+		if bool(state.flags.get("hearthfall_hearthsong_echo", false)):
+			return "The old hearth answered you. That's the thing about belonging here: it is never something you are simply given. You leave a little of yourself behind."
 		if bool(state.flags.get("garden_harvested", false)) and state.relationship_mara >= 2:
 			return "The garden looks good. Funny how a place starts feeling like home once something you planted is growing there."
 		if int(state.activity_counts.get("fishing",0)) >= 5:
