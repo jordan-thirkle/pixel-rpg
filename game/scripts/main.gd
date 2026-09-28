@@ -18,6 +18,7 @@ const GATHERING_SCENE := preload("res://scripts/systems/gathering_system.gd")
 const COMBAT_SCENE := preload("res://scripts/systems/combat_system.gd")
 const CRAFTING_SCENE := preload("res://scripts/systems/crafting_system.gd")
 const LOCATION_SCENE := preload("res://scripts/systems/location_system.gd")
+const FREEPLAY_SCENE := preload("res://scripts/systems/freeplay_system.gd")
 const NPC_VISUAL_SCENE := preload("res://scripts/npc_visual.gd")
 
 var world: Node2D
@@ -37,6 +38,7 @@ var gathering: Node
 var combat: Node
 var crafting: Node
 var location_system: Node
+var freeplay: Node
 var vfx_root: Node2D
 var prompt := ""
 var toast := ""
@@ -96,6 +98,9 @@ func _ready() -> void:
 	location_system = LOCATION_SCENE.new()
 	location_system.name = "LocationSystem"
 	add_child(location_system)
+	freeplay = FREEPLAY_SCENE.new()
+	freeplay.name = "FreeplaySystem"
+	add_child(freeplay)
 	await registry.ready
 	interactions.configure(registry)
 	location_system.configure(registry)
@@ -159,16 +164,20 @@ func _spawn_npc_visuals() -> void:
 
 func _spawn_gather_nodes() -> void:
 	var definitions := [
-		{"id":"wood_1","resource":"wood","index":0,"pos":Vector2(205,150)},
-		{"id":"wood_2","resource":"wood","index":0,"pos":Vector2(760,165)},
-		{"id":"wood_3","resource":"wood","index":0,"pos":Vector2(155,92)},
-		{"id":"stone_1","resource":"stone","index":8,"pos":Vector2(180,360)},
-		{"id":"stone_2","resource":"stone","index":8,"pos":Vector2(820,330)}
+		{"id":"wood_1","resource":"wood","index":0,"pos":Vector2(205,150),"skill":"woodcutting","xp":10},
+		{"id":"wood_2","resource":"wood","index":0,"pos":Vector2(760,165),"skill":"woodcutting","xp":12},
+		{"id":"wood_3","resource":"wood","index":0,"pos":Vector2(155,92),"skill":"woodcutting","xp":10},
+		{"id":"stone_1","resource":"stone","index":8,"pos":Vector2(180,360),"skill":"mining","xp":12},
+		{"id":"stone_2","resource":"stone","index":8,"pos":Vector2(820,330),"skill":"mining","xp":14},
+		{"id":"berry_1","resource":"berries","index":2,"pos":Vector2(120,140),"skill":"foraging","xp":8},
+		{"id":"berry_2","resource":"berries","index":2,"pos":Vector2(205,315),"skill":"foraging","xp":8},
+		{"id":"mushroom_1","resource":"mushrooms","index":3,"pos":Vector2(275,330),"skill":"foraging","xp":10},
+		{"id":"herb_1","resource":"herbs","index":4,"pos":Vector2(590,315),"skill":"foraging","xp":10}
 	]
 	for data in definitions:
 		var node := GATHER_SCENE.new()
 		node.name = String(data.id)
-		node.setup(String(data.resource), props_texture, int(data.index), data.pos)
+		node.setup(String(data.resource), props_texture, int(data.index), data.pos, String(data.skill), int(data.xp))
 		node.harvested.connect(_on_gathered)
 		world.add_child(node)
 
@@ -245,6 +254,9 @@ func _update_nearby() -> void:
 		"fish": prompt = "E  Fish"
 		"home": prompt = "E  Rest at home"
 		"dungeon": prompt = "E  Enter the Sleeping Gate"
+		"activity":
+			var location: EverduneLocationData = registry.location(nearby_id)
+			prompt = "E  " + (location.activity_hint if location != null and not location.activity_hint.is_empty() else "Do something useful")
 		"gather": prompt = "E  Gather " + nearby_id
 
 func _interact() -> void:
@@ -254,11 +266,20 @@ func _interact() -> void:
 		"fish": _fish()
 		"home": _rest()
 		"dungeon": _enter_dungeon()
+		"activity": _perform_activity(nearby_id)
 		"gather":
 			for node in get_tree().get_nodes_in_group("gather_nodes"):
 				if node.resource_id == nearby_id and node.global_position.distance_to(player.position) < 34.0:
 					node.gather()
 					break
+
+func _perform_activity(id: String) -> void:
+	var result: Dictionary = freeplay.perform(id, state)
+	if bool(result.ok):
+		_play_cue("craft" if id in ["cookfire","building","decorating"] else "gather")
+		_show_toast(String(result.message))
+	else:
+		_show_toast(String(result.message))
 
 func _talk(id: String) -> void:
 	var result: Dictionary = npcs.talk(id, registry, state)
@@ -326,6 +347,7 @@ func _resolve_fish_catch() -> void:
 		state.fish_luck = maxi(0, state.fish_luck - 1)
 	state.add_item(catch_id,1)
 	state.add_skill_xp("fishing",12)
+	state.record_activity("fishing")
 	if int(state.collections.get("silverfin",0)) >= 3:
 		state._unlock_achievement("angler")
 	_play_cue("fish_catch")
@@ -338,7 +360,9 @@ func _rest() -> void:
 	state.hp = state.max_hp
 	state.advance_time(2)
 	state.home_returns += 1
+	state.record_activity("resting")
 	state.set_flag("returned_home", true)
+	state.remember_npc("mara", "shared_home_return")
 	state.weather = "Rain" if state.hour >= 18 and state.hour < 21 else "Clear"
 	weather.set_weather(state.weather)
 	_play_cue("home")
