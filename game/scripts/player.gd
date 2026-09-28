@@ -34,7 +34,7 @@ var equipment := "axe"
 var step_phase := 0.0
 var last_moving := false
 
-const CHARACTER_SCALE := Vector2(1.75, 1.75)
+const CHARACTER_SCALE := Vector2(2.0, 2.0)
 
 func _ready() -> void:
 	z_index = 20
