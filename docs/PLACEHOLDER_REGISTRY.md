@@ -128,23 +128,3 @@ A PASSED item must be backed by:
 World/content scaling is blocked by unresolved P0 placeholders in the vertical slice.
 
 The vertical slice remains the quality laboratory. Scale only after the remaining P0 visual gates pass.
-
-
-## Free-play depth pass — 2026-09-28
-
-The following are now canonical foundations rather than placeholders:
-
-- skill family expanded to woodcutting, mining, foraging, fishing, farming, cooking, crafting, building, wayfinding, memory and combat;
-- repeatable Larkmere activities for cooking, gardening, wayfinding, building and decorating;
-- skill-specific gathering progression;
-- persistent activity counts;
-- persistent world memories;
-- persistent NPC memories;
-- persistent home level and display items;
-- persistent garden state;
-- systemic Echo metadata and world-memory consequences;
-- Bellroot and Silverrun Echoes;
-- dense Larkmere content plan;
-- depth-first long-term roadmap.
-
-These systems are intentionally foundation-depth, not a claim that the final commercial content quantity or presentation is complete.
