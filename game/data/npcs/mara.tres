@@ -16,5 +16,14 @@ relationship_dialogue = "You are getting better at listening, Wayfarer. The vall
 evening_dialogue = "The market is closed now. Come back with the morning bell."
 post_echo_dialogue = "You heard it. I can tell. The valley has been waiting for someone willing to listen."
 evening_hour = 18
+morning_dialogue = "Morning's best. The river catches the first light before the market wakes."
+day_dialogue = "Bring me what the valley gave you. I like seeing people turn a walk into a reason to stay."
+weather_dialogue = "Rain makes old paths honest. You can see which ones still matter."
+favourite_activity = "fishing"
+favourite_location = "market"
+goal_flag = "market_trade"
+goal_dialogue = "The market feels different now. You keep bringing pieces of the valley home, and somehow the whole village benefits."
+relationship_id = "mara"
 post_echo_flag = "old_road_echo"
 met_flag = "met_mara"
+
