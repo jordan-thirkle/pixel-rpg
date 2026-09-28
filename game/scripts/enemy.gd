@@ -24,7 +24,7 @@ func setup(at: Vector2, player_ref: Node2D) -> void:
 	position = at
 	target = player_ref
 	visual = Sprite2D.new()
-	visual.texture = SLIME
+	visual.texture = preload("res://assets/everdune/mossling_sheet.svg")
 	visual.region_enabled = true
 	visual.region_rect = Rect2(0,0,32,32)
 	visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
