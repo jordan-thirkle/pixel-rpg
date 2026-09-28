@@ -3,11 +3,11 @@ class_name EverduneGameState
 
 signal changed
 
-const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
+const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"brook_trout":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
 const DEFAULT_SKILLS := {"gathering":1,"woodcutting":1,"mining":1,"foraging":1,"fishing":1,"farming":1,"cooking":1,"crafting":1,"building":1,"wayfinding":1,"memory":1,"combat":1}
 const DEFAULT_SKILL_XP := {"gathering":0,"woodcutting":0,"mining":0,"foraging":0,"fishing":0,"farming":0,"cooking":0,"crafting":0,"building":0,"wayfinding":0,"memory":0,"combat":0}
 const DEFAULT_EQUIPMENT := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
-const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0,"berries":0,"mushrooms":0,"herbs":0,"cooked_meal":0,"decor":0}
+const DEFAULT_COLLECTIONS := {"silverfin":0,"brook_trout":0,"memory_shard":0,"wood":0,"stone":0,"berries":0,"mushrooms":0,"herbs":0,"cooked_meal":0,"decor":0}
 
 var day := 1
 var hour := 8
