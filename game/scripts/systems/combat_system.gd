@@ -2,6 +2,7 @@ extends Node
 class_name EverduneCombatSystem
 
 var dungeon_wins := 0
+var attack_cooldown := 0.0
 
 func enter_dungeon(state: Node, world: Node2D, player: Node2D, enemy_script: Script, ui: CanvasLayer, audio: Node) -> Dictionary:
 	if not bool(state.flags.get("glass_orchard_echo", false)):
@@ -28,6 +29,10 @@ func enter_dungeon(state: Node, world: Node2D, player: Node2D, enemy_script: Scr
 	return {"ok": true, "message": "Three mosslings stir beneath the old stones. The gate remembers a fight."}
 
 func attack(state: Node, player: Node2D, ui: CanvasLayer, audio: Node, vfx_root: Node2D) -> Dictionary:
+	attack_cooldown = maxf(0.0, attack_cooldown - get_process_delta_time())
+	if attack_cooldown > 0.0:
+		return {"ok": false, "killed": false, "message": "Recovering…"}
+	attack_cooldown = 0.28
 	if not bool(state.flags.get("sleeping_gate_entered", false)):
 		return {"ok": false, "killed": false, "message": "There is nothing to fight here."}
 	if bool(state.flags.get("sleeping_gate_cleared", false)):
@@ -35,13 +40,17 @@ func attack(state: Node, player: Node2D, ui: CanvasLayer, audio: Node, vfx_root:
 
 	player.perform_action("attack")
 	audio.cue("swing")
+	_spawn_attack_arc(player, vfx_root)
 	var nearest: Node = null
 	var distance := 9999.0
 	for enemy in player.get_tree().get_nodes_in_group("enemies"):
 		var d: float = player.position.distance_to(enemy.position)
-		if d < 62.0 and d < distance:
-			distance = d
-			nearest = enemy
+		if d < 72.0 and d < distance:
+			var facing := Vector2(player.get("facing")) if player.get("facing") != null else Vector2.DOWN
+			var to_enemy := player.position.direction_to(enemy.position)
+			if facing.dot(to_enemy) > 0.15:
+				distance = d
+				nearest = enemy
 	if nearest == null:
 		return {"ok": false, "killed": false, "message": "Your blade cuts the air. Move close to strike."}
 
@@ -68,3 +77,16 @@ func attack(state: Node, player: Node2D, ui: CanvasLayer, audio: Node, vfx_root:
 
 func _on_enemy_defeated(_enemy: Node) -> void:
 	pass
+
+func _spawn_attack_arc(player: Node2D, root: Node2D) -> void:
+	var arc := Polygon2D.new()
+	arc.polygon = PackedVector2Array([Vector2(0,-26),Vector2(9,-22),Vector2(23,-10),Vector2(29,0),Vector2(23,10),Vector2(9,22),Vector2(0,26),Vector2(7,0)])
+	arc.color = Color("#d9bd72")
+	arc.position = player.position
+	arc.rotation = Vector2(player.get("facing")).angle() + PI * 0.5
+	arc.modulate.a = 0.0
+	root.add_child(arc)
+	var tween := root.create_tween()
+	tween.tween_property(arc,"modulate:a",0.9,0.05)
+	tween.tween_property(arc,"modulate:a",0.0,0.16)
+	tween.tween_callback(arc.queue_free)
