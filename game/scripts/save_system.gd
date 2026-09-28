@@ -3,7 +3,7 @@ class_name EverduneSaveSystem
 
 const SAVE_PATH := "user://everdune_save.json"
 const TEMP_PATH := "user://everdune_save.tmp.json"
-const CURRENT_VERSION := 4
+const CURRENT_VERSION := 5
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -63,8 +63,11 @@ func _migrate_state(data: Dictionary, version: int) -> Dictionary:
 	if not migrated.has("relationship_mara"): migrated["relationship_mara"] = 0
 	if not migrated.has("combat_streak"): migrated["combat_streak"] = 0
 	if not migrated.has("activity_counts"): migrated["activity_counts"] = {}
+	if not migrated.has("activity_last_day"): migrated["activity_last_day"] = {}
 	if not migrated.has("world_memory"): migrated["world_memory"] = {}
 	if not migrated.has("npc_memories"): migrated["npc_memories"] = {}
+	if not migrated.has("relationships"):
+		migrated["relationships"] = {"mara": int(migrated.get("relationship_mara", 0)), "rowan": 0}
 	if not migrated.has("home_level"): migrated["home_level"] = 1
 	if not migrated.has("home_display_items"): migrated["home_display_items"] = []
 	if not migrated.has("garden_planted_day"): migrated["garden_planted_day"] = 0
