@@ -2,7 +2,7 @@
 # EVERDUNE — LIVE TODO / EXECUTION QUEUE
 
 Last reviewed: 2026-09-28
-Evidence update: production contracts verified against main; next gate is Hearthfall/Larkmere player-facing quality.
+Evidence update: repository contracts pass, but the prior deployment/site was not a credible player-facing product. P0 is now public runtime + authored visual quality before deeper content.
 Rule: work from the top. Do not skip ahead because a lower item is more exciting.
 
 Legend: [ ] not started, [~] active, [x] complete, [!] blocked, [?] needs evidence.
@@ -62,19 +62,19 @@ Reconcile:
 
 # P0 — VERTICAL SLICE
 
-## [~] Complete the first-session journey
+## [!] Complete the first-session journey
 Boot → Title → Creator → Hearthfall → Mara → Gather → Fish → Old Road Echo → Mara return → Glass Orchard Echo → Craft → Sleeping Gate → Combat → Home
 
-Acceptance: no fake presentation, movement feels excellent, interactions are tactile, first Echo feels magical, return home feels rewarding.
+Acceptance: no fake presentation, movement feels excellent, interactions are tactile, first Echo feels magical, return home feels rewarding. Blocked until the real public browser build is anonymously reachable and visually verified.
 
-## [~] Finish Hearthfall visual environment gate
-Production feel/atmosphere foundations are present on main; remaining gate is authored terrain/props/landmark density plus final player-facing visual QA.
+## [!] Finish Hearthfall visual environment gate
+Production feel/atmosphere foundations are present on main, but the shipped result is still prototype-grade. Replace concept/prototype presentation with authored production composition, depth, lighting and readable silhouettes.
 
-## [ ] Finish props / terrain atlas
-Need production asset set with coherent palette, density, pivots, readable silhouettes and landmark variants.
+## [~] Finish props / terrain atlas
+Current atlas is a technical prototype. Production pass must establish coherent palette, density, pivots, readable silhouettes and authored landmark variants.
 
-## [ ] Finish title screen
-Need immediate identity, atmosphere, hierarchy and fast entry.
+## [~] Finish title screen
+Real Godot title/loading foundation exists; remaining work is production art direction, typography, transition and final browser QA.
 
 ## [ ] Finish character creator
 Must use the real production hero assets and remain fast and expressive.
