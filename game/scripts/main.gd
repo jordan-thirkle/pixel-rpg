@@ -273,6 +273,7 @@ func _interact() -> void:
 		"gather":
 			for node in get_tree().get_nodes_in_group("gather_nodes"):
 				if node.resource_id == nearby_id and node.global_position.distance_to(player.position) < 34.0:
+					player.perform_action("gather")
 					node.gather()
 					break
 
