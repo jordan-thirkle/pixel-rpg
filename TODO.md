@@ -67,8 +67,8 @@ Boot → Title → Creator → Hearthfall → Mara → Gather → Fish → Old R
 
 Acceptance: no fake presentation, movement feels excellent, interactions are tactile, first Echo feels magical, return home feels rewarding.
 
-## [ ] Finish Hearthfall visual environment gate
-Need authored pixel-art terrain, landmark readability, depth, lighting and environmental storytelling.
+## [~] Finish Hearthfall visual environment gate
+Production feel/atmosphere foundations are present on main; remaining gate is authored terrain/props/landmark density plus final player-facing visual QA.
 
 ## [ ] Finish props / terrain atlas
 Need production asset set with coherent palette, density, pivots, readable silhouettes and landmark variants.
@@ -83,7 +83,7 @@ Must use the real production hero assets and remain fast and expressive.
 Mara has the stronger foundation. Rowan needs deeper routine, identity, dialogue and world responses.
 
 ## [~] Finish first Echo presentation
-System exists. Remaining: cinematic presentation, stronger audio/VFX, environmental response and emotional payoff.
+Echo discovery now has an authored reveal layer in addition to the existing audio, burst FX and dialogue. Remaining: environmental response and final emotional/visual/audio tuning.
 
 ## [~] Finish Sleeping Gate
 Existing: landmark, encounter loop, variants, telegraphs, hit-stun, health bars and progression.
