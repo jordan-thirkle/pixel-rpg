@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "bellroot_memory"
+title = "The Bell Beneath Bellroot"
+discovery_text = "The stone under your hand remembers miners tapping three times before entering the dark. The bell answers from somewhere below."
+repeat_text = "Three taps. Then silence. The mine remembers the way in."
+prerequisite_flags = ["old_road_echo"]
+completion_flag = "bellroot_memory_echo"
+quest_stage = 4
+memory_xp = 18
+xp_reward = 30
+item_id = "memory_shard"
+item_amount = 1
+position = Vector2(230, 390)
+memory_kind = "place"
+knowledge_tag = "bellroot"
+world_memory_id = "bellroot_route"
+consequence_text = "You learn a safe route into Bellroot Mine and begin to hear the old miners' rhythm."
