@@ -336,6 +336,8 @@ func _sync_home_displays(state: Node) -> void:
 				_home_display_prop(9, Vector2(420,236), Vector2(0.72,0.72))
 			"workbench":
 				_home_display_prop(5, Vector2(455,220), Vector2(0.9,0.9))
+			"workshop_upgrade":
+				_home_display_prop(5, Vector2(430,220), Vector2(0.72,0.72))
 
 func _home_display_prop(index: int, pos: Vector2, scale := Vector2.ONE) -> void:
 	_prop(index, pos, scale, 6)
