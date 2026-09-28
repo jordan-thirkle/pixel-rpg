@@ -1,23 +1,34 @@
-# AI Agent Contract
+# Everdune AI Agent Contract
 
-Every AI implementation task must identify the canonical owner, existing system to extend, allowed files, verification method, and affected quality/placeholder gate before editing.
+Read PROJECT.md and TODO.md before any implementation.
 
-## Safe pattern
+## Required preflight
+1. Identify the active TODO task.
+2. Identify the canonical owner.
+3. Read the existing implementation.
+4. State acceptance criteria.
+5. Identify the validation path.
 
-Data → system → state → presentation.
+## Canonical pattern
+Content data → gameplay systems → GameState → presentation.
 
-- New Echo → game/data/echoes + Echo system.
-- New NPC → game/data/npcs + NPC system.
-- New location → game/data/locations + location/interaction system.
-- New visual → canonical asset path + manifest + visual QA.
+Examples:
+- Echo: game/data/echoes + echo_system.gd
+- NPC: game/data/npcs + npc_system.gd
+- Location: game/data/locations + location_system.gd
+- Visual: canonical asset + asset manifest + visual QA
 
 ## Forbidden
-
-Do not add hardcoded content databases to main.gd.
-Do not create a second world renderer.
-Do not replace canonical visual references with generic substitutes.
-Do not mark a placeholder complete because code executes.
+- hardcoded content databases in main.gd;
+- second world renderer;
+- duplicate gameplay authority;
+- generic replacement for canonical assets;
+- invisible placeholders;
+- architecture rewrites for isolated features;
+- speculative features outside TODO priority.
 
 ## Completion
+A task is complete only when code/data/docs agree, validation passes, TODO.md is updated, and known risks are recorded.
 
-Code, data, validation and documentation must agree before a task is considered complete.
+## Handoff
+Record task, owner, files, validation, evidence, risk and next task.
