@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "river_song"
+title = "The River Sings Back"
+discovery_text = "After enough evenings beside Silverrun, you hear the pattern beneath the water. It is not a song exactly. It is a route, a memory, and a promise that the river will keep changing."
+repeat_text = "The river's rhythm is different tonight."
+prerequisite_flags = ["silverrun_memory_echo"]
+prerequisite_activities = {"fishing": 5}
+completion_flag = "river_song_echo"
+quest_stage = 6
+memory_xp = 28
+xp_reward = 55
+item_id = "decor"
+item_amount = 1
+position = Vector2(700, 310)
+memory_kind = "creature"
+knowledge_tag = "river_song"
+world_memory_id = "silverrun_song"
+consequence_text = "Silverrun now reveals a rare catch window at dawn and a hidden bank path during clear weather."
+unlock_flags = ["silverrun_legend","dawn_fishing_known"]
+relationship_bonus = 1
+relationship_npc_id = "mara"
