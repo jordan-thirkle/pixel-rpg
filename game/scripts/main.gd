@@ -273,6 +273,7 @@ func _interact() -> void:
 		"gather":
 			for node in get_tree().get_nodes_in_group("gather_nodes"):
 				if node.resource_id == nearby_id and node.global_position.distance_to(player.position) < 34.0:
+					player.perform_action("gather")
 					node.gather()
 					break
 
@@ -332,9 +333,11 @@ func _fish() -> void:
 	if fish_phase == "waiting_bite":
 		return
 	if fish_phase == "bite":
+		player.perform_action("fish_reel")
 		_resolve_fish_catch()
 		return
 	fish_phase = "waiting_bite"
+	player.perform_action("fish_cast")
 	fish_timer = 0.75 + randf_range(0.35, 0.95)
 	_play_cue("fish_cast")
 	_spawn_fishing_cast_fx()
