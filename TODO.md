@@ -2,6 +2,7 @@
 # EVERDUNE — LIVE TODO / EXECUTION QUEUE
 
 Last reviewed: 2026-09-28
+Evidence update: production contracts verified against main; next gate is Hearthfall/Larkmere player-facing quality.
 Rule: work from the top. Do not skip ahead because a lower item is more exciting.
 
 Legend: [ ] not started, [~] active, [x] complete, [!] blocked, [?] needs evidence.
@@ -29,13 +30,8 @@ Decision: preserve useful work, then retire branch proliferation.
 ## [x] Close obsolete depth PR
 PR #9 was closed after the direct-to-main route proved unsuitable for repository consolidation.
 
-## [~] Consolidate production art/audio + systemic free-play work
-Required:
-1. preserve production hero/audio/combat work;
-2. preserve systemic free-play work;
-3. preserve canonical architecture;
-4. run full CI;
-5. merge only the verified result into main.
+## [x] Consolidate production art/audio + systemic free-play work
+Evidence: main already contains the production hero layer set, Sleeping Gate asset, authored audio layer, combat telegraphs and the systemic free-play foundation. The divergent production branch was audited and its stale free-play-sensitive runtime replacements were not merged.
 
 # P0 — CANONICAL DOCUMENTATION
 
@@ -45,14 +41,14 @@ Permanent product and engineering source of truth.
 ## [x] Create TODO.md
 Live execution queue for all AI development.
 
-## [ ] Port canonical AI agent contract into main
+## [x] Port canonical AI agent contract into main
 Target: docs/AI_AGENT_CONTRACT.md
 Required: source-of-truth first, canonical owner, no duplicate authority, data → systems → state → presentation, verification required, TODO update required.
 
-## [ ] Port canonical system map into main
+## [x] Port canonical system map into main
 Target: docs/SYSTEM_MAP.md
 
-## [ ] Port production rules into main
+## [x] Port production rules into main
 Target: docs/PRODUCTION_RULES.md
 
 ## [ ] Reconcile roadmap documents
@@ -283,12 +279,12 @@ Every PR includes:
 
 # CURRENT AI TEAM QUEUE
 
-NEXT TASK: P0 repository consolidation.
+NEXT TASK: P0 Hearthfall/Larkmere player-facing quality gate.
 
-Do not begin unrelated gameplay work until the repository has one canonical development line and the source-of-truth docs are available on that line.
+Repository governance and production contracts are now reconciled on main. Do not add breadth.
 
 Then execute:
-1. vertical slice visual gate;
+1. Hearthfall visual environment gate;
 2. movement + interaction feel;
 3. fishing depth;
 4. gathering depth;
