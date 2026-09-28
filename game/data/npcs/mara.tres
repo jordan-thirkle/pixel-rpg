@@ -15,6 +15,11 @@ default_dialogue = "The river remembers every footstep. Most people just don't l
 relationship_dialogue = "You are getting better at listening, Wayfarer. The valley changes around people who pay attention."
 evening_dialogue = "The market is closed now. Come back with the morning bell."
 post_echo_dialogue = "You heard it. I can tell. The valley has been waiting for someone willing to listen."
+activity_dialogue = {
+"woodcutting": "The eastern trees are softer after rain. If you listen before you swing, they tell you which branches are ready.",
+"mining": "Stone keeps a different kind of memory. Bellroot rewards patience more than strength.",
+"foraging": "Take what the hedges can spare. Leave enough for the next season and the valley remembers that kindness."
+}
 evening_hour = 18
 post_echo_flag = "old_road_echo"
 met_flag = "met_mara"
