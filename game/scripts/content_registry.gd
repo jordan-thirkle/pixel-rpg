@@ -4,16 +4,24 @@ class_name EverduneContentRegistry
 var echoes: Dictionary = {}
 var npcs: Dictionary = {}
 var locations: Dictionary = {}
+var activities: Dictionary = {}
 
 func _ready() -> void:
 	_load_echo("res://data/echoes/old_road.tres")
 	_load_echo("res://data/echoes/glass_orchard.tres")
+	_load_echo("res://data/echoes/bellroot_memory.tres")
+	_load_echo("res://data/echoes/silverrun_memory.tres")
 	_load_npc("res://data/npcs/mara.tres")
 	_load_npc("res://data/npcs/rowan.tres")
 	_load_location("res://data/locations/larkmere.tres")
 	_load_location("res://data/locations/fishing.tres")
 	_load_location("res://data/locations/home.tres")
 	_load_location("res://data/locations/sleeping_gate.tres")
+	_load_location("res://data/locations/cookfire.tres")
+	_load_location("res://data/locations/garden.tres")
+	_load_location("res://data/locations/wayfinding.tres")
+	_load_location("res://data/locations/workbench.tres")
+	_load_location("res://data/locations/decorating.tres")
 
 func _load_echo(path: String) -> void:
 	var data := load(path) as EverduneEchoData
