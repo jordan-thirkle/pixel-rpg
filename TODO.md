@@ -2,7 +2,7 @@
 # EVERDUNE — LIVE TODO / EXECUTION QUEUE
 
 Last reviewed: 2026-09-28
-Evidence update: repository contracts pass, but the prior deployment/site was not a credible player-facing product. P0 is now public runtime + authored visual quality before deeper content.
+Evidence update: repository contracts pass and the first-session production art/feel pass is now on main. P0 remains public runtime + authored visual verification before deeper content.
 Rule: work from the top. Do not skip ahead because a lower item is more exciting.
 
 Legend: [ ] not started, [~] active, [x] complete, [!] blocked, [?] needs evidence.
@@ -67,17 +67,17 @@ Boot → Title → Creator → Hearthfall → Mara → Gather → Fish → Old R
 
 Acceptance: no fake presentation, movement feels excellent, interactions are tactile, first Echo feels magical, return home feels rewarding. Blocked until the real public browser build is anonymously reachable and visually verified.
 
-## [!] Finish Hearthfall visual environment gate
-Production feel/atmosphere foundations are present on main, but the shipped result is still prototype-grade. Replace concept/prototype presentation with authored production composition, depth, lighting and readable silhouettes.
+## [~] Finish Hearthfall visual environment gate
+Authored Hearthfall production composition and distinct runtime character/enemy sheets are now on main. Remaining gate: public browser verification, depth/lighting QA and final authored density.
 
 ## [~] Finish props / terrain atlas
-Current atlas is a technical prototype. Production pass must establish coherent palette, density, pivots, readable silhouettes and authored landmark variants.
+Authored Hearthfall presentation now establishes the palette, major silhouettes and landmarks. Remaining: dense interactive/foreground prop treatment and final browser QA.
 
 ## [~] Finish title screen
-Real Godot title/loading foundation exists; remaining work is production art direction, typography, transition and final browser QA.
+Authored Everdune title scene and real start/continue flow are now wired. Remaining: transition timing and final browser QA.
 
-## [ ] Finish character creator
-Must use the real production hero assets and remain fast and expressive.
+## [~] Finish character creator
+Existing creator remains fast and expressive and now feeds the authored runtime Wayfarer presentation. Remaining: final visual QA and one additional identity choice only if it materially improves player ownership.
 
 ## [x] Finish Mara + Rowan production pass
 Mara and Rowan now have authored routines; activity-aware dialogue is data-driven, and Rowan responds to remembered world/gathering discoveries.
@@ -103,14 +103,14 @@ Woodcutting, mining and foraging now have skill-sensitive yield mastery, remembe
 ## [~] Farming
 Deepen seasonal crops, useful produce, cooking, gifts, home visuals and orchard connection.
 
-## [~] Crafting
-Deepen meaningful recipes, resource decisions, functional upgrades and home displays. Avoid recipe spam.
+## [x] Crafting
+Hearth Lamp, Wayfarer Rod and Echo Lantern now form a small meaningful slice set with functional and persistent consequences. Further recipe expansion remains intentionally blocked until density QA.
 
 ## [~] Wayfinding
 Deepen routes, shortcuts, maps, landmarks, lost places and historical Echoes.
 
 ## [~] Optional combat
-Combat must feel good, reward mastery, remain optional and connect to Bellroot/Sleeping Gate.
+Directional melee intent, recovery timing and attack feedback are now implemented; final balance, enemy readability and full encounter QA remain.
 
 # P1 — WORLD CONSEQUENCE
 
@@ -204,7 +204,7 @@ Do not start a second region until this table is genuinely dense.
 Acceleration/braking and grounded animation are present; interaction/activity actions now use the authored player action response.
 
 ## [~] Interaction feedback pass
-Prompt transitions and gathering/fishing action feedback are now tactile. Remaining: final QA across NPCs, Echoes, activities and combat.
+Prompt transitions, authored character presentation, gathering/fishing feedback and combat attack feedback are now present. Remaining: final QA across NPCs, Echoes, activities and combat.
 
 ## [x] Fishing feel pass
 Cast → bite → reel timing, audio/VFX, miss feedback and species/time/weather behavior are implemented; remaining polish is QA.
@@ -215,8 +215,8 @@ Contact animation, authored gather cue, resource response, mastery pulse and res
 ## [ ] Echo feel pass
 Anticipation, reveal, world response, sound motif and emotional punctuation.
 
-## [ ] Combat feel pass
-Readable attacks, hit feedback, enemy response, player response, telegraphs and satisfying defeat.
+## [~] Combat feel pass
+Directional attack intent, recovery timing, attack arc, enemy telegraphs, hit-stun and defeat feedback are present. Remaining: balance and end-to-end encounter QA.
 
 # P1 — QA
 
