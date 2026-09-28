@@ -113,16 +113,15 @@ Improve the existing journey first.
 
 ## After the gate
 
-Only after this gate passes should the project scale into:
+Once the vertical-slice quality gate and the depth demonstration both pass, the project can scale the proven simulation into:
 
 - additional regions,
-- deeper NPC simulation,
-- broader equipment,
-- systemic Echoes,
+- deeper equipment and build expression,
+- larger systemic Echo families,
 - controlled procedural content,
-- Gauntlet,
+- Gauntlet and mastery challenges,
 - Steam integration,
 - co-op transport,
 - long-term replayability systems.
 
-The vertical slice is the quality laboratory for everything that follows.
+Depth work inside Larkmere is explicitly allowed before this gate because it addresses the current product risk: a technically valid game can still feel shallow. The vertical slice remains the quality laboratory; Larkmere depth is the product laboratory.
