@@ -7,7 +7,7 @@ const ROWS := 17
 const TERRAIN := preload("res://assets/terrain_atlas.svg")
 const PROPS := preload("res://assets/props.svg")
 const WATER := preload("res://assets/water_anim.svg")
-const HEARTHFALL_ART := preload("res://assets/hearthfall_scene.svg")
+const HEARTHFALL_ART := preload("res://assets/everdune/hearthfall_master.svg")
 
 var water_sprites: Array[Sprite2D] = []
 var ambience: Array[Node2D] = []
@@ -345,6 +345,8 @@ func _sync_home_displays(state: Node) -> void:
 				_home_display_prop(5, Vector2(455,220), Vector2(0.9,0.9))
 			"workshop_upgrade":
 				_home_display_prop(5, Vector2(430,220), Vector2(0.72,0.72))
+			"echo_lantern":
+				_home_display_prop(9, Vector2(400,268), Vector2(0.9,0.9))
 
 func _home_display_prop(index: int, pos: Vector2, scale := Vector2.ONE) -> void:
 	_prop(index, pos, scale, 6)
