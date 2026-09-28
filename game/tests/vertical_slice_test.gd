@@ -74,7 +74,7 @@ func _run() -> void:
 	assert(int(fresh.skills.get("farming",1)) >= 1)
 	fresh.inventory["wood"] = 8
 	fresh.inventory["stone"] = 5
-	var build_result: Dictionary = freeplay.perform("building", fresh)
+	var build_result: Dictionary = freeplay.perform("workbench", fresh)
 	assert(bool(build_result.ok))
 	assert(fresh.home_level == 2)
 	var save := SAVE.new()
