@@ -332,6 +332,9 @@ func sync_state(state: Node) -> void:
 				_prop(5, Vector2(430,195), Vector2(0.7,0.7), 6)
 
 func place_hearth_lamp() -> void:
+	if bool(synced_world_state.get("hearth_lamp", false)):
+		return
+	synced_world_state["hearth_lamp"] = true
 	var lamp := Sprite2D.new()
 	lamp.texture = load("res://assets/environment_fx.svg") as Texture2D
 	lamp.region_enabled = true
