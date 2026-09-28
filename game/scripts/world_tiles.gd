@@ -15,7 +15,6 @@ var water_layer: TileMapLayer
 var path_layer: TileMapLayer
 var anim_time := 0.0
 var hearthsong_awake := false
-var synced_world_state := {}
 
 func _ready() -> void:
 	_build_tiles()
@@ -270,19 +269,6 @@ func awaken_echo(id: String) -> void:
 		var tween := create_tween().set_loops()
 		tween.tween_property(marker,"modulate:a",0.15,0.8)
 		tween.tween_property(marker,"modulate:a",1.0,0.8)
-
-func sync_state(state: Node) -> void:
-	if bool(state.flags.get("mapped_old_road", false)) and not bool(synced_world_state.get("mapped_old_road", false)):
-		synced_world_state["mapped_old_road"] = true
-		for p in [Vector2(455,345),Vector2(470,330),Vector2(485,315)]:
-			_prop(6, p, Vector2(0.75,0.75), 5)
-	if bool(state.flags.get("home_workshop", false)) and not bool(synced_world_state.get("home_workshop", false)):
-		synced_world_state["home_workshop"] = true
-		_prop(5, Vector2(455,220), Vector2(1.0,1.0), 5)
-	if bool(state.flags.get("garden_harvested", false)) and not bool(synced_world_state.get("garden_harvested", false)):
-		synced_world_state["garden_harvested"] = true
-		for p in [Vector2(275,292),Vector2(320,292),Vector2(300,310)]:
-			_prop(9, p, Vector2(0.8,0.8), 5)
 
 func place_hearth_lamp() -> void:
 	var lamp := Sprite2D.new()
