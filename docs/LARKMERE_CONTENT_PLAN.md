@@ -18,14 +18,22 @@ Activities:
 - socialising;
 - home projects.
 
+Current depth:
+- cooking;
+- gardening;
+- building;
+- decorating;
+- market trading;
+- persistent home displays;
+- relationship memory.
+
 Future density:
-- market;
 - workshops;
 - seasonal gatherings;
 - player storage;
 - letters;
 - visitors;
-- home expansion;
+- room-level home expansion;
 - community projects.
 
 ## Silverrun
@@ -48,7 +56,9 @@ Return reasons:
 - rare catches;
 - river memories;
 - NPC requests;
-- changing water levels.
+- changing water levels;
+- fishing mastery;
+- the River Song Echo chain;
 
 ## Briarwood
 
@@ -67,7 +77,8 @@ Return reasons:
 - seasons;
 - rare plants;
 - wildlife behaviour;
-- hidden Echoes.
+- hidden Echoes;
+- orchard care after the Glass Orchard Echo;
 
 ## The Old Road
 
@@ -89,7 +100,8 @@ Return reasons:
 - map fragments;
 - traveller encounters;
 - lost landmarks;
-- historical chains.
+- historical chains;
+- survey work that reveals the Hollow Steps;
 
 ## Bellroot Mine
 
@@ -109,8 +121,10 @@ Return reasons:
 - deeper resources;
 - old mining routes;
 - rare materials;
+- archaeology;
 - environmental puzzles;
-- buried history.
+- buried history;
+- the Miner's Ledger Echo;
 
 ## Glass Orchard
 
@@ -118,6 +132,7 @@ Purpose: mystery and cultivation.
 
 Activities:
 - orchard restoration;
+- orchard care;
 - unusual crops;
 - seasonal plants;
 - Echo chains;
@@ -140,9 +155,11 @@ Purpose: vertical exploration and secrets.
 Activities:
 - traversal;
 - climbing/wayfinding;
+- survey routes;
 - environmental puzzles;
 - hidden collectibles;
-- old structures.
+- old structures;
+- the Stair That Wasn't There Echo.
 
 Return reasons:
 - shortcuts;
@@ -173,3 +190,12 @@ No new location is complete until it has:
 - at least one reason to return;
 - authored environmental storytelling;
 - a meaningful relationship to Hearthsong.
+
+
+## Depth-first implementation rule
+
+Larkmere is now the proving ground for the complete Everdune loop:
+
+**player choice → activity → skill mastery → material/knowledge → world/NPC/home consequence → Echo or new possibility → return**
+
+The valley is intentionally not being expanded to a second region while these connections are still being deepened.
