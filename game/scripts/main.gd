@@ -210,7 +210,7 @@ func _process(delta: float) -> void:
 			fish_phase = "idle"
 			fish_cooldown = 0.8
 			_play_cue("fish_miss")
-			_show_toast("The silverfin slipped away. Cast again when the water settles.")
+			_show_toast("The line goes slack. Whatever was there gets away. Cast again when the water settles.")
 	toast_time = maxf(0.0, toast_time-delta)
 	_update_nearby()
 	if world and world.has_method("sync_state"):
@@ -346,7 +346,11 @@ func _fish() -> void:
 func _resolve_fish_catch() -> void:
 	fish_phase = "idle"
 	fish_cooldown = 1.1
-	var silverfin_chance := clampf(0.18 + float(state.fish_luck) * 0.04, 0.18, 0.36)
+	var dawn_bonus := 0.10 if state.hour >= 5 and state.hour <= 8 else 0.0
+	var dusk_bonus := 0.08 if state.hour >= 18 and state.hour <= 21 else 0.0
+	var weather_bonus := 0.06 if String(state.weather) == "Rain" else 0.0
+	var silverfin_chance := clampf(0.16 + float(state.fish_luck) * 0.035 + dawn_bonus + dusk_bonus, 0.16, 0.38)
+	var trout_chance := clampf(0.24 + weather_bonus + (0.04 if state.hour >= 6 and state.hour <= 16 else 0.0), 0.24, 0.34)
 	var roll := randf()
 	var catch_id := "river_fish"
 	var catch_label := "river fish"
@@ -354,6 +358,10 @@ func _resolve_fish_catch() -> void:
 		catch_id = "silverfin"
 		catch_label = "silverfin"
 		state.fish_luck += 1
+	elif roll <= silverfin_chance + trout_chance:
+		catch_id = "brook_trout"
+		catch_label = "brook trout"
+		state.fish_luck = mini(3, state.fish_luck + 1)
 	else:
 		state.fish_luck = maxi(0, state.fish_luck - 1)
 	state.add_item(catch_id,1)
