@@ -17,6 +17,13 @@ func discover(id: String, registry: Node, state: Node) -> Dictionary:
 	state.add_skill_xp("memory", data.memory_xp)
 	state.echoes += 1
 	state.add_xp(data.xp_reward)
+	if not data.world_memory_id.is_empty():
+		state.record_world_memory(data.world_memory_id, data.consequence_text)
+	if not data.knowledge_tag.is_empty():
+		state.set_flag("knowledge_" + data.knowledge_tag, true)
+	if data.relationship_bonus > 0:
+		state.relationship_mara = mini(10, int(state.relationship_mara) + data.relationship_bonus)
+	state.record_activity("echo_" + data.memory_kind)
 	if not data.item_id.is_empty():
 		state.add_item(data.item_id, data.item_amount)
 	discovered.emit(data)
