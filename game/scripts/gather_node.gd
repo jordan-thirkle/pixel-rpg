@@ -12,11 +12,15 @@ var visual: Sprite2D
 var base_scale := Vector2(1.1,1.1)
 var skill_id := "gathering"
 var skill_xp := 10
+var bonus_resource_id := ""
+var bonus_chance := 0.0
 
-func setup(id: String, texture: Texture2D, atlas_index: int, at: Vector2, skill := "gathering", xp := 10) -> void:
+func setup(id: String, texture: Texture2D, atlas_index: int, at: Vector2, skill := "gathering", xp := 10, bonus_id := "", bonus_roll := 0.0) -> void:
 	resource_id = id
 	skill_id = skill
 	skill_xp = xp
+	bonus_resource_id = bonus_id
+	bonus_chance = bonus_roll
 	position = at
 	visual = Sprite2D.new()
 	visual.texture = texture
