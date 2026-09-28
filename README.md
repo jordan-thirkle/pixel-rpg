@@ -65,3 +65,8 @@ See:
 The product pressure test is simple:
 
 **Can a player ignore the story, spend 45 minutes doing whatever sounds good, and feel that their evening mattered?**
+
+
+## Development control
+
+The canonical AI development instructions live in [PROJECT.md](PROJECT.md) and [TODO.md](TODO.md). Every implementation agent must read both before making changes.
