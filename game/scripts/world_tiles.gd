@@ -314,8 +314,38 @@ func sync_state(state: Node) -> void:
 		synced_world_state["garden_harvested"] = true
 		for p in [Vector2(275,292),Vector2(320,292),Vector2(300,310)]:
 			_prop(9, p, Vector2(0.8,0.8), 5)
+	_sync_home_displays(state)
+
+func _sync_home_displays(state: Node) -> void:
+	var displays: Array = state.home_display_items if state.home_display_items is Array else []
+	for item_id in displays:
+		var id := String(item_id)
+		if bool(synced_world_state.get("home_" + id, false)):
+			continue
+		synced_world_state["home_" + id] = true
+		match id:
+			"hearth_lamp":
+				place_hearth_lamp()
+			"first_meal":
+				_home_display_prop(2, Vector2(318,286), Vector2(0.72,0.72))
+			"silverfin_trophy":
+				_home_display_prop(7, Vector2(350,236), Vector2(0.82,0.82))
+			"old_road_map":
+				_home_display_prop(6, Vector2(385,236), Vector2(0.82,0.82))
+			"found_decor":
+				_home_display_prop(9, Vector2(420,236), Vector2(0.72,0.72))
+			"workbench":
+				_home_display_prop(5, Vector2(455,220), Vector2(0.9,0.9))
+
+func _home_display_prop(index: int, pos: Vector2, scale := Vector2.ONE) -> void:
+	_prop(index, pos, scale, 6)
+	_shadow(pos + Vector2(0,8), Vector2(8,3), 0.18)
 
 func place_hearth_lamp() -> void:
+	if bool(synced_world_state.get("home_hearth_lamp", false)):
+		return
+	synced_world_state["home_hearth_lamp"] = true
+	var lamp := Sprite2D.new()
 	var lamp := Sprite2D.new()
 	lamp.texture = load("res://assets/environment_fx.svg") as Texture2D
 	lamp.region_enabled = true
