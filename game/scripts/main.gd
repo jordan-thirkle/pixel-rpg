@@ -164,20 +164,24 @@ func _spawn_npc_visuals() -> void:
 
 func _spawn_gather_nodes() -> void:
 	var definitions := [
-		{"id":"wood_1","resource":"wood","index":0,"pos":Vector2(205,150),"skill":"woodcutting","xp":10},
-		{"id":"wood_2","resource":"wood","index":0,"pos":Vector2(760,165),"skill":"woodcutting","xp":12},
-		{"id":"wood_3","resource":"wood","index":0,"pos":Vector2(155,92),"skill":"woodcutting","xp":10},
-		{"id":"stone_1","resource":"stone","index":8,"pos":Vector2(180,360),"skill":"mining","xp":12},
-		{"id":"stone_2","resource":"stone","index":8,"pos":Vector2(820,330),"skill":"mining","xp":14},
-		{"id":"berry_1","resource":"berries","index":2,"pos":Vector2(120,140),"skill":"foraging","xp":8},
-		{"id":"berry_2","resource":"berries","index":2,"pos":Vector2(205,315),"skill":"foraging","xp":8},
-		{"id":"mushroom_1","resource":"mushrooms","index":3,"pos":Vector2(275,330),"skill":"foraging","xp":10},
-		{"id":"herb_1","resource":"herbs","index":4,"pos":Vector2(590,315),"skill":"foraging","xp":10}
+		{"id":"wood_1","resource":"wood","index":0,"pos":Vector2(205,150),"skill":"woodcutting","xp":10,"bonus":"timber","chance":0.18},
+		{"id":"wood_2","resource":"wood","index":0,"pos":Vector2(760,165),"skill":"woodcutting","xp":12,"bonus":"timber","chance":0.22},
+		{"id":"wood_3","resource":"wood","index":0,"pos":Vector2(155,92),"skill":"woodcutting","xp":10,"bonus":"timber","chance":0.18},
+		{"id":"wood_4","resource":"wood","index":0,"pos":Vector2(110,230),"skill":"woodcutting","xp":13,"bonus":"timber","chance":0.24},
+		{"id":"stone_1","resource":"stone","index":8,"pos":Vector2(180,360),"skill":"mining","xp":12,"bonus":"ore","chance":0.20},
+		{"id":"stone_2","resource":"stone","index":8,"pos":Vector2(820,330),"skill":"mining","xp":14,"bonus":"ore","chance":0.24},
+		{"id":"stone_3","resource":"stone","index":8,"pos":Vector2(250,420),"skill":"mining","xp":16,"bonus":"ore","chance":0.28},
+		{"id":"berry_1","resource":"berries","index":2,"pos":Vector2(120,140),"skill":"foraging","xp":8,"bonus":"wildflower","chance":0.18},
+		{"id":"berry_2","resource":"berries","index":2,"pos":Vector2(205,315),"skill":"foraging","xp":8,"bonus":"wildflower","chance":0.16},
+		{"id":"berry_3","resource":"berries","index":2,"pos":Vector2(690,135),"skill":"foraging","xp":11,"bonus":"wildflower","chance":0.20},
+		{"id":"mushroom_1","resource":"mushrooms","index":3,"pos":Vector2(275,330),"skill":"foraging","xp":10,"bonus":"wildflower","chance":0.14},
+		{"id":"herb_1","resource":"herbs","index":4,"pos":Vector2(590,315),"skill":"foraging","xp":10,"bonus":"wildflower","chance":0.20},
+		{"id":"herb_2","resource":"herbs","index":4,"pos":Vector2(620,120),"skill":"foraging","xp":12,"bonus":"wildflower","chance":0.22}
 	]
 	for data in definitions:
 		var node := GATHER_SCENE.new()
 		node.name = String(data.id)
-		node.setup(String(data.resource), props_texture, int(data.index), data.pos, String(data.skill), int(data.xp))
+		node.setup(String(data.resource), props_texture, int(data.index), data.pos, String(data.skill), int(data.xp), String(data.get("bonus","")), float(data.get("chance",0.0)))
 		node.harvested.connect(_on_gathered)
 		world.add_child(node)
 
