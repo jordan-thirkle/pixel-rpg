@@ -48,6 +48,10 @@ func craft(recipe_id: String, state: Node) -> bool:
 	state.add_home_display(String(recipe.display))
 	state.record_activity("crafting")
 	state.add_skill_xp("crafting", 14)
+	if recipe_id == "hearth_lamp":
+		if not state.has_achievement("first_craft"):
+			state._unlock_achievement("first_craft")
+		state.add_skill_xp("memory", 10)
 	state.add_xp(8)
 	state.set_flag("crafted_" + recipe_id, true)
 	state.changed.emit()
