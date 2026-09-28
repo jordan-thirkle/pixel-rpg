@@ -122,36 +122,9 @@
   ],
   "dataResources": [
     {
-      "path": "game/data/echoes/old_road.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/echoes/glass_orchard.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/npcs/mara.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/npcs/rowan.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/locations/larkmere.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/locations/fishing.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/locations/home.tres",
-      "status": "canonical-data"
-    },
-    {
-      "path": "game/data/locations/sleeping_gate.tres",
-      "status": "canonical-data"
+      "path": "game/data/echoes/bellroot_ledger.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
     },
     {
       "path": "game/data/echoes/bellroot_memory.tres",
@@ -159,9 +132,32 @@
       "status": "free-play-foundation"
     },
     {
+      "path": "game/data/echoes/glass_orchard.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/echoes/hollow_steps_echo.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
+    },
+    {
+      "path": "game/data/echoes/old_road.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/echoes/river_song.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
+    },
+    {
       "path": "game/data/echoes/silverrun_memory.tres",
       "category": "gameplay-data",
       "status": "free-play-foundation"
+    },
+    {
+      "path": "game/data/locations/archaeology.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
     },
     {
       "path": "game/data/locations/cookfire.tres",
@@ -169,9 +165,45 @@
       "status": "free-play-foundation"
     },
     {
+      "path": "game/data/locations/decorating.tres",
+      "category": "gameplay-data",
+      "status": "free-play-foundation"
+    },
+    {
+      "path": "game/data/locations/fishing.tres",
+      "status": "canonical-data"
+    },
+    {
       "path": "game/data/locations/garden.tres",
       "category": "gameplay-data",
       "status": "free-play-foundation"
+    },
+    {
+      "path": "game/data/locations/home.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/larkmere.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/market.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
+    },
+    {
+      "path": "game/data/locations/orchard_care.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
+    },
+    {
+      "path": "game/data/locations/sleeping_gate.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/locations/survey.tres",
+      "type": "Godot Resource",
+      "purpose": "Larkmere player-led depth content"
     },
     {
       "path": "game/data/locations/wayfinding.tres",
@@ -184,9 +216,12 @@
       "status": "free-play-foundation"
     },
     {
-      "path": "game/data/locations/decorating.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
+      "path": "game/data/npcs/mara.tres",
+      "status": "canonical-data"
+    },
+    {
+      "path": "game/data/npcs/rowan.tres",
+      "status": "canonical-data"
     }
   ],
   "conceptReferences": [
