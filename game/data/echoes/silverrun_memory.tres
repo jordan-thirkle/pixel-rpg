@@ -20,4 +20,6 @@ memory_kind = "creature"
 knowledge_tag = "silverrun"
 world_memory_id = "silverrun_kindness"
 consequence_text = "The river becomes a little less wary of you; fishing luck improves for the evening."
+unlock_flags = ["silverrun_kindness_known"]
 relationship_bonus = 1
+relationship_npc_id = "mara"
