@@ -56,6 +56,9 @@ var preview_accessory: Sprite2D
 var preview_back: Sprite2D
 var start_backdrop: TextureRect
 var start_overlay: ColorRect
+var echo_reveal: Panel
+var echo_reveal_title: Label
+var echo_reveal_text: Label
 
 func _ready() -> void:
 	layer = 100
@@ -140,6 +143,34 @@ func _build_ui() -> void:
 	craft_button.size = Vector2(190,36)
 	craft_button.pressed.connect(_craft_lamp)
 	inventory_panel.add_child(craft_button)
+
+	echo_reveal = Panel.new()
+	echo_reveal.position = Vector2(170,112)
+	echo_reveal.size = Vector2(620,148)
+	echo_reveal.visible = false
+	var echo_style := StyleBoxFlat.new()
+	echo_style.bg_color = Color("#101915",0.96)
+	echo_style.border_color = Color("#d8b86a",0.92)
+	echo_style.set_border_width_all(2)
+	echo_style.shadow_color = Color(0,0,0,0.55)
+	echo_style.shadow_size = 18
+	echo_reveal.add_theme_stylebox_override("panel", echo_style)
+	add_child(echo_reveal)
+	echo_reveal_title = Label.new()
+	echo_reveal_title.position = Vector2(26,20)
+	echo_reveal_title.size = Vector2(568,30)
+	echo_reveal_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	echo_reveal_title.add_theme_font_size_override("font_size",22)
+	echo_reveal_title.add_theme_color_override("font_color",Color("#e7c77b"))
+	echo_reveal.add_child(echo_reveal_title)
+	echo_reveal_text = Label.new()
+	echo_reveal_text.position = Vector2(38,60)
+	echo_reveal_text.size = Vector2(544,64)
+	echo_reveal_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	echo_reveal_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	echo_reveal_text.add_theme_font_size_override("font_size",15)
+	echo_reveal_text.add_theme_color_override("font_color",Color("#f3ead2"))
+	echo_reveal.add_child(echo_reveal_text)
 
 	_build_start_menu()
 	_build_character_creator()
@@ -556,3 +587,21 @@ func _craft_lamp() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		close_panels()
+
+func show_echo_reveal(title: String, body: String) -> void:
+	if echo_reveal == null:
+		return
+	echo_reveal_title.text = "ECHO AWAKENED  •  " + title.to_upper()
+	echo_reveal_text.text = body
+	echo_reveal.visible = true
+	echo_reveal.modulate = Color(1,1,1,0)
+	echo_reveal.scale = Vector2(0.96,0.96)
+	echo_reveal.pivot_offset = echo_reveal.size * 0.5
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(echo_reveal,"modulate",Color.WHITE,0.22)
+	tween.tween_property(echo_reveal,"scale",Vector2.ONE,0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.set_parallel(false)
+	tween.tween_interval(2.7)
+	tween.tween_property(echo_reveal,"modulate",Color(1,1,1,0),0.45)
+	tween.tween_callback(func(): echo_reveal.visible = false)
