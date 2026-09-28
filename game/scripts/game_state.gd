@@ -3,11 +3,11 @@ class_name EverduneGameState
 
 signal changed
 
-const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
+const DEFAULT_INVENTORY := {"wood":3,"stone":2,"ore":0,"timber":0,"river_fish":0,"silverfin":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"wildflower":0,"seeds":3,"fruit":0,"cooked_meal":0,"map_fragment":0,"decor":0,"antique":0,"trade_token":0}
 const DEFAULT_SKILLS := {"gathering":1,"woodcutting":1,"mining":1,"foraging":1,"fishing":1,"farming":1,"cooking":1,"crafting":1,"building":1,"wayfinding":1,"memory":1,"combat":1}
 const DEFAULT_SKILL_XP := {"gathering":0,"woodcutting":0,"mining":0,"foraging":0,"fishing":0,"farming":0,"cooking":0,"crafting":0,"building":0,"wayfinding":0,"memory":0,"combat":0}
 const DEFAULT_EQUIPMENT := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
-const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0,"berries":0,"mushrooms":0,"herbs":0,"cooked_meal":0,"decor":0}
+const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0,"ore":0,"timber":0,"berries":0,"mushrooms":0,"herbs":0,"wildflower":0,"fruit":0,"cooked_meal":0,"map_fragment":0,"decor":0,"antique":0}
 
 var day := 1
 var hour := 8
@@ -38,8 +38,10 @@ var home_returns := 0
 var relationship_mara := 0
 var combat_streak := 0
 var activity_counts := {}
+var activity_last_day := {}
 var world_memory := {}
 var npc_memories := {}
+var relationships := {"mara":0,"rowan":0}
 var home_level := 1
 var home_display_items := []
 var garden_planted_day := 0
@@ -75,8 +77,10 @@ func reset_new_game() -> void:
 	relationship_mara = 0
 	combat_streak = 0
 	activity_counts = {}
+	activity_last_day = {}
 	world_memory = {}
 	npc_memories = {}
+	relationships = {"mara":0,"rowan":0}
 	home_level = 1
 	home_display_items = []
 	garden_planted_day = 0
@@ -101,9 +105,51 @@ func add_skill_xp(skill: String, amount: int) -> void:
 
 func record_activity(id: String) -> void:
 	activity_counts[id] = int(activity_counts.get(id, 0)) + 1
+	activity_last_day[id] = day
 	if int(activity_counts[id]) == 1:
 		set_flag("activity_" + id, true)
+	var count := int(activity_counts[id])
+	if count == 5:
+		set_flag("activity_" + id + "_established", true)
+	if count == 10:
+		set_flag("activity_" + id + "_mastered", true)
 	changed.emit()
+
+func activity_count(id: String) -> int:
+	return int(activity_counts.get(id, 0))
+
+func activity_done_today(id: String) -> bool:
+	return int(activity_last_day.get(id, 0)) == day
+
+func adjust_relationship(npc_id: String, amount: int) -> int:
+	var next := clampi(int(relationships.get(npc_id, 0)) + amount, 0, 10)
+	relationships[npc_id] = next
+	if npc_id == "mara":
+		relationship_mara = next
+	changed.emit()
+	return next
+
+func relationship(npc_id: String) -> int:
+	if npc_id == "mara":
+		return maxi(int(relationships.get("mara", 0)), relationship_mara)
+	return int(relationships.get(npc_id, 0))
+
+func home_identity() -> String:
+	var scores := {
+		"Fisher": activity_count("fishing"),
+		"Gatherer": activity_count("foraging") + activity_count("woodcutting"),
+		"Builder": activity_count("building") + activity_count("decorating"),
+		"Farmer": activity_count("garden") + activity_count("garden_harvest"),
+		"Wayfinder": activity_count("wayfinding"),
+		"Keeper of Echoes": activity_count("echo_place") + activity_count("echo_creature")
+	}
+	var best := "Wayfarer"
+	var best_score := 0
+	for key in scores.keys():
+		if int(scores[key]) > best_score:
+			best = String(key)
+			best_score = int(scores[key])
+	return best
 
 func record_world_memory(id: String, detail: String = "") -> void:
 	world_memory[id] = detail if not detail.is_empty() else true
@@ -166,9 +212,14 @@ func advance_time(hours: int) -> void:
 	while hour >= 24:
 		hour -= 24
 		day += 1
+		season = _season_for_day(day)
 		if garden_planted_day > 0 and day > garden_planted_day:
 			garden_ready = true
 	changed.emit()
+
+func _season_for_day(value: int) -> String:
+	var index := int(floor(float(maxi(1, value) - 1) / 7.0)) % 4
+	return ["Spring","Summer","Autumn","Winter"][index]
 
 func craft_hearth_lamp() -> bool:
 	if not has_item("wood",3) or not has_item("stone",2) or not has_item("memory_shard",1):
@@ -198,8 +249,8 @@ func snapshot() -> Dictionary:
 		"equipment":equipment.duplicate(true),"collections":collections.duplicate(true),
 		"achievements":achievements.duplicate(true), "fish_luck":fish_luck,
 		"home_returns":home_returns, "relationship_mara":relationship_mara, "combat_streak":combat_streak,
-		"activity_counts":activity_counts.duplicate(true),"world_memory":world_memory.duplicate(true),
-		"npc_memories":npc_memories.duplicate(true),"home_level":home_level,
+		"activity_counts":activity_counts.duplicate(true),"activity_last_day":activity_last_day.duplicate(true),"world_memory":world_memory.duplicate(true),
+		"npc_memories":npc_memories.duplicate(true),"relationships":relationships.duplicate(true),"relationship_mara":relationship_mara,"home_level":home_level,
 		"home_display_items":home_display_items.duplicate(true),"garden_planted_day":garden_planted_day,
 		"garden_ready":garden_ready
 	}
@@ -224,8 +275,12 @@ func restore(data: Dictionary) -> void:
 	relationship_mara = int(data.get("relationship_mara",0))
 	combat_streak = int(data.get("combat_streak",0))
 	activity_counts = _dict_or_default(data,"activity_counts",{})
+	activity_last_day = _dict_or_default(data,"activity_last_day",{})
 	world_memory = _dict_or_default(data,"world_memory",{})
 	npc_memories = _dict_or_default(data,"npc_memories",{})
+	relationships = _dict_or_default(data,"relationships",{"mara":int(data.get("relationship_mara",0)),"rowan":0})
+	relationship_mara = int(data.get("relationship_mara", relationships.get("mara",0)))
+	relationships["mara"] = relationship_mara
 	home_level = int(data.get("home_level",1))
 	home_display_items = data.get("home_display_items",[]).duplicate(true) if data.get("home_display_items",[]) is Array else []
 	garden_planted_day = int(data.get("garden_planted_day",0))
