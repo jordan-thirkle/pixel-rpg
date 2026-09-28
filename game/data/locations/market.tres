@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "market"
+display_name = "Hearthfall Market"
+kind = "activity"
+position = Vector2(335, 265)
+interaction_radius = 42.0
+skill = "gathering"
+activity_hint = "Trade something you brought back."
