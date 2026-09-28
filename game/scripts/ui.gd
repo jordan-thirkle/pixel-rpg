@@ -525,15 +525,21 @@ func close_panels() -> void:
 	inventory_panel.visible = false
 
 func _refresh_inventory() -> void:
-	inventory_text.text = "INVENTORY\n\nWood            %d\nStone           %d\nSilverfin       %d\nMemory Shard    %d\nHearthstone     %d\n\nSKILLS\nGathering %d   Fishing %d   Memory %d   Combat %d\n\nCOLLECTIONS\nSilverfin %d   Wood %d   Stone %d   Shards %d\nAchievements %d\n\nCRAFTING\nTurn Memory Shards into Hearth Lamps." % [
+	inventory_text.text = "INVENTORY\n\nWood %d  Stone %d  Fish %d  Silverfin %d\nBerries %d  Mushrooms %d  Herbs %d  Seeds %d\nMeals %d  Memory Shards %d  Decor %d\n\nSKILLS\nGather %d  Woodcut %d  Mining %d  Forage %d\nFish %d  Farm %d  Cook %d  Build %d\nWayfind %d  Memory %d  Combat %d\n\nHOME\nLevel %d   Displays %d   Returns %d\nGarden: %s\n\nMEMORY\nEchoes %d   World memories %d\nActivities %d   Achievements %d\n\nCRAFTING\nCraft at the home hearth; build and display what your life leaves behind." % [
 		int(state.inventory.get("wood",0)), int(state.inventory.get("stone",0)),
-		int(state.inventory.get("river_fish",0)), int(state.inventory.get("memory_shard",0)),
-		int(state.inventory.get("hearthstone",0)),
-		int(state.skills.get("gathering",1)), int(state.skills.get("fishing",1)),
-		int(state.skills.get("memory",1)), int(state.skills.get("combat",1)),
-		int(state.collections.get("silverfin",0)), int(state.collections.get("wood",0)),
-		int(state.collections.get("stone",0)), int(state.collections.get("memory_shard",0)),
-		state.achievements.size()
+		int(state.inventory.get("river_fish",0)), int(state.inventory.get("silverfin",0)),
+		int(state.inventory.get("berries",0)), int(state.inventory.get("mushrooms",0)),
+		int(state.inventory.get("herbs",0)), int(state.inventory.get("seeds",0)),
+		int(state.inventory.get("cooked_meal",0)), int(state.inventory.get("memory_shard",0)),
+		int(state.inventory.get("decor",0)),
+		int(state.skills.get("gathering",1)), int(state.skills.get("woodcutting",1)),
+		int(state.skills.get("mining",1)), int(state.skills.get("foraging",1)),
+		int(state.skills.get("fishing",1)), int(state.skills.get("farming",1)),
+		int(state.skills.get("cooking",1)), int(state.skills.get("building",1)),
+		int(state.skills.get("wayfinding",1)), int(state.skills.get("memory",1)),
+		int(state.skills.get("combat",1)), int(state.home_level), state.home_display_items.size(),
+		int(state.home_returns), "Ready" if state.garden_ready else "Growing" if state.garden_planted_day > 0 else "Empty",
+		int(state.echoes), state.world_memory.size(), state.activity_counts.size(), state.achievements.size()
 	]
 
 func _craft_lamp() -> void:
