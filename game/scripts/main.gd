@@ -236,6 +236,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_L: _load_game()
 		KEY_SPACE: _attack()
 		KEY_ESCAPE: ui.close_panels()
+		KEY_Q: ui.toggle_quest_visibility()
 
 func _update_nearby() -> void:
 	var result: Dictionary = interactions.nearest(player.position, get_tree().get_nodes_in_group("gather_nodes"))
@@ -248,7 +249,7 @@ func _update_nearby() -> void:
 		prompt = "E  REEL NOW"
 		return
 	if nearby_kind.is_empty():
-		prompt = "WASD / Arrows move  •  E interact  •  I inventory  •  K save"
+		prompt = "WASD / Arrows move  •  E interact  •  I inventory  •  Q story panel  •  K save"
 		return
 	match nearby_kind:
 		"npc": prompt = "E  Talk"
