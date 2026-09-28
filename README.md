@@ -55,10 +55,13 @@ Gameplay content is moving into Godot Resources so Echoes, NPCs and locations ca
 
 The architecture is frozen. The current development focus is now systemic depth inside Larkmere rather than another framework.
 
+The production rule is simple: **make player choices persist before making the world bigger.**
+
 The runtime now has a broader skill family, skill-specific gathering, repeatable cooking/gardening/building/wayfinding/decorating activities, persistent activity counts, world memories, NPC memories, home progression, garden state and systemic Echo metadata.
 
 See:
 - [docs/FREE_PLAY_FOUNDATION.md](docs/FREE_PLAY_FOUNDATION.md)
+- [docs/DEPTH_FIRST_PRODUCTION.md](docs/DEPTH_FIRST_PRODUCTION.md)
 - [docs/LARKMERE_CONTENT_PLAN.md](docs/LARKMERE_CONTENT_PLAN.md)
 - [docs/ROADMAP_2026_PLUS.md](docs/ROADMAP_2026_PLUS.md)
 
