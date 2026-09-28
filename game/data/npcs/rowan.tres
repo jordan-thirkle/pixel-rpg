@@ -7,9 +7,19 @@ script = ExtResource("1")
 id = "rowan"
 display_name = "Rowan Bell"
 position = Vector2(620, 250)
+morning_position = Vector2(585, 220)
+day_position = Vector2(665, 300)
+evening_position = Vector2(610, 265)
+routine_speed = 18.0
 default_dialogue = "Old road-stones are memory anchors. Find one, stand still, and let the world speak first."
-evening_dialogue = ""
-post_echo_dialogue = ""
-evening_hour = 24
-post_echo_flag = ""
+evening_dialogue = "The road is quieter after dusk. That's when the old stones have the most to say."
+post_echo_dialogue = "The road has started answering you. Don't mistake that for an invitation to hurry."
+activity_dialogue = {
+"fishing": "You keep returning to Silverrun. A river rewards people who learn its patterns instead of demanding the same answer twice.",
+"woodcutting": "The woodcutters mark good stands quietly. Follow their marks and you'll waste less of the forest.",
+"mining": "If the stone rings clean, keep going. If it answers dull, look around; old workings are rarely where the map says they are.",
+"foraging": "Foragers leave small signs for one another. Once you notice them, the valley stops looking empty."
+}
+evening_hour = 18
+post_echo_flag = "old_road_echo"
 met_flag = "met_rowan"
