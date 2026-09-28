@@ -10,7 +10,9 @@ REQUIRED = [
     "docs/PLACEHOLDER_REGISTRY.md","docs/EVEDUNE_VERTICAL_SLICE_QUALITY_GATE.md",
     "game/project.godot","game/scripts/main.gd","game/scripts/game_state.gd",
     "game/scripts/content_registry.gd","game/scripts/data/echo_data.gd",
-    "game/scripts/data/npc_data.gd","game/scripts/data/location_data.gd"
+    "game/scripts/data/npc_data.gd","game/scripts/data/location_data.gd",
+    "game/scripts/systems/freeplay_system.gd","game/scripts/systems/crafting_system.gd",
+    "game/scripts/systems/echo_system.gd","game/scripts/systems/npc_system.gd"
 ]
 
 HERO_LAYERS = [
@@ -60,6 +62,52 @@ def main() -> None:
         if source.count('<g transform="translate(') != 16:
             raise SystemExit(f"Hero layer must contain exactly 16 animation frames: {relative}")
 
+    freeplay = (ROOT / "game/scripts/systems/freeplay_system.gd").read_text(encoding="utf-8")
+    for activity in ["market", "orchard_care", "archaeology", "survey"]:
+        if f'"{activity}":' not in freeplay and f'"{activity}"' not in freeplay:
+            raise SystemExit(f"Depth activity missing from FreeplaySystem: {activity}")
+
+    crafting = (ROOT / "game/scripts/systems/crafting_system.gd").read_text(encoding="utf-8")
+    for recipe in ["hearth_lamp", "fisher_rack", "herb_shelf", "archive_case"]:
+        if f'"{recipe}":' not in crafting:
+            raise SystemExit(f"Crafting recipe missing: {recipe}")
+
+    state = (ROOT / "game/scripts/game_state.gd").read_text(encoding="utf-8")
+    for token in ["activity_last_day", "relationships", "home_identity", "_season_for_day"]:
+        if token not in state:
+            raise SystemExit(f"Systemic progression state contract missing: {token}")
+
+    save = (ROOT / "game/scripts/save_system.gd").read_text(encoding="utf-8")
+    if "const CURRENT_VERSION := 5" not in save:
+        raise SystemExit("Save schema is not at depth-pass version 5.")
+    for token in ["activity_last_day", "relationships"]:
+        if token not in save:
+            raise SystemExit(f"Save migration missing depth field: {token}")
+
+    echo_system = (ROOT / "game/scripts/systems/echo_system.gd").read_text(encoding="utf-8")
+    for token in ["prerequisite_activities", "unlock_flags", "relationship_npc_id"]:
+        if token not in echo_system:
+            raise SystemExit(f"Systemic Echo contract missing: {token}")
+
+    interaction = (ROOT / "game/scripts/systems/interaction_system.gd").read_text(encoding="utf-8")
+    if '"prerequisite_flags": location.prerequisite_flags' not in interaction:
+        raise SystemExit("Location prerequisite flags are not carried into interaction routing.")
+
+    registry_runtime = (ROOT / "game/scripts/content_registry.gd").read_text(encoding="utf-8")
+    for resource_id in ["river_song.tres", "bellroot_ledger.tres", "hollow_steps_echo.tres", "market.tres", "orchard_care.tres", "archaeology.tres", "survey.tres"]:
+        if resource_id not in registry_runtime:
+            raise SystemExit(f"Depth resource not registered: {resource_id}")
+
+    for required_echo in [
+        "game/data/echoes/river_song.tres",
+        "game/data/echoes/bellroot_ledger.tres",
+        "game/data/echoes/hollow_steps_echo.tres",
+    ]:
+        text = (ROOT / required_echo).read_text(encoding="utf-8")
+        for token in ["prerequisite_activities", "unlock_flags", "world_memory_id"]:
+            if token not in text:
+                raise SystemExit(f"Echo chain resource is incomplete: {required_echo} ({token})")
+
     audio = (ROOT / "game/scripts/audio.gd").read_text(encoding="utf-8")
     for cue in AUDIO_CUES:
         if f'"{cue}":' not in audio:
@@ -75,7 +123,7 @@ def main() -> None:
         if phrase not in registry:
             raise SystemExit("Production gate is not recorded as passed: " + phrase)
 
-    print("Repository + production asset validation passed.")
+    print("Repository + production asset + depth validation passed.")
 
 if __name__ == "__main__":
     main()
