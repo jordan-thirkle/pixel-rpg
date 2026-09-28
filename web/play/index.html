@@ -1,5 +1,34 @@
 <!doctype html>
 <html lang="en-GB">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07110d"><title>Everdune — Play</title>
-<style>html,body{height:100%;margin:0;background:#05080d;color:#f3e5c7;font-family:Georgia,serif}body{display:grid;place-items:center}.stage{width:min(1440px,100vw);height:min(810px,100vh);position:relative;background:#07110e;overflow:hidden}.stage iframe{width:100%;height:100%;border:0;display:block}.chrome{position:absolute;left:18px;right:18px;top:16px;display:flex;justify-content:space-between;pointer-events:none;z-index:5}.chrome span,.chrome a{pointer-events:auto;padding:7px 10px;border:1px solid #765638;background:#07110ed9;color:#d8c8aa;text-decoration:none;font:11px monospace}.chrome a{color:#f0cf91}@media(max-width:700px){.stage{width:100vw;height:100vh}}</style>
-</head><body><div class="stage"><iframe title="Everdune game" src="/game/index.html" allow="fullscreen" allowfullscreen></iframe><div class="chrome"><span>EVERDUNE • REAL GODOT BUILD</span><a href="/">BACK TO EVERDUNE</a></div></div></body></html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07110e">
+<meta name="description" content="Play Everdune — The World Remembers.">
+<title>Play Everdune</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050907;color:#f1e2c2;font-family:Georgia,serif}
+body{display:grid;place-items:center}
+#launch{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,#1a3025,#07100d 62%,#030605);z-index:2;transition:opacity .35s}
+.card{width:min(560px,88vw);padding:44px 42px;text-align:center;border:1px solid #8e6d46;background:#0b1511ee;box-shadow:0 30px 100px #000}
+.mark{color:#d9b66d;font-size:25px;letter-spacing:8px}.title{font-size:48px;letter-spacing:5px;margin:9px 0 4px;color:#f0d29a}.sub{font:10px monospace;letter-spacing:3px;color:#a99d86}.copy{font-size:14px;line-height:1.55;color:#bdb19b;max-width:430px;margin:28px auto}.enter{display:inline-block;padding:14px 24px;border:1px solid #f0cf8a;background:#d5ad64;color:#17120d;text-decoration:none;font:12px monospace;letter-spacing:1.5px;box-shadow:0 0 0 3px #2b2116}.note{margin-top:18px;font:9px monospace;letter-spacing:1px;color:#786f60}
+#game{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#07110e}
+</style>
+</head>
+<body>
+<div id="launch">
+  <div class="card">
+    <div class="mark">✦</div>
+    <div class="title">EVERDUNE</div>
+    <div class="sub">THE WORLD REMEMBERS</div>
+    <p class="copy">The game is the source of truth. This page does not simulate gameplay or place marketing UI over it. Enter the actual Godot build.</p>
+    <a class="enter" href="/game/index.html">ENTER LARKMERE</a>
+    <div class="note">GODOT 4.7.2 • WEB BUILD • 960×540</div>
+  </div>
+</div>
+<script>
+const enter=document.querySelector('.enter');
+enter.addEventListener('click',()=>{document.getElementById('launch').style.opacity='0';setTimeout(()=>document.getElementById('launch').remove(),350);});
+</script>
+</body>
+</html>
