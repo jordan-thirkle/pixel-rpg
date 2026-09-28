@@ -488,9 +488,9 @@ func _process(_delta: float) -> void:
 	if hud_settings_button:
 		hud_settings_button.visible = session_active
 	creation_panel.visible = (not session_active) and start_menu != null and not start_menu.visible and not settings_panel.visible
-	stats_label.text = "%s  •  Day %d  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d" % [
-		state.character.get("name","Wayfarer"), state.day, state.hour, state.minute,
-		state.hp, state.max_hp, state.energy, state.max_energy, state.level, state.xp, state.echoes
+	stats_label.text = "%s  •  Day %d  •  %s  •  %02d:%02d\nHP %d/%d   Energy %d/%d   Lv %d   XP %d   Echoes %d  •  Home: %s" % [
+		state.character.get("name","Wayfarer"), state.day, state.season, state.hour, state.minute,
+		state.hp, state.max_hp, state.energy, state.max_energy, state.level, state.xp, state.echoes, state.home_identity()
 	]
 	if not state.flags.get("old_road_echo", false):
 		quest_label.text = "THE WORLD REMEMBERS\nFind the Echo on the Old Road\n○ Listen to the valley"
@@ -533,20 +533,52 @@ func close_panels() -> void:
 	inventory_panel.visible = false
 
 func _refresh_inventory() -> void:
-	inventory_text.text = "INVENTORY\n\nWood %d  Stone %d  Fish %d  Silverfin %d\nBerries %d  Mushrooms %d  Herbs %d  Seeds %d\nMeals %d  Memory Shards %d  Decor %d\n\nSKILLS\nGather %d  Woodcut %d  Mining %d  Forage %d\nFish %d  Farm %d  Cook %d  Build %d\nWayfind %d  Memory %d  Combat %d\n\nHOME\nLevel %d   Displays %d   Returns %d\nGarden: %s\n\nMEMORY\nEchoes %d   World memories %d\nActivities %d   Achievements %d\n\nCRAFTING\nCraft at the home hearth; build and display what your life leaves behind." % [
-		int(state.inventory.get("wood",0)), int(state.inventory.get("stone",0)),
+	inventory_text.text = "INVENTORY
+
+Wood %d  Timber %d  Stone %d  Ore %d
+Fish %d  Silverfin %d  Berries %d  Wildflower %d
+Mushrooms %d  Herbs %d  Seeds %d  Fruit %d
+Meals %d  Memory Shards %d  Decor %d  Antique %d
+Trade Tokens %d  Map Fragments %d
+
+SKILLS
+Gather %d  Woodcut %d  Mining %d  Forage %d
+Fish %d  Farm %d  Cook %d  Craft %d
+Build %d  Wayfind %d  Memory %d  Combat %d
+
+HOME
+Identity: %s
+Level %d   Displays %d   Returns %d
+Garden: %s
+
+RELATIONSHIPS
+Mara %d/10   Rowan %d/10
+
+MEMORY
+Echoes %d   World memories %d
+Activity types %d   Achievements %d
+
+CRAFTING
+Lamp, fisher rack, herb shelf and archive case become available as your life supplies the right materials." % [
+		int(state.inventory.get("wood",0)), int(state.inventory.get("timber",0)),
+		int(state.inventory.get("stone",0)), int(state.inventory.get("ore",0)),
 		int(state.inventory.get("river_fish",0)), int(state.inventory.get("silverfin",0)),
-		int(state.inventory.get("berries",0)), int(state.inventory.get("mushrooms",0)),
-		int(state.inventory.get("herbs",0)), int(state.inventory.get("seeds",0)),
+		int(state.inventory.get("berries",0)), int(state.inventory.get("wildflower",0)),
+		int(state.inventory.get("mushrooms",0)), int(state.inventory.get("herbs",0)),
+		int(state.inventory.get("seeds",0)), int(state.inventory.get("fruit",0)),
 		int(state.inventory.get("cooked_meal",0)), int(state.inventory.get("memory_shard",0)),
-		int(state.inventory.get("decor",0)),
+		int(state.inventory.get("decor",0)), int(state.inventory.get("antique",0)),
+		int(state.inventory.get("trade_token",0)), int(state.inventory.get("map_fragment",0)),
 		int(state.skills.get("gathering",1)), int(state.skills.get("woodcutting",1)),
 		int(state.skills.get("mining",1)), int(state.skills.get("foraging",1)),
 		int(state.skills.get("fishing",1)), int(state.skills.get("farming",1)),
-		int(state.skills.get("cooking",1)), int(state.skills.get("building",1)),
-		int(state.skills.get("wayfinding",1)), int(state.skills.get("memory",1)),
-		int(state.skills.get("combat",1)), int(state.home_level), state.home_display_items.size(),
-		int(state.home_returns), "Ready" if state.garden_ready else "Growing" if state.garden_planted_day > 0 else "Empty",
+		int(state.skills.get("cooking",1)), int(state.skills.get("crafting",1)),
+		int(state.skills.get("building",1)), int(state.skills.get("wayfinding",1)),
+		int(state.skills.get("memory",1)), int(state.skills.get("combat",1)),
+		state.home_identity(), int(state.home_level), state.home_display_items.size(),
+		int(state.home_returns),
+		"Ready" if state.garden_ready else "Growing" if state.garden_planted_day > 0 else "Empty",
+		state.relationship("mara"), state.relationship("rowan"),
 		int(state.echoes), state.world_memory.size(), state.activity_counts.size(), state.achievements.size()
 	]
 
