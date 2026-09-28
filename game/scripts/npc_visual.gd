@@ -12,6 +12,7 @@ var body_sprite: Sprite2D
 var hair_sprite: Sprite2D
 var coat_sprite: Sprite2D
 var ornament_sprite: Sprite2D
+var authored_sprite: Sprite2D
 var phase := 0.0
 var routine_clock := 0.0
 var routine_target := Vector2.ZERO
@@ -29,6 +30,13 @@ func set_state(value: Node) -> void:
 	state = value
 
 func _build_layers() -> void:
+	authored_sprite = Sprite2D.new()
+	authored_sprite.texture = load("res://assets/everdune/" + String(npc_data.id) + "_sheet.svg") as Texture2D
+	authored_sprite.region_enabled = true
+	authored_sprite.region_rect = Rect2(0,0,32,32)
+	authored_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	authored_sprite.scale = Vector2(2.0,2.0)
+	add_child(authored_sprite)
 	body_sprite = _sprite(BODY)
 	coat_sprite = _sprite(COAT)
 	hair_sprite = _sprite(HAIR)
@@ -37,6 +45,8 @@ func _build_layers() -> void:
 		sprite.scale = Vector2(2.0,2.0)
 		add_child(sprite)
 	_apply_identity()
+	for sprite in [body_sprite, coat_sprite, hair_sprite, ornament_sprite]:
+		sprite.visible = false
 
 func _sprite(texture: Texture2D) -> Sprite2D:
 	var sprite := Sprite2D.new()
@@ -100,15 +110,12 @@ func _process(delta: float) -> void:
 			var row := 1 if routine_target.x > position.x else 3 if routine_target.x < position.x else 0
 			var frame := int(Time.get_ticks_msec() / 180) % 4
 			var rect := Rect2(frame * 32, row * 32, 32, 32)
-			for sprite in [body_sprite,coat_sprite,hair_sprite,ornament_sprite]:
-				if sprite: sprite.region_rect = rect
+			if authored_sprite: authored_sprite.region_rect = rect
 	else:
 		var frame := int(Time.get_ticks_msec() / 520) % 4
 		var rect := Rect2(frame * 32, 0, 32, 32)
-		for sprite in [body_sprite,coat_sprite,hair_sprite,ornament_sprite]:
-			if sprite: sprite.region_rect = rect
+		if authored_sprite: authored_sprite.region_rect = rect
 
 	var idle := sin(phase * 1.6) * 0.7
-	for sprite in [body_sprite,coat_sprite,hair_sprite,ornament_sprite]:
-		if sprite:
-			sprite.position.y = idle
+	if authored_sprite:
+			authored_sprite.position.y = idle
