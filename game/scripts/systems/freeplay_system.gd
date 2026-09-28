@@ -86,6 +86,8 @@ func _build(state: Node) -> Dictionary:
 	if state.home_level == 2:
 		state.set_flag("home_workshop", true)
 		return _finish("building", state, "building", 24, "You build a proper workbench. Home is becoming a place where projects can begin.")
+	state.add_home_display("workshop_upgrade")
+	state.record_world_memory("hearthfall_workshop_upgrade", "The workshop has grown into a permanent part of home.")
 	return _finish("building", state, "building", 30, "You reinforce the workshop. Your home is starting to feel like your own.")
 
 func _decorate(state: Node) -> Dictionary:
