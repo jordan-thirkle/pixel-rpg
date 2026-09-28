@@ -520,6 +520,11 @@ func toggle_inventory() -> void:
 		dialog_panel.visible = false
 		_refresh_inventory()
 
+func toggle_quest_visibility() -> void:
+	if not session_active:
+		return
+	quest_label.visible = not quest_label.visible
+
 func close_panels() -> void:
 	dialog_panel.visible = false
 	inventory_panel.visible = false
