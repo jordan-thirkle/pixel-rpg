@@ -310,6 +310,7 @@ func sync_state(state: Node) -> void:
 	if bool(state.flags.get("home_workshop", false)) and not bool(synced_world_state.get("home_workshop", false)):
 		synced_world_state["home_workshop"] = true
 		_prop(5, Vector2(455,220), Vector2(1.0,1.0), 5)
+		synced_world_state["home_workbench"] = true
 	if bool(state.flags.get("garden_harvested", false)) and not bool(synced_world_state.get("garden_harvested", false)):
 		synced_world_state["garden_harvested"] = true
 		for p in [Vector2(275,292),Vector2(320,292),Vector2(300,310)]:
@@ -322,10 +323,11 @@ func _sync_home_displays(state: Node) -> void:
 		var id := String(item_id)
 		if bool(synced_world_state.get("home_" + id, false)):
 			continue
+		if id == "hearth_lamp":
+			place_hearth_lamp()
+			continue
 		synced_world_state["home_" + id] = true
 		match id:
-			"hearth_lamp":
-				place_hearth_lamp()
 			"first_meal":
 				_home_display_prop(2, Vector2(318,286), Vector2(0.72,0.72))
 			"silverfin_trophy":
