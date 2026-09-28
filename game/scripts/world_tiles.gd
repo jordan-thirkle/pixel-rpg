@@ -350,7 +350,6 @@ func place_hearth_lamp() -> void:
 		return
 	synced_world_state["home_hearth_lamp"] = true
 	var lamp := Sprite2D.new()
-	var lamp := Sprite2D.new()
 	lamp.texture = load("res://assets/environment_fx.svg") as Texture2D
 	lamp.region_enabled = true
 	lamp.region_rect = Rect2(64,0,32,32)
