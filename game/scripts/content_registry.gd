@@ -7,6 +7,7 @@ var locations: Dictionary = {}
 var activities: Dictionary = {}
 
 func _ready() -> void:
+	_load_echo("res://data/echoes/hearthfall_memory.tres")
 	_load_echo("res://data/echoes/old_road.tres")
 	_load_echo("res://data/echoes/glass_orchard.tres")
 	_load_echo("res://data/echoes/bellroot_memory.tres")
