@@ -152,41 +152,6 @@
     {
       "path": "game/data/locations/sleeping_gate.tres",
       "status": "canonical-data"
-    },
-    {
-      "path": "game/data/echoes/bellroot_memory.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/echoes/silverrun_memory.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/locations/cookfire.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/locations/garden.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/locations/wayfinding.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/locations/workbench.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
-    },
-    {
-      "path": "game/data/locations/decorating.tres",
-      "category": "gameplay-data",
-      "status": "free-play-foundation"
     }
   ],
   "conceptReferences": [
