@@ -168,7 +168,7 @@ func _spawn_gather_nodes() -> void:
 		{"id":"wood_1","resource":"wood","index":0,"pos":Vector2(205,150),"skill":"woodcutting","xp":10,"bonus":"timber","chance":0.18},
 		{"id":"wood_2","resource":"wood","index":0,"pos":Vector2(760,165),"skill":"woodcutting","xp":12,"bonus":"timber","chance":0.22},
 		{"id":"wood_3","resource":"wood","index":0,"pos":Vector2(155,92),"skill":"woodcutting","xp":10,"bonus":"timber","chance":0.18},
-		{"id":"wood_4","resource":"wood","index":0,"pos":Vector2(110,230),"skill":"woodcutting","xp":13,"bonus":"timber","chance":0.24},
+		{"id":"wood_4","resource":"wood","index":0,"pos":Vector2(95,125),"skill":"woodcutting","xp":13,"bonus":"timber","chance":0.24},
 		{"id":"stone_1","resource":"stone","index":8,"pos":Vector2(180,360),"skill":"mining","xp":12,"bonus":"ore","chance":0.20},
 		{"id":"stone_2","resource":"stone","index":8,"pos":Vector2(820,330),"skill":"mining","xp":14,"bonus":"ore","chance":0.24},
 		{"id":"stone_3","resource":"stone","index":8,"pos":Vector2(250,420),"skill":"mining","xp":16,"bonus":"ore","chance":0.28},
