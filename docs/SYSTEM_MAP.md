@@ -6,7 +6,7 @@ The repository has one canonical owner for each class of truth. New work must ex
 
 | Concern | Canonical owner | Rule |
 |---|---|---|
-| Product identity / lore | docs/GENESIS.md | No contradictory lore |
+| Product identity / lore | docs/GENESIS.md + docs/FREE_PLAY_FOUNDATION.md | No contradictory lore; free-play promise is canonical |
 | Visual language | docs/PIXEL_ART_BIBLE.md | Supplied visual master remains the bar |
 | Engine / stack | docs/STACK_LOCK.md | Godot 4.7.2-stable |
 | Architecture | docs/TECHNICAL_FOUNDATION.md | Simulation → State → Presentation |
@@ -24,6 +24,7 @@ The repository has one canonical owner for each class of truth. New work must ex
 | Gathering | game/scripts/systems/gathering_system.gd | Resource reward/progression rules |
 | Crafting | game/scripts/systems/crafting_system.gd | Crafting orchestration |
 | Combat | game/scripts/systems/combat_system.gd | Combat rules; presentation remains separate |
+| Free-play activities | game/scripts/systems/freeplay_system.gd | Player-led cooking, farming, building, decorating and wayfinding |
 | World presentation | game/scripts/world_tiles.gd | TileMapLayer + authored world dressing |
 | Player | game/scripts/player.gd | Movement, animation and player presentation |
 | UI | game/scripts/ui.gd | Presentation/input intent only |
@@ -39,6 +40,8 @@ The repository has one canonical owner for each class of truth. New work must ex
 ## Dependency direction
 
 Content data → gameplay systems → GameState → presentation.
+
+Player-led progression follows the same direction: location/data → activity system → persistent state → world/NPC presentation.
 
 Presentation may emit player intent through signals. It must not become a second gameplay authority.
 
