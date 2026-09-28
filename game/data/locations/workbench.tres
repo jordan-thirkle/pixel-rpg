@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "workbench"
+display_name = "Hearthfall Workbench"
+kind = "activity"
+position = Vector2(390, 180)
+interaction_radius = 44.0
+skill = "building"
+activity_hint = "Build an improvement."

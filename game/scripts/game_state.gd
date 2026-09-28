@@ -3,11 +3,11 @@ class_name EverduneGameState
 
 signal changed
 
-const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0}
-const DEFAULT_SKILLS := {"gathering":1,"fishing":1,"memory":1,"combat":1}
-const DEFAULT_SKILL_XP := {"gathering":0,"fishing":0,"memory":0,"combat":0}
+const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
+const DEFAULT_SKILLS := {"gathering":1,"woodcutting":1,"mining":1,"foraging":1,"fishing":1,"farming":1,"cooking":1,"crafting":1,"building":1,"wayfinding":1,"memory":1,"combat":1}
+const DEFAULT_SKILL_XP := {"gathering":0,"woodcutting":0,"mining":0,"foraging":0,"fishing":0,"farming":0,"cooking":0,"crafting":0,"building":0,"wayfinding":0,"memory":0,"combat":0}
 const DEFAULT_EQUIPMENT := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
-const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0}
+const DEFAULT_COLLECTIONS := {"silverfin":0,"memory_shard":0,"wood":0,"stone":0,"berries":0,"mushrooms":0,"herbs":0,"cooked_meal":0,"decor":0}
 
 var day := 1
 var hour := 8
@@ -37,6 +37,13 @@ var fish_luck := 0
 var home_returns := 0
 var relationship_mara := 0
 var combat_streak := 0
+var activity_counts := {}
+var world_memory := {}
+var npc_memories := {}
+var home_level := 1
+var home_display_items := []
+var garden_planted_day := 0
+var garden_ready := false
 
 func reset_new_game() -> void:
 	day = 1
@@ -67,6 +74,13 @@ func reset_new_game() -> void:
 	home_returns = 0
 	relationship_mara = 0
 	combat_streak = 0
+	activity_counts = {}
+	world_memory = {}
+	npc_memories = {}
+	home_level = 1
+	home_display_items = []
+	garden_planted_day = 0
+	garden_ready = false
 	changed.emit()
 
 func add_item(id: String, amount: int) -> void:
@@ -83,6 +97,28 @@ func add_skill_xp(skill: String, amount: int) -> void:
 		skills[skill] = int(skills.get(skill, 1)) + 1
 		_unlock_achievement("skill_" + skill + "_" + str(skills[skill]))
 		threshold = 25 + (int(skills.get(skill, 1)) - 1) * 20
+	changed.emit()
+
+func record_activity(id: String) -> void:
+	activity_counts[id] = int(activity_counts.get(id, 0)) + 1
+	if int(activity_counts[id]) == 1:
+		set_flag("activity_" + id, true)
+	changed.emit()
+
+func record_world_memory(id: String, detail: String = "") -> void:
+	world_memory[id] = detail if not detail.is_empty() else true
+	set_flag("world_" + id, true)
+
+func remember_npc(npc_id: String, memory_id: String) -> void:
+	var memories: Array = npc_memories.get(npc_id, [])
+	if memory_id not in memories:
+		memories.append(memory_id)
+	npc_memories[npc_id] = memories
+	changed.emit()
+
+func add_home_display(item_id: String) -> void:
+	if item_id not in home_display_items:
+		home_display_items.append(item_id)
 	changed.emit()
 
 func _unlock_achievement(id: String) -> void:
@@ -117,6 +153,7 @@ func add_xp(amount: int) -> void:
 		max_energy += 5
 		hp = max_hp
 		energy = max_energy
+		_unlock_achievement("level_" + str(level))
 		threshold = 50 + (level - 1) * 35
 	changed.emit()
 
@@ -129,6 +166,8 @@ func advance_time(hours: int) -> void:
 	while hour >= 24:
 		hour -= 24
 		day += 1
+		if garden_planted_day > 0 and day > garden_planted_day:
+			garden_ready = true
 	changed.emit()
 
 func craft_hearth_lamp() -> bool:
@@ -139,7 +178,9 @@ func craft_hearth_lamp() -> bool:
 	remove_item("memory_shard",1)
 	inventory["hearthstone"] = int(inventory.get("hearthstone",0)) + 1
 	crafted["hearth_lamp"] = int(crafted.get("hearth_lamp",0)) + 1
+	add_home_display("hearth_lamp")
 	_unlock_achievement("first_craft")
+	add_skill_xp("crafting",10)
 	add_skill_xp("memory",10)
 	add_xp(20)
 	changed.emit()
@@ -156,29 +197,47 @@ func snapshot() -> Dictionary:
 		"skills":skills.duplicate(true),"skill_xp":skill_xp.duplicate(true),
 		"equipment":equipment.duplicate(true),"collections":collections.duplicate(true),
 		"achievements":achievements.duplicate(true), "fish_luck":fish_luck,
-		"home_returns":home_returns, "relationship_mara":relationship_mara, "combat_streak":combat_streak
+		"home_returns":home_returns, "relationship_mara":relationship_mara, "combat_streak":combat_streak,
+		"activity_counts":activity_counts.duplicate(true),"world_memory":world_memory.duplicate(true),
+		"npc_memories":npc_memories.duplicate(true),"home_level":home_level,
+		"home_display_items":home_display_items.duplicate(true),"garden_planted_day":garden_planted_day,
+		"garden_ready":garden_ready
 	}
 
 func restore(data: Dictionary) -> void:
 	for key in ["day","hour","minute","season","year","hp","max_hp","energy","max_energy","level","xp","gold","echoes"]:
 		if data.has(key):
 			set(key, data[key])
-	inventory = _dict_or_default(data,"inventory",DEFAULT_INVENTORY)
+	inventory = _merge_defaults(data,"inventory",DEFAULT_INVENTORY)
 	flags = _dict_or_default(data,"flags",{})
 	crafted = _dict_or_default(data,"crafted",{})
 	weather = String(data.get("weather","Clear"))
 	character = _dict_or_default(data,"character",{"name":"","hair":"dark","coat":"teal"})
 	quest_stage = int(data.get("quest_stage",0))
-	skills = _dict_or_default(data,"skills",DEFAULT_SKILLS)
-	skill_xp = _dict_or_default(data,"skill_xp",DEFAULT_SKILL_XP)
-	equipment = _dict_or_default(data,"equipment",DEFAULT_EQUIPMENT)
-	collections = _dict_or_default(data,"collections",DEFAULT_COLLECTIONS)
+	skills = _merge_defaults(data,"skills",DEFAULT_SKILLS)
+	skill_xp = _merge_defaults(data,"skill_xp",DEFAULT_SKILL_XP)
+	equipment = _merge_defaults(data,"equipment",DEFAULT_EQUIPMENT)
+	collections = _merge_defaults(data,"collections",DEFAULT_COLLECTIONS)
 	achievements = _dict_or_default(data,"achievements",{})
 	fish_luck = int(data.get("fish_luck",0))
 	home_returns = int(data.get("home_returns",0))
 	relationship_mara = int(data.get("relationship_mara",0))
 	combat_streak = int(data.get("combat_streak",0))
+	activity_counts = _dict_or_default(data,"activity_counts",{})
+	world_memory = _dict_or_default(data,"world_memory",{})
+	npc_memories = _dict_or_default(data,"npc_memories",{})
+	home_level = int(data.get("home_level",1))
+	home_display_items = data.get("home_display_items",[]).duplicate(true) if data.get("home_display_items",[]) is Array else []
+	garden_planted_day = int(data.get("garden_planted_day",0))
+	garden_ready = bool(data.get("garden_ready",false))
 	changed.emit()
+
+func _merge_defaults(data: Dictionary, key: String, fallback: Dictionary) -> Dictionary:
+	var value = _dict_or_default(data,key,{})
+	var merged := fallback.duplicate(true)
+	for item in value.keys():
+		merged[item] = value[item]
+	return merged
 
 func _dict_or_default(data: Dictionary, key: String, fallback: Dictionary) -> Dictionary:
 	var value = data.get(key, fallback)

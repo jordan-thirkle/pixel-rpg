@@ -10,6 +10,8 @@ The current build must be treated as an executable vertical-slice foundation, no
 
 ## P0 — must be true before calling the first-run gate complete
 
+> This audit is retained as a historical gate document. Current implementation has since closed the hero/audio production gates and moved river collision into the world owner; the remaining product risk is authored environment/UI/content depth.
+
 ### 1. Reference artwork fidelity
 Current state: FAIL.
 The current Hearthfall SVG is a useful scene scaffold, but it is substantially simpler than the supplied visual master and the locked Cinematic Pixel Fantasy bible. It reads as constructed vector/pixel geometry rather than high-detail authored pixel art.
@@ -32,11 +34,11 @@ No fake waits, fake percentages, fake readiness or dead UI.
 
 ### 3. Runtime must be visually real
 Current state: IMPROVED, but FAIL as final visual gate.
-The Godot runtime now contains actual authored scene artwork. However, the browser page still contains legacy CSS mock-game markup underneath the real iframe. It is not the source of gameplay, but it is dead presentation code and must be removed before the web surface is considered clean.
+The Godot runtime now contains actual authored scene artwork and the public gameplay viewport embeds the same Godot export. Remaining work is visual fidelity and removal of any obsolete presentation scaffolding.
 
 ### 4. World architecture
 Current state: PARTIAL.
-A real TileMapLayer/TileSet system exists and is now instantiated beneath the authored scene. However, the current visible map is still primarily one authored scene image, and collision remains hardcoded in player logic.
+A real TileMapLayer/TileSet system owns the Hearthfall topology, river collision, world boundaries and landmark collision. The remaining gap is production-authored visual density and final collision/topology QA across the full valley.
 
 Required:
 - production-authored TileMapLayer world

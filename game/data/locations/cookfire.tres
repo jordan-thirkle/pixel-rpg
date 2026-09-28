@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "cookfire"
+display_name = "Hearthfall Cookfire"
+kind = "activity"
+position = Vector2(350, 315)
+interaction_radius = 44.0
+skill = "cooking"
+activity_hint = "Cook something warm."

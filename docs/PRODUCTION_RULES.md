@@ -19,3 +19,10 @@
 14. Retire obsolete implementations instead of keeping parallel compatibility paths.
 15. Runtime asset manifest drift is a CI failure.
 16. Deterministic vertical-slice and save/migration checks are required before architecture changes are considered complete.
+
+
+16. The current Godot/TileMapLayer/data-driven architecture is frozen. Do not introduce a new gameplay framework to solve a content-depth problem.
+17. Prefer deeper systemic connections between existing activities over isolated feature accumulation.
+18. Player-led progress must be persistent where practical: skills, knowledge, NPC memories, home changes and world consequences belong in canonical state.
+19. A feature is not successful because it adds another menu, quest or number; it must create a meaningful new way to spend time in Larkmere.
+20. Use the 45-minute self-directed evening test before expanding breadth.

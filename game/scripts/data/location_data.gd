@@ -7,3 +7,5 @@ class_name EverduneLocationData
 @export var position := Vector2.ZERO
 @export var interaction_radius := 32.0
 @export var prerequisite_flags: Array[String] = []
+@export var skill := ""
+@export_multiline var activity_hint := ""

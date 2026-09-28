@@ -49,3 +49,19 @@ This is intentionally a production foundation rather than a final-art release. S
 The current foundation follows Content → Systems → State → Presentation. Canonical ownership is defined in [docs/SYSTEM_MAP.md](docs/SYSTEM_MAP.md), AI implementation boundaries in [docs/AI_AGENT_CONTRACT.md](docs/AI_AGENT_CONTRACT.md), and the consolidation record in [docs/ARCHITECTURE_CONSOLIDATION.md](docs/ARCHITECTURE_CONSOLIDATION.md).
 
 Gameplay content is moving into Godot Resources so Echoes, NPCs and locations can scale without expanding the orchestration script. CI validates repository drift, runtime asset manifests, Godot parsing and deterministic vertical-slice/save regressions.
+
+
+## Free-play depth pass
+
+The architecture is frozen. The current development focus is now systemic depth inside Larkmere rather than another framework.
+
+The runtime now has a broader skill family, skill-specific gathering, repeatable cooking/gardening/building/wayfinding/decorating activities, persistent activity counts, world memories, NPC memories, home progression, garden state and systemic Echo metadata.
+
+See:
+- [docs/FREE_PLAY_FOUNDATION.md](docs/FREE_PLAY_FOUNDATION.md)
+- [docs/LARKMERE_CONTENT_PLAN.md](docs/LARKMERE_CONTENT_PLAN.md)
+- [docs/ROADMAP_2026_PLUS.md](docs/ROADMAP_2026_PLUS.md)
+
+The product pressure test is simple:
+
+**Can a player ignore the story, spend 45 minutes doing whatever sounds good, and feel that their evening mattered?**

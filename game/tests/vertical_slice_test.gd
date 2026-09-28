@@ -24,6 +24,13 @@ func _run() -> void:
 	registry._ready()
 	assert(registry.echo("old_road") != null)
 	assert(registry.echo("glass_orchard") != null)
+	assert(registry.echo("bellroot_memory") != null)
+	assert(registry.echo("silverrun_memory") != null)
+	assert(registry.location("cookfire") != null)
+	assert(registry.location("garden") != null)
+	assert(registry.location("wayfinding") != null)
+	assert(registry.location("workbench") != null)
+	assert(registry.location("decorating") != null)
 	assert(registry.npc("mara") != null)
 	assert(registry.location("home") != null)
 	assert(registry.location("dungeon") != null)
@@ -51,12 +58,27 @@ func _run() -> void:
 	assert(bool(fresh.flags.get("old_road_echo",false)))
 	assert(fresh.echoes == 1)
 	assert(int(fresh.inventory.get("memory_shard",0)) == 1)
+	assert(fresh.world_memory.has("old_road_mapped") == false)
 	var orchard_result: Dictionary = echo_system.discover("glass_orchard",registry,fresh)
 	assert(bool(orchard_result.get("ok",false)))
 	assert(bool(fresh.flags.get("glass_orchard_echo",false)))
 
+	var freeplay := preload("res://scripts/systems/freeplay_system.gd").new()
+	fresh.inventory["seeds"] = 1
+	var garden_result: Dictionary = freeplay.perform("garden", fresh)
+	assert(bool(garden_result.ok))
+	fresh.day += 1
+	fresh.garden_ready = true
+	var harvest_result: Dictionary = freeplay.perform("garden", fresh)
+	assert(bool(harvest_result.ok))
+	assert(int(fresh.skills.get("farming",1)) >= 1)
+	fresh.inventory["wood"] = 8
+	fresh.inventory["stone"] = 5
+	var build_result: Dictionary = freeplay.perform("workbench", fresh)
+	assert(bool(build_result.ok))
+	assert(fresh.home_level == 2)
 	var save := SAVE.new()
-	assert(int(save.CURRENT_VERSION) >= 3)
+	assert(int(save.CURRENT_VERSION) >= 4)
 
 	# Production hero layers: all nine layers must be real 4x4 crisp-edge sheets.
 	var hero_assets := [

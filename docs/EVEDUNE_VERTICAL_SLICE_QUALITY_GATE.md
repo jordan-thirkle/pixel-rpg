@@ -102,10 +102,12 @@ The gate passes only when:
 Until this gate passes:
 
 - do not add new regions merely for breadth,
-- do not expand procedural generation,
+- do not expand procedural generation for breadth,
 - do not add large content libraries to disguise quality gaps,
 - do not treat working systems as finished product,
 - do not silently promote placeholders to production status.
+
+The architecture is now frozen. Depth work inside Larkmere is explicitly allowed because the current product risk is systemic shallowness rather than missing technical frameworks. Free-play systems must improve the existing valley and remain covered by deterministic regression.
 
 Improve the existing journey first.
 
