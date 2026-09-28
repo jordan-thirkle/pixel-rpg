@@ -12,7 +12,11 @@ Changes to architecture require a demonstrated failure in the existing model and
 
 ## Stage 1 — Free-play foundation
 
+Status: ACTIVE IMPLEMENTATION
+
 Goal: make a 45-minute self-directed evening genuinely possible in Larkmere.
+
+The first implementation pass is now live: skill-specific gathering, persistent activity state, repeatable home/valley activities, seasonal day progression and a larger Larkmere activity surface.
 
 Build deeply:
 - woodcutting;
@@ -31,7 +35,11 @@ Each skill must have a reason to exist beyond XP.
 
 ## Stage 2 — Systemic consequence
 
+Status: ACTIVE IMPLEMENTATION
+
 Goal: make player actions accumulate.
+
+The current pass adds visible milestone consequences, persistent world memories, route knowledge, market history, orchard restoration and home-state presentation.
 
 Build:
 - world memory;
@@ -49,7 +57,11 @@ The test is: "Can I point to something in the world and know that I caused it?"
 
 ## Stage 3 — NPC lives
 
+Status: ACTIVE FOUNDATION
+
 Goal: people should appear to have lives even when the player is not doing quests.
+
+Mara and Rowan now have daily movement, contextual dialogue, daily conversation memory and persistent relationship state. This is the foundation, not the final NPC simulation.
 
 Build:
 - daily routines;
@@ -65,7 +77,11 @@ Build:
 
 ## Stage 4 — Systemic Echoes
 
+Status: ACTIVE FOUNDATION
+
 Goal: Echoes become the signature Everdune system.
+
+The current data model supports activity prerequisites, unlock flags, world-memory consequences and NPC-specific relationship rewards, with chained River/Bellroot/Hollow Steps discoveries.
 
 Build:
 - place/object/person/creature/event/environment Echo types;
@@ -80,7 +96,11 @@ Build:
 
 ## Stage 5 — Personal home
 
+Status: ACTIVE FOUNDATION
+
 Goal: the home becomes a readable autobiography.
+
+The current slice persists home level, display items and an emergent home identity; the next depth pass is room-level layout and richer functional displays.
 
 Build:
 - rooms;
@@ -97,7 +117,11 @@ Build:
 
 ## Stage 6 — Dense Larkmere
 
+Status: ACTIVE CONTENT BUILD
+
 Goal: one valley can support dozens of evenings.
+
+Do not add another region until this valley demonstrates the complete freedom → skill → activity → consequence → NPC → Echo → home loop.
 
 Every location gets:
 - activities;
