@@ -11,7 +11,7 @@ func configure(registry: Node) -> void:
 	for id in registry.locations.keys():
 		var location: EverduneLocationData = registry.locations[id]
 		if location.kind != "region":
-			locations.append({"id": location.id, "kind": location.kind, "pos": location.position, "radius": location.interaction_radius})
+			locations.append({"id": location.id, "kind": location.kind, "pos": location.position, "radius": location.interaction_radius, "prerequisite_flags": location.prerequisite_flags})
 
 func nearest(player_position: Vector2, gather_nodes: Array[Node]) -> Dictionary:
 	var result := {"kind": "", "id": "", "distance": 99999.0}
