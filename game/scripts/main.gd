@@ -143,6 +143,7 @@ func _ready() -> void:
 	ui.start_requested.connect(_on_start_requested)
 	ui.sound_requested.connect(_play_cue)
 	ui.craft_requested.connect(_craft_lamp)
+	ui.craft_next_requested.connect(_craft_next_recipe)
 	ui.settings_changed.connect(_apply_settings)
 	ui.set_settings(settings.values)
 
@@ -331,6 +332,18 @@ func _craft_lamp() -> void:
 		ui.show_dialogue("Hearth Lamp", "The lamp hums softly. A fragment of the old Hearthsong now lives in your hands.")
 	else:
 		ui.show_dialogue("Hearth Lamp", "Requires 3 Wood, 2 Stone and 1 Memory Shard.")
+
+func _craft_next_recipe() -> void:
+	var recipe_id := String(crafting.next_available_recipe(state))
+	if recipe_id.is_empty():
+		ui.show_dialogue("Workbench", "Nothing is ready to craft yet. Keep living, gathering and discovering; your materials will open new projects.")
+		return
+	if crafting.craft(recipe_id, state):
+		_play_cue("craft")
+		if world and world.has_method("sync_state"):
+			world.sync_state(state)
+		var titles := {"hearth_lamp":"Hearth Lamp","fisher_rack":"Fisher's Rack","herb_shelf":"Herb Shelf","archive_case":"Memory Archive Case"}
+		ui.show_dialogue(String(titles.get(recipe_id, recipe_id.capitalize())), "You made something that belongs to your life in Larkmere. It now becomes part of the home.")
 
 func _fish() -> void:
 	if fish_cooldown > 0.0:
