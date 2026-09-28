@@ -46,6 +46,7 @@ var toast_time := 0.0
 var echo_cooldown := 0.0
 var fish_cooldown := 0.0
 var fish_phase := "idle"
+var fish_quality := "normal"
 var fish_timer := 0.0
 var nearby_kind := ""
 var nearby_id := ""
@@ -143,6 +144,8 @@ func _ready() -> void:
 	ui.start_requested.connect(_on_start_requested)
 	ui.sound_requested.connect(_play_cue)
 	ui.craft_requested.connect(_craft_lamp)
+	ui.rod_craft_requested.connect(_craft_rod)
+	ui.lantern_craft_requested.connect(_craft_lantern)
 	ui.settings_changed.connect(_apply_settings)
 	ui.set_settings(settings.values)
 
@@ -344,6 +347,7 @@ func _fish() -> void:
 	_show_toast("Line cast. Watch the float…")
 	
 func _resolve_fish_catch() -> void:
+	var reaction := fish_timer
 	fish_phase = "idle"
 	fish_cooldown = 1.1
 	var dawn_bonus := 0.10 if state.hour >= 5 and state.hour <= 8 else 0.0
@@ -364,7 +368,13 @@ func _resolve_fish_catch() -> void:
 		state.fish_luck = mini(3, state.fish_luck + 1)
 	else:
 		state.fish_luck = maxi(0, state.fish_luck - 1)
-	state.add_item(catch_id,1)
+	if reaction >= 0.72:
+		fish_quality = "perfect"
+		state.add_item(catch_id, 2 if int(state.skills.get("fishing",1)) >= 2 else 1)
+		state.fish_luck += 1
+	else:
+		fish_quality = "normal"
+		state.add_item(catch_id, 1)
 	state.add_skill_xp("fishing",12)
 	state.record_activity("fishing")
 	if int(state.collections.get("silverfin",0)) >= 3:
@@ -372,7 +382,23 @@ func _resolve_fish_catch() -> void:
 	_play_cue("fish_catch")
 	_spawn_fishing_fx()
 	state.add_xp(10 if catch_id == "silverfin" else 5)
-	_show_toast("You caught a %s." % catch_label)
+	_show_toast(("Perfect reel — " if fish_quality == "perfect" else "") + "You caught a %s." % catch_label)
+
+func _craft_rod() -> void:
+	if state.craft_wayfarer_rod():
+		_play_cue("craft")
+		_show_toast("Wayfarer Rod crafted. Read the water, then reel cleanly.")
+	else:
+		_show_toast("Requires 4 Wood and 1 Stone, and can only be crafted once.")
+
+func _craft_lantern() -> void:
+	if state.craft_echo_lantern():
+		_play_cue("craft")
+		if world and world.has_method("sync_state"):
+			world.sync_state(state)
+		_show_toast("Echo Lantern crafted. A memory now lives at home.")
+	else:
+		_show_toast("Requires 2 Wood and 2 Memory Shards, and can only be crafted once.")
 
 func _rest() -> void:
 	state.energy = state.max_energy
