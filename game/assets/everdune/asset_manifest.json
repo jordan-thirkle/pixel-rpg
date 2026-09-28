@@ -1,0 +1,19 @@
+{
+  "pack": "Everdune First Session Production Art",
+  "version": "0.1.0",
+  "renderer": "2d",
+  "logical_character_grid": "32px",
+  "palette": ["#12201c","#334c3d","#536b50","#4d7f7b","#9a8a65","#d9bd72","#eadfbd"],
+  "assets": [
+    "hearthfall_master.svg",
+    "title_scene.svg",
+    "wayfarer_sheet.svg",
+    "mara_sheet.svg",
+    "rowan_sheet.svg",
+    "mossling_sheet.svg"
+  ],
+  "three_d": {
+    "required": false,
+    "reason": "Everdune is a top-down 2D pixel-fantasy slice; a second 3D renderer would violate the current architecture freeze."
+  }
+}
