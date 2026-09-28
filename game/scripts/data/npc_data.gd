@@ -12,6 +12,7 @@ class_name EverduneNPCData
 @export_multiline var relationship_dialogue := ""
 @export_multiline var evening_dialogue := ""
 @export_multiline var post_echo_dialogue := ""
+@export var activity_dialogue: Dictionary = {}
 @export var evening_hour := 18
 @export var post_echo_flag := ""
 @export var met_flag := ""

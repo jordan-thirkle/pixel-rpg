@@ -79,8 +79,8 @@ Need immediate identity, atmosphere, hierarchy and fast entry.
 ## [ ] Finish character creator
 Must use the real production hero assets and remain fast and expressive.
 
-## [~] Finish Mara + Rowan production pass
-Mara has the stronger foundation. Rowan needs deeper routine, identity, dialogue and world responses.
+## [x] Finish Mara + Rowan production pass
+Mara and Rowan now have authored routines; activity-aware dialogue is data-driven, and Rowan responds to remembered world/gathering discoveries.
 
 ## [~] Finish first Echo presentation
 Echo discovery now has an authored reveal layer in addition to the existing audio, burst FX and dialogue. Remaining: environmental response and final emotional/visual/audio tuning.
@@ -128,14 +128,14 @@ Every major activity should connect to at least one NPC, home, Echo, route, reso
 
 # P1 — NPC LIVES
 
-## [~] Daily routines
-Mara foundation exists.
+## [x] Daily routines
+Mara and Rowan both move through authored morning/day/evening positions.
 
-## [~] Rowan foundation
-Needs deeper authored life.
+## [x] Rowan foundation
+Rowan now has a daily route, evening identity and post-Echo response.
 
-## [ ] Activity preferences
-NPC responses should vary by player activity.
+## [x] Activity preferences
+Mara and Rowan respond to repeated fishing, woodcutting, mining and foraging activity through authored data.
 
 ## [ ] NPC-to-NPC world activity
 NPCs should appear to have lives even without player input.
@@ -278,13 +278,12 @@ Every PR includes:
 
 # CURRENT AI TEAM QUEUE
 
-NEXT TASK: NPC lives.
+NEXT TASK: Echo environmental consequences.
 
-Gathering depth is now implemented on the canonical branch. Do not add breadth.
+Gathering depth and the Mara + Rowan lives pass are implemented on the canonical branch. Do not add breadth.
 
 Then execute:
-1. Mara + Rowan lives;
-2. Echo environmental consequences;
+1. Echo environmental consequences;
 3. home personalisation;
 4. Hearthfall/Larkmere density;
 5. 45-minute self-directed free-play QA;
