@@ -7,6 +7,7 @@ const ROWS := 17
 const TERRAIN := preload("res://assets/terrain_atlas.svg")
 const PROPS := preload("res://assets/props.svg")
 const WATER := preload("res://assets/water_anim.svg")
+const HEARTHFALL_ART := preload("res://assets/hearthfall_scene.svg")
 
 var water_sprites: Array[Sprite2D] = []
 var ambience: Array[Node2D] = []
@@ -17,6 +18,7 @@ var anim_time := 0.0
 var hearthsong_awake := false
 var synced_world_state := {}
 var echo_markers: Dictionary = {}
+var authored_backdrop: Sprite2D
 
 func _ready() -> void:
 	_build_tiles()
@@ -46,24 +48,37 @@ func _make_tileset() -> TileSet:
 	return set
 
 func _build_tiles() -> void:
+	# The visual composition is authored as a single Hearthfall scene plate. The TileMap remains
+	# authoritative for topology/collision; it is deliberately not used as the final art renderer.
+	authored_backdrop = Sprite2D.new()
+	authored_backdrop.name = "AuthoredHearthfallBackdrop"
+	authored_backdrop.texture = HEARTHFALL_ART
+	authored_backdrop.position = Vector2(480,270)
+	authored_backdrop.z_index = -50
+	authored_backdrop.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	add_child(authored_backdrop)
+
 	var set := _make_tileset()
 
 	layer = TileMapLayer.new()
 	layer.name = "Ground"
 	layer.tile_set = set
 	layer.z_index = -30
+	layer.modulate.a = 0.0
 	add_child(layer)
 
 	water_layer = TileMapLayer.new()
 	water_layer.name = "River"
 	water_layer.tile_set = set
 	water_layer.z_index = -28
+	water_layer.modulate.a = 0.0
 	add_child(water_layer)
 
 	path_layer = TileMapLayer.new()
 	path_layer.name = "PathsAndBridges"
 	path_layer.tile_set = set
 	path_layer.z_index = -26
+	path_layer.modulate.a = 0.0
 	add_child(path_layer)
 
 	# Base meadow: every visible square is authored by the TileMap.
@@ -193,40 +208,8 @@ func _shadow(pos: Vector2, size := Vector2(18, 7), alpha := 0.24) -> Polygon2D:
 	return p
 
 func _build_props() -> void:
-	# Hearthfall landmarks are positioned against the authored TileMap topology.
-	for p in [Vector2(360,220), Vector2(430,220)]:
-		_shadow(p + Vector2(0,20), Vector2(25,8), 0.28)
-		_prop(1, p, Vector2(2.2,2.2), 1)
-
-	_shadow(Vector2(300,315), Vector2(16,6))
-	_prop(2, Vector2(300,300), Vector2(1.3,1.3), 2)
-	_shadow(Vector2(255,280), Vector2(15,6))
-	_prop(3, Vector2(255,265), Vector2(1.5,1.5), 2)
-
-	for p in [
-		Vector2(100,100),Vector2(155,92),Vector2(205,150),Vector2(760,165),
-		Vector2(860,120),Vector2(110,455),Vector2(875,450),Vector2(72,300),Vector2(890,250)
-	]:
-		_shadow(p + Vector2(0,12), Vector2(15,5), 0.22)
-		_prop(0, p, Vector2(1.25,1.25), 2)
-
-	_prop(4, Vector2(300,250), Vector2(1.25,1.25), 2)
-	_prop(5, Vector2(620,250), Vector2(1.25,1.25), 2)
-	_prop(6, Vector2(495,355), Vector2(1.15,1.15), 2)
-	_prop(7, Vector2(730,370), Vector2(1.15,1.15), 2)
-
-	for p in [Vector2(250,220),Vector2(275,205),Vector2(335,215),Vector2(350,235)]:
-		_prop(9,p,Vector2.ONE,2)
-	for p in [Vector2(280,285),Vector2(345,290),Vector2(395,275)]:
-		_prop(2,p,Vector2.ONE,2)
-	for p in [Vector2(205,315),Vector2(230,330),Vector2(270,345),Vector2(315,335),Vector2(365,345)]:
-		_prop(9,p,Vector2(0.9,0.9),2)
-	for p in [Vector2(120,190),Vector2(145,205),Vector2(175,215),Vector2(825,190),Vector2(855,210)]:
-		_prop(0,p,Vector2.ONE,2)
-	_prop(3,Vector2(565,300),Vector2(1.1,1.1),2)
-	_prop(2,Vector2(545,320),Vector2(1.05,1.05),2)
-	_prop(3,Vector2(665,305),Vector2(1.1,1.1),2)
-	_prop(9,Vector2(685,325),Vector2.ONE,2)
+	# The backdrop owns Hearthfall's authored composition. Runtime props are reserved for
+	# interactive/earned objects so the world does not look like a debug prop scatter.
 	var gate := Sprite2D.new()
 	gate.texture = load("res://assets/sleeping_gate.svg") as Texture2D
 	gate.position = Vector2(820,430)
