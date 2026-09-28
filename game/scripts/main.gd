@@ -313,6 +313,7 @@ func _discover_echo(id: String) -> void:
 		world.awaken_echo(data.id)
 	if data.world_memory_id == "silverrun_kindness":
 		state.fish_luck += 2
+	ui.show_echo_reveal(data.title, data.discovery_text)
 	ui.show_dialogue(data.title, data.discovery_text)
 	_show_toast("%s discovered  •  Memory Shard +%d  •  XP +%d" % [data.title, data.item_amount, data.xp_reward])
 
