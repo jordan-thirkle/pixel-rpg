@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EverduneLocationData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/location_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "wayfinding"
+display_name = "Old Road Marker"
+kind = "activity"
+position = Vector2(495, 355)
+interaction_radius = 42.0
+skill = "wayfinding"
+activity_hint = "Read the road."
