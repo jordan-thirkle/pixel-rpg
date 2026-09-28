@@ -34,7 +34,7 @@ func _build_layers() -> void:
 	hair_sprite = _sprite(HAIR)
 	ornament_sprite = _sprite(ORNAMENTS)
 	for sprite in [body_sprite, coat_sprite, hair_sprite, ornament_sprite]:
-		sprite.scale = Vector2(1.75,1.75)
+		sprite.scale = Vector2(2.0,2.0)
 		add_child(sprite)
 	_apply_identity()
 
