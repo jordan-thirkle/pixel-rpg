@@ -13,3 +13,8 @@ class_name EverduneEchoData
 @export var item_id := ""
 @export var item_amount := 0
 @export var position := Vector2.ZERO
+@export var memory_kind := "place"
+@export var knowledge_tag := ""
+@export var world_memory_id := ""
+@export_multiline var consequence_text := ""
+@export var relationship_bonus := 0
