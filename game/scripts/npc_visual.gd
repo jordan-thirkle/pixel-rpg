@@ -77,13 +77,11 @@ func _build_nameplate() -> void:
 	add_child(marker)
 
 func _target_for_hour(hour: int) -> Vector2:
-	if String(npc_data.id) != "mara":
-		return npc_data.position
 	if hour < 10:
-		return npc_data.morning_position
+		return npc_data.morning_position if npc_data.morning_position != Vector2.ZERO else npc_data.position
 	if hour < npc_data.evening_hour:
-		return npc_data.day_position
-	return npc_data.evening_position
+		return npc_data.day_position if npc_data.day_position != Vector2.ZERO else npc_data.position
+	return npc_data.evening_position if npc_data.evening_position != Vector2.ZERO else npc_data.position
 
 func _process(delta: float) -> void:
 	phase += delta
