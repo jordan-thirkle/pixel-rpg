@@ -253,10 +253,30 @@ func _build_atmosphere() -> void:
 
 func awaken_echo(id: String) -> void:
 	match id:
+		"hearthfall_hearthsong":
+			_apply_hearthfall_hearthsong()
 		"old_road":
 			_apply_old_road_echo()
 		"glass_orchard":
 			_apply_glass_orchard_echo()
+
+func _apply_hearthfall_hearthsong() -> void:
+	if bool(echo_markers.get("hearthfall_hearthsong", false)):
+		return
+	echo_markers["hearthfall_hearthsong"] = true
+	var ring := Polygon2D.new()
+	ring.polygon = PackedVector2Array([
+		Vector2(-14,0),Vector2(-10,-5),Vector2(-4,-8),Vector2(4,-8),
+		Vector2(10,-5),Vector2(14,0),Vector2(10,5),Vector2(4,8),
+		Vector2(-4,8),Vector2(-10,5)
+	])
+	ring.position = Vector2(335,275)
+	ring.z_index = 7
+	ring.color = Color("#e8c77c")
+	add_child(ring)
+	var tween := create_tween().set_loops()
+	tween.tween_property(ring,"scale",Vector2(1.18,1.18),1.1)
+	tween.tween_property(ring,"scale",Vector2.ONE,1.1)
 
 func _apply_old_road_echo() -> void:
 	if bool(echo_markers.get("old_road", false)):
@@ -299,6 +319,8 @@ func _apply_glass_orchard_echo() -> void:
 		tween.tween_property(petal,"position:y",p.y,1.4)
 
 func sync_state(state: Node) -> void:
+	if bool(state.flags.get("hearthfall_hearthsong_echo", false)):
+		_apply_hearthfall_hearthsong()
 	if bool(state.flags.get("old_road_echo", false)):
 		_apply_old_road_echo()
 	if bool(state.flags.get("glass_orchard_echo", false)):

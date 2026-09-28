@@ -146,7 +146,7 @@ Unlock knowledge, dialogue, gifts, visits, world changes and home moments.
 # P1 — ECHOES
 
 ## [~] Systemic Echo data model
-Supports activity prerequisites, experience, unlock flags, world memory and relationship consequences.
+Supports activity prerequisites, experience, unlock flags, world memory and relationship consequences; Hearthfall now has a local belonging Echo that connects cooking, home and Mara.
 
 ## [~] Chained Echoes
 Foundation includes River Song, Miner's Ledger and Hollow Steps.
@@ -187,7 +187,7 @@ Players should understand Everdune by living in it, not reading walls of text.
 Every important location should track:
 place + resource + skill + person + story + Echo + secret + restoration + return reason
 
-Hearthfall: activities [~], NPC [~], Echo [ ], secret [ ], restoration [~], return [~]
+Hearthfall: activities [~], NPC [x], Echo [x], secret [ ], restoration [~], return [~]
 Silverrun: activities [~], NPC [~], Echo [~], secret [ ], restoration [ ], return [~]
 Briarwood: activities [~], NPC [ ], Echo [ ], secret [ ], restoration [ ], return [~]
 Old Road: activities [~], NPC [~], Echo [~], secret [ ], restoration [~], return [~]

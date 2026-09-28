@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "hearthfall_hearthsong"
+title = "The Hearth That Stayed"
+discovery_text = "The old hearth remembers hands passing food from one person to another. It does not remember who owned the fire. It remembers that someone kept it warm."
+repeat_text = "The hearth is quiet now, but it remembers the warmth you brought home."
+prerequisite_flags = ["cooked_first_meal"]
+completion_flag = "hearthfall_hearthsong_echo"
+quest_stage = 6
+memory_xp = 20
+xp_reward = 35
+item_id = "decor"
+item_amount = 1
+position = Vector2(335, 275)
+memory_kind = "belonging"
+knowledge_tag = "hearthfall"
+world_memory_id = "hearthfall_belonging"
+consequence_text = "Hearthfall now carries a remembered sign of belonging; the home hearth answers more warmly when you return."
+relationship_bonus = 1
