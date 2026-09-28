@@ -23,8 +23,7 @@ func talk(id: String, registry: Node, state: Node) -> Dictionary:
 		text = data.evening_dialogue
 
 	if id == "mara":
-		state.relationship_mara = mini(10, int(state.relationship_mara) + 1
-		)
+		state.relationship_mara = mini(10, int(state.relationship_mara) + 1)
 		state.remember_npc(id, "talked_day_" + str(state.day))
 		if state.relationship_mara == 1:
 			state.set_flag("mara_bond_started", true)
