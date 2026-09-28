@@ -1,7 +1,7 @@
 extends CanvasLayer
 class_name EverduneUI
 
-const SCENE_ART := preload("res://assets/hearthfall_scene.svg")
+const SCENE_ART := preload("res://assets/everdune/title_scene.svg")
 const PREVIEW_BODY := preload("res://assets/player_body.svg")
 const PREVIEW_HAIR := preload("res://assets/player_hair.svg")
 const PREVIEW_COAT := preload("res://assets/player_coat.svg")
@@ -17,6 +17,8 @@ signal start_requested(continue_game: bool)
 signal sound_requested(kind: String)
 signal settings_changed(values: Dictionary)
 signal craft_requested
+signal rod_craft_requested
+signal lantern_craft_requested
 
 var state: Node
 var prompt_label: Label
@@ -128,7 +130,7 @@ func _build_ui() -> void:
 	inventory_panel = Panel.new()
 	inventory_panel.add_theme_stylebox_override("panel", panel_style)
 	inventory_panel.position = Vector2(250,105)
-	inventory_panel.size = Vector2(460,320)
+	inventory_panel.size = Vector2(460,380)
 	inventory_panel.visible = false
 	add_child(inventory_panel)
 	inventory_text = Label.new()
@@ -144,6 +146,20 @@ func _build_ui() -> void:
 	craft_button.size = Vector2(190,36)
 	craft_button.pressed.connect(_craft_lamp)
 	inventory_panel.add_child(craft_button)
+	var rod_button := Button.new()
+	rod_button.text = "Craft Wayfarer Rod"
+	rod_button.position = Vector2(225,248)
+	rod_button.size = Vector2(205,36)
+	rod_button.add_theme_stylebox_override("normal", button_style)
+	rod_button.pressed.connect(func(): rod_craft_requested.emit(); _refresh_inventory())
+	inventory_panel.add_child(rod_button)
+	var lantern_button := Button.new()
+	lantern_button.text = "Craft Echo Lantern"
+	lantern_button.position = Vector2(28,290)
+	lantern_button.size = Vector2(190,36)
+	lantern_button.add_theme_stylebox_override("normal", button_style)
+	lantern_button.pressed.connect(func(): lantern_craft_requested.emit(); _refresh_inventory())
+	inventory_panel.add_child(lantern_button)
 
 	echo_reveal = Panel.new()
 	echo_reveal.position = Vector2(170,112)
@@ -202,7 +218,7 @@ func _build_start_menu() -> void:
 	start_backdrop.position = Vector2.ZERO
 	start_backdrop.size = Vector2(960,540)
 	start_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	start_backdrop.visible = false
+	start_backdrop.visible = true
 	start_menu.add_child(start_backdrop)
 
 	start_overlay = ColorRect.new()
@@ -289,7 +305,7 @@ func _build_start_menu() -> void:
 	card.add_child(settings_button)
 
 	var footer := Label.new()
-	footer.text = "WASD / Arrows   •   E interact   •   I inventory"
+	footer.text = "WASD / Arrows   •   E interact   •   I inventory   •   SPACE combat"
 	footer.position = Vector2(30,295)
 	footer.add_theme_font_size_override("font_size",11)
 	footer.add_theme_color_override("font_color",Color("#8e927f"))
