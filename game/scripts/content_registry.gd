@@ -22,6 +22,10 @@ func _ready() -> void:
 	_load_location("res://data/locations/wayfinding.tres")
 	_load_location("res://data/locations/workbench.tres")
 	_load_location("res://data/locations/decorating.tres")
+	_load_location("res://data/locations/market.tres")
+	_load_location("res://data/locations/orchard_care.tres")
+	_load_location("res://data/locations/archaeology.tres")
+	_load_location("res://data/locations/survey.tres")
 
 func _load_echo(path: String) -> void:
 	var data := load(path) as EverduneEchoData
