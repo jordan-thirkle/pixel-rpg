@@ -82,8 +82,8 @@ Must use the real production hero assets and remain fast and expressive.
 ## [x] Finish Mara + Rowan production pass
 Mara and Rowan now have authored routines; activity-aware dialogue is data-driven, and Rowan responds to remembered world/gathering discoveries.
 
-## [~] Finish first Echo presentation
-Echo discovery now has an authored reveal layer in addition to the existing audio, burst FX and dialogue. Remaining: environmental response and final emotional/visual/audio tuning.
+## [x] Finish first Echo presentation
+Echo discovery now has an authored reveal layer, audio, burst FX, persistent environmental response and dialogue.
 
 ## [~] Finish Sleeping Gate
 Existing: landmark, encounter loop, variants, telegraphs, hit-stun, health bars and progression.
@@ -120,8 +120,8 @@ Examples: repaired route, restored orchard, workshop, improved home.
 ## [ ] Make activity mastery visibly alter the world
 Mastery should leave evidence beyond numbers.
 
-## [ ] Expand world-memory vocabulary
-World memories should describe meaningful state transitions.
+## [~] Expand world-memory vocabulary
+Echoes now leave persistent visual state; continue extending the same vocabulary only where it creates a visible player consequence.
 
 ## [ ] Add cross-system consequences
 Every major activity should connect to at least one NPC, home, Echo, route, resource or lore consequence.
