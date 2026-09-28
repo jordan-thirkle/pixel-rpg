@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EverduneEchoData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/echo_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "hollow_steps_echo"
+title = "The Stair That Wasn't There"
+discovery_text = "The steps remember being hidden. One by one, old footprints appear in the dust, climbing toward a view of the entire valley."
+repeat_text = "The hidden stair waits above the valley road."
+prerequisite_flags = ["hollow_steps_known"]
+prerequisite_activities = {"wayfinding": 3}
+completion_flag = "hollow_steps_echo"
+quest_stage = 7
+memory_xp = 34
+xp_reward = 70
+item_id = "map_fragment"
+item_amount = 1
+position = Vector2(625, 130)
+memory_kind = "place"
+knowledge_tag = "hollow_steps"
+world_memory_id = "hollow_steps_awakened"
+consequence_text = "The Hollow Steps become a persistent shortcut between the valley edge and the old road."
+unlock_flags = ["hollow_steps_open"]
+relationship_bonus = 1
+relationship_npc_id = "rowan"
