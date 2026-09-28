@@ -97,8 +97,8 @@ fish → cooking → food → gifts → relationship → trophy → home → riv
 
 Current pass: fishing skill progression, three catch profiles, dawn/dusk/rain weighting, cast/bite/reel feedback, miss feedback and cooking integration. Remaining: trophy progression, NPC requests and final QA.
 
-## [~] Gathering
-Deepen woodcutting, mining and foraging with mastery, rare materials, environmental clues and consequences.
+## [x] Gathering depth
+Woodcutting, mining and foraging now have skill-sensitive yield mastery, remembered first-use knowledge, deterministic experienced-gatherer memory finds, and local mastery feedback. Final playthrough QA remains.
 
 ## [~] Farming
 Deepen seasonal crops, useful produce, cooking, gifts, home visuals and orchard connection.
@@ -209,8 +209,8 @@ Prompt transitions and gathering/fishing action feedback are now tactile. Remain
 ## [x] Fishing feel pass
 Cast → bite → reel timing, audio/VFX, miss feedback and species/time/weather behavior are implemented; remaining polish is QA.
 
-## [ ] Gathering feel pass
-Contact animation, sound, particles, resource response and satisfying timing.
+## [~] Gathering feel pass
+Contact animation, authored gather cue, resource response, mastery pulse and respawn timing are present. Final player-facing QA remains.
 
 ## [ ] Echo feel pass
 Anticipation, reveal, world response, sound motif and emotional punctuation.
@@ -278,22 +278,18 @@ Every PR includes:
 
 # CURRENT AI TEAM QUEUE
 
-NEXT TASK: P0 Hearthfall/Larkmere player-facing quality gate.
+NEXT TASK: NPC lives.
 
-Repository governance and production contracts are now reconciled on main. Do not add breadth.
+Gathering depth is now implemented on the canonical branch. Do not add breadth.
 
 Then execute:
-1. Hearthfall visual environment gate;
-2. movement + interaction feel;
-3. fishing depth;
-4. gathering depth;
-5. NPC lives;
-6. systemic Echo presentation;
-7. home personalisation;
-8. Larkmere density;
-9. 45-minute free-play QA;
-10. Vertical Slice 1.0 final gate;
-11. only then expansion.
+1. Mara + Rowan lives;
+2. Echo environmental consequences;
+3. home personalisation;
+4. Hearthfall/Larkmere density;
+5. 45-minute self-directed free-play QA;
+6. Vertical Slice 1.0 final gate;
+7. only then expansion.
 
 # AGENT COMPLETION TEMPLATE
 
