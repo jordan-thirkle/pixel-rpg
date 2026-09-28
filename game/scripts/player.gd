@@ -33,12 +33,22 @@ var back_sprite: Sprite2D
 var equipment := "axe"
 var step_phase := 0.0
 var last_moving := false
+var camera: Camera2D
+var runtime_sprite: Sprite2D
 
 const CHARACTER_SCALE := Vector2(2.0, 2.0)
 
 func _ready() -> void:
 	z_index = 20
 	_build_layers()
+	camera = Camera2D.new()
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 9.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = 960
+	camera.limit_bottom = 540
+	add_child(camera)
 	queue_redraw()
 
 func _build_layers() -> void:
@@ -56,6 +66,16 @@ func _build_layers() -> void:
 	for sprite in [back_sprite, boots_sprite, trousers_sprite, shirt_sprite, body_sprite, face_sprite, coat_sprite, hair_sprite, accessory_sprite, tool_sprite]:
 		add_child(sprite)
 	_apply_customisation()
+	runtime_sprite = Sprite2D.new()
+	runtime_sprite.texture = preload("res://assets/everdune/wayfarer_sheet.svg")
+	runtime_sprite.region_enabled = true
+	runtime_sprite.region_rect = Rect2(0,0,32,32)
+	runtime_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	runtime_sprite.scale = CHARACTER_SCALE
+	runtime_sprite.z_index = 2
+	add_child(runtime_sprite)
+	for sprite in [back_sprite, boots_sprite, trousers_sprite, shirt_sprite, body_sprite, face_sprite, coat_sprite, hair_sprite, accessory_sprite]:
+		sprite.visible = false
 
 func _atlas_sprite(texture: Texture2D) -> Sprite2D:
 	var s := Sprite2D.new()
@@ -79,6 +99,7 @@ func _process(delta: float) -> void:
 	var row := _direction_row()
 	var rect := Rect2(frame * 32, row * 32, 32, 32)
 	if body_sprite: body_sprite.region_rect = rect
+	if runtime_sprite: runtime_sprite.region_rect = rect
 	if hair_sprite: hair_sprite.region_rect = rect
 	if coat_sprite: coat_sprite.region_rect = rect
 	if tool_sprite:
@@ -149,3 +170,5 @@ func _apply_customisation() -> void:
 
 func refresh_customisation() -> void:
 	_apply_customisation()
+	if runtime_sprite:
+		runtime_sprite.modulate = {"teal":Color.WHITE,"wine":Color("#ead2df"),"ochre":Color("#ead39a")}.get(String(state.character.get("coat","teal")),Color.WHITE)
