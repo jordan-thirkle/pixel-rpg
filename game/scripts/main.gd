@@ -365,7 +365,7 @@ func _resolve_fish_catch() -> void:
 func _rest() -> void:
 	state.energy = state.max_energy
 	state.hp = state.max_hp
-	state.advance_time(2)
+	state.advance_time(8)
 	state.home_returns += 1
 	state.record_activity("resting")
 	state.set_flag("returned_home", true)
