@@ -3,7 +3,7 @@ class_name EverduneGameState
 
 signal changed
 
-const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"brook_trout":0,"memory_shard":0,"hearthstone":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
+const DEFAULT_INVENTORY := {"wood":3,"stone":2,"river_fish":0,"brook_trout":0,"memory_shard":0,"hearthstone":0,"hearth_lamp":0,"wayfarer_rod":0,"echo_lantern":0,"berries":2,"mushrooms":1,"herbs":1,"seeds":3,"cooked_meal":0,"map_fragment":0,"decor":0}
 const DEFAULT_SKILLS := {"gathering":1,"woodcutting":1,"mining":1,"foraging":1,"fishing":1,"farming":1,"cooking":1,"crafting":1,"building":1,"wayfinding":1,"memory":1,"combat":1}
 const DEFAULT_SKILL_XP := {"gathering":0,"woodcutting":0,"mining":0,"foraging":0,"fishing":0,"farming":0,"cooking":0,"crafting":0,"building":0,"wayfinding":0,"memory":0,"combat":0}
 const DEFAULT_EQUIPMENT := {"tool":"axe","weapon":"wayfarer_blade","armor":"traveller_coat"}
@@ -169,6 +169,40 @@ func advance_time(hours: int) -> void:
 		if garden_planted_day > 0 and day > garden_planted_day:
 			garden_ready = true
 	changed.emit()
+
+func craft_wayfarer_rod() -> bool:
+	if bool(flags.get("wayfarer_rod_crafted", false)):
+		return false
+	if not has_item("wood",4) or not has_item("stone",1):
+		return false
+	remove_item("wood",4)
+	remove_item("stone",1)
+	inventory["wayfarer_rod"] = 1
+	crafted["wayfarer_rod"] = 1
+	flags["wayfarer_rod_crafted"] = true
+	fish_luck += 2
+	add_skill_xp("crafting",14)
+	add_skill_xp("fishing",12)
+	add_xp(18)
+	changed.emit()
+	return true
+
+func craft_echo_lantern() -> bool:
+	if bool(flags.get("echo_lantern_crafted", false)):
+		return false
+	if not has_item("wood",2) or not has_item("memory_shard",2):
+		return false
+	remove_item("wood",2)
+	remove_item("memory_shard",2)
+	inventory["echo_lantern"] = 1
+	crafted["echo_lantern"] = 1
+	flags["echo_lantern_crafted"] = true
+	add_home_display("echo_lantern")
+	add_skill_xp("crafting",20)
+	add_skill_xp("memory",20)
+	add_xp(28)
+	changed.emit()
+	return true
 
 func craft_hearth_lamp() -> bool:
 	if not has_item("wood",3) or not has_item("stone",2) or not has_item("memory_shard",1):
