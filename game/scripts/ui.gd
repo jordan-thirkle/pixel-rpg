@@ -42,6 +42,7 @@ var settings_values := {}
 var start_menu: Panel
 var continue_button: Button
 var session_active := false
+var quest_visible := true
 var settings_from_start := false
 var hud_settings_button: Button
 var preview_body: Sprite2D
@@ -277,6 +278,7 @@ func _open_creator() -> void:
 
 func begin_session() -> void:
 	session_active = true
+	quest_visible = true
 	start_menu.visible = false
 	creation_panel.visible = false
 
@@ -480,7 +482,7 @@ func _process(_delta: float) -> void:
 	if state == null:
 		return
 	stats_label.visible = session_active
-	quest_label.visible = session_active
+	quest_label.visible = session_active and quest_visible
 	prompt_label.visible = session_active
 	toast_label.visible = session_active
 	if hud_settings_button:
@@ -523,7 +525,8 @@ func toggle_inventory() -> void:
 func toggle_quest_visibility() -> void:
 	if not session_active:
 		return
-	quest_label.visible = not quest_label.visible
+	quest_visible = not quest_visible
+	quest_label.visible = quest_visible
 
 func close_panels() -> void:
 	dialog_panel.visible = false
