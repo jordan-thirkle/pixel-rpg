@@ -222,20 +222,12 @@ func _season_for_day(value: int) -> String:
 	return ["Spring","Summer","Autumn","Winter"][index]
 
 func craft_hearth_lamp() -> bool:
-	if not has_item("wood",3) or not has_item("stone",2) or not has_item("memory_shard",1):
-		return false
-	remove_item("wood",3)
-	remove_item("stone",2)
-	remove_item("memory_shard",1)
-	inventory["hearthstone"] = int(inventory.get("hearthstone",0)) + 1
-	crafted["hearth_lamp"] = int(crafted.get("hearth_lamp",0)) + 1
-	add_home_display("hearth_lamp")
-	_unlock_achievement("first_craft")
-	add_skill_xp("crafting",10)
-	add_skill_xp("memory",10)
-	add_xp(20)
-	changed.emit()
-	return true
+	# Legacy compatibility shim: recipe authority lives in CraftingSystem.
+	var root := get_tree().current_scene
+	var crafting = root.get_node_or_null("CraftingSystem") if root != null else null
+	if crafting != null and crafting.has_method("craft_hearth_lamp"):
+		return crafting.craft_hearth_lamp(self)
+	return false
 
 func snapshot() -> Dictionary:
 	return {
